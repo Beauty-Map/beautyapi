@@ -47,6 +47,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function metas()
+    {
+        return $this->morphMany(Meta::class, 'metaable');
+    }
+
     public function city()
     {
         return $this->belongsTo(City::class);
