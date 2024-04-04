@@ -44,4 +44,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function metas()
+    {
+        return $this->morphMany(Meta::class, 'metaable');
+    }
 }
