@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('phone_number')->unique();
             $table->foreignId('city_id')->nullable()->references('id')
                 ->on('cities')->nullOnDelete()->cascadeOnUpdate();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->boolean('is_active')->default(1);
             $table->date('birth_date')->nullable();
             $table->rememberToken();

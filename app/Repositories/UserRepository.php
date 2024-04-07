@@ -3,8 +3,6 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\LoginUserRequest;
-use App\Http\Requests\RegisterUserRequest;
 use App\Interfaces\UserInterface;
 use Illuminate\Database\Eloquent\Model;
 

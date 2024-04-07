@@ -10,5 +10,7 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('/auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
+    Route::post('/register/otp', [AuthController::class, 'checkOtpCode'])->middleware('guest');
+    Route::post('/register/password', [AuthController::class, 'setPassword'])->middleware('guest');
     Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 });
