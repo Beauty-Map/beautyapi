@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Constants\Constants;
+use App\Events\SendForgotPasswordOtpEvent;
 use App\Events\SendRegisterOtpEvent;
 use App\Helpers\Helper;
 use App\Http\Requests\CheckRegisterOtpCodeRequest;
+use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\SetRegisterPasswordRequest;
@@ -14,6 +16,7 @@ use App\Interfaces\OtpInterface;
 use App\Interfaces\UserInterface;
 use App\Models\Otp;
 use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -48,21 +51,7 @@ class AuthController extends Controller
 
     public function checkOtpCode(CheckRegisterOtpCodeRequest $request)
     {
-        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
-        $otp = $this->otpRepository->findOneBy([
-            'phone_number' => $request['phone_number'],
-            'type' => Otp::REGISTER_OTP_TYPE,
-            'code' => $request['code'],
-        ]);
-        if (!$otp) {
-            return $this->createError('INVALID_OTP_CODE_ERROR', Constants::INVALID_OTP_CODE_ERROR,404);
-        }
-        $user = $this->userRepository->findOneBy(['phone_number' => $request['phone_number']]);
-        $this->userRepository->update([
-            'remember_token' => Helper::randomCode(10),
-        ], $user->id);
-        $otp->delete();
-        return $this->createCustomResponse($user->remember_token);
+        return $this->getOtpCodeByType($request);
     }
 
     public function setPassword(SetRegisterPasswordRequest $request)
@@ -118,5 +107,40 @@ class AuthController extends Controller
     public function me()
     {
         return new UserLoginResource($this->getAuth(), "");
+    }
+
+    public function forgotPassword(ForgotPasswordRequest $request)
+    {
+        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
+        $user = $this->userRepository->findOneBy(['phone_number' => $request['phone_number']]);
+        if (!$user) {
+            return $this->createError('USER_NOT_FOUND_ERROR', Constants::USER_NOT_FOUND_ERROR,404);
+        }
+        event(new SendForgotPasswordOtpEvent($user));
+        return $this->createCustomResponse('', 201);
+    }
+
+    public function checkForgotPasswordOtpCode(CheckRegisterOtpCodeRequest $request)
+    {
+        return $this->getOtpCodeByType($request, Otp::FORGOT_PASSWORD_OTP_TYPE);
+    }
+
+    private function getOtpCodeByType(FormRequest $request, string $type = Otp::REGISTER_OTP_TYPE)
+    {
+        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
+        $otp = $this->otpRepository->findOneBy([
+            'phone_number' => $request['phone_number'],
+            'type' => $type,
+            'code' => $request['code'],
+        ]);
+        if (!$otp) {
+            return $this->createError('INVALID_OTP_CODE_ERROR', Constants::INVALID_OTP_CODE_ERROR,404);
+        }
+        $user = $this->userRepository->findOneBy(['phone_number' => $request['phone_number']]);
+        $this->userRepository->update([
+            'remember_token' => Helper::randomCode(10),
+        ], $user->id);
+        $otp->delete();
+        return $this->createCustomResponse($user->remember_token);
     }
 }
