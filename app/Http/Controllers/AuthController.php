@@ -96,4 +96,27 @@ class AuthController extends Controller
             return $this->createError('INVALID_LOGIN_ERROR', Constants::INVALID_LOGIN_ERROR, 422);
         }
     }
+
+    public function adminLogin(LoginUserRequest $request)
+    {
+        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
+        if(Auth::attempt(['phone_number' => $request->phone_number, 'password' => $request->password])){
+            /** @var User $user */
+            $user = Auth::user();
+            if (!$user->hasAnyRole(['admin', 'super-admin'])) {
+                Auth::logout();
+                return $this->createError('INVALID_LOGIN_ERROR', Constants::INVALID_LOGIN_ERROR, 422);
+            }
+            $token =  $user->createToken(env('APP_NAME'))->plainTextToken;
+            return new UserLoginResource($user, $token);
+        }
+        else{
+            return $this->createError('INVALID_LOGIN_ERROR', Constants::INVALID_LOGIN_ERROR, 422);
+        }
+    }
+
+    public function me()
+    {
+        return new UserLoginResource($this->getAuth(), "");
+    }
 }
