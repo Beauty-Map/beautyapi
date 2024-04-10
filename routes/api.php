@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IntroController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UploadController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -28,5 +29,12 @@ Route::prefix('/admin')->middleware(['auth:sanctum', AdminMiddleware::class])->g
         Route::get('/{id}', [IntroController::class, 'show']);
         Route::put('/{id}', [IntroController::class, 'update']);
         Route::delete('/{id}', [IntroController::class, 'destroy']);
+    });
+    Route::prefix('/services')->group(function () {
+        Route::get('/', [ServiceController::class, 'index']);
+        Route::post('/', [ServiceController::class, 'store']);
+        Route::get('/{id}', [ServiceController::class, 'show']);
+        Route::put('/{id}', [ServiceController::class, 'update']);
+        Route::delete('/{id}', [ServiceController::class, 'destroy']);
     });
 });
