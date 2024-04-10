@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PlanRepository extends BaseRepository implements PlanInterface
 {
-    protected $model;
-
     public function __construct(Model $model)
     {
         parent::__construct($model);

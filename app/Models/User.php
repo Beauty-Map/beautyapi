@@ -48,6 +48,14 @@ class User extends Authenticatable
         ];
     }
 
+    protected $with = [
+        'metas',
+    ];
+
+    protected $appends = [
+        'province',
+    ];
+
     public function metas()
     {
         return $this->morphMany(Meta::class, 'metaable');
@@ -56,5 +64,10 @@ class User extends Authenticatable
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function getProvinceAttribute()
+    {
+        return $this->city ? $this->city->province : null;
     }
 }

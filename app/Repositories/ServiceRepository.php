@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ServiceRepository extends BaseRepository implements ServiceInterface
 {
-    protected $model;
-
     public function __construct(Model $model)
     {
         parent::__construct($model);

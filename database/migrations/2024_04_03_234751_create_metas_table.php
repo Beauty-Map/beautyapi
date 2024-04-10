@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('metas', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('metaable_id');
+            $table->string('metaable_type');
+            $table->string('key');
+            $table->string('value');
             $table->timestamps();
         });
     }

@@ -4,17 +4,20 @@ namespace App\Providers;
 
 use App\Interfaces\BaseInterface;
 use App\Interfaces\IntroInterface;
+use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\PlanInterface;
 use App\Interfaces\ServiceInterface;
 use App\Interfaces\UserInterface;
 use App\Models\Intro;
+use App\Models\Meta;
 use App\Models\Otp;
 use App\Models\Plan;
 use App\Models\Service;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\IntroRepository;
+use App\Repositories\MetaRepository;
 use App\Repositories\OtpRepository;
 use App\Repositories\PlanRepository;
 use App\Repositories\ServiceRepository;
@@ -60,6 +63,12 @@ class BackendServiceProvider extends ServiceProvider
             PlanInterface::class,
             function() {
                 return new PlanRepository(new Plan);
+            }
+        );
+        $this->app->bind(
+            MetaInterface::class,
+            function() {
+                return new MetaRepository(new Meta);
             }
         );
     }

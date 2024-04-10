@@ -30,8 +30,14 @@ class UserLoginResource extends JsonResource
             'full_name' => $this->user->full_name,
             'phone_number' => $this->user->phone_number,
             'city_id' => $this->user->city_id,
+            'city' => $this->user->city,
+            'province_id' => $this->user->province_id,
+            'province' => $this->user->province,
             'created_at' => $this->user->created_at,
             'token' => $this->token,
+            'metas' => MetaResource::collection($this->metas),
+            'permissions' => $this->getPermissionNames(),
+            'roles' => $this->getRoleNames(),
         ];
     }
 }

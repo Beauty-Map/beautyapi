@@ -104,7 +104,7 @@ class AuthController extends Controller
         }
     }
 
-    public function me()
+    public function own()
     {
         return new UserLoginResource($this->getAuth(), "");
     }
