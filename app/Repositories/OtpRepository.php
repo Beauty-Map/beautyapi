@@ -14,8 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class OtpRepository extends BaseRepository implements OtpInterface
 {
-    protected $model;
-
     public function __construct(Model $model)
     {
         parent::__construct($model);

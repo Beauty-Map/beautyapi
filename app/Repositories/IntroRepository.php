@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class IntroRepository extends BaseRepository implements IntroInterface
 {
-    protected $model;
-
     public function __construct(Model $model)
     {
         parent::__construct($model);
