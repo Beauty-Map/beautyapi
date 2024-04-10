@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IntroController;
+use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UploadController;
 use App\Http\Middleware\AdminMiddleware;
@@ -36,5 +37,10 @@ Route::prefix('/admin')->middleware(['auth:sanctum', AdminMiddleware::class])->g
         Route::get('/{id}', [ServiceController::class, 'show']);
         Route::put('/{id}', [ServiceController::class, 'update']);
         Route::delete('/{id}', [ServiceController::class, 'destroy']);
+    });
+    Route::prefix('/plans')->group(function () {
+        Route::get('/', [PlanController::class, 'index']);
+        Route::get('/{id}', [PlanController::class, 'show']);
+        Route::put('/{id}', [PlanController::class, 'update']);
     });
 });
