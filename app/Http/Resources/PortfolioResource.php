@@ -14,6 +14,18 @@ class PortfolioResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'price' => $this->price,
+            'discount_price' => $this->discount_price,
+            'showing_phone_number' => $this->showing_phone_number,
+            'service_id' => new ServiceSimpleResource($this->service),
+            'user_id' => $this->user_id,
+            'user' => new UserSimpleResource($this->user),
+            'images' => $this->images_list,
+            'work_hours' => new MetaResource($this->work_hours),
+        ];
     }
 }

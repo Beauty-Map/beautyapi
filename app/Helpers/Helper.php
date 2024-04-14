@@ -35,7 +35,7 @@ class Helper
         }
     }
 
-    public static function getMeta(Model $model = null, $key = ''): string
+    public static function getMeta(Model $model = null, $key = '')
     {
         if (!$key || !$model) {
             return '';
@@ -43,9 +43,9 @@ class Helper
         /** @var Meta $meta */
         $meta = $model->metas()->where('key', $key)->first();
         if (!$meta) {
-            return '';
+            return null;
         }
-        return $meta->value;
+        return $meta;
     }
 
     public static function setMeta(Model $model = null, string $key = '', $value = '')
@@ -56,7 +56,7 @@ class Helper
         /** @var Meta $meta */
         $meta = $model->metas()->where('key', $key)->first();
         if ($meta) {
-            return $meta->value;
+            return $meta;
         }
         return $model->metas()->create([
             'key' => $key,
