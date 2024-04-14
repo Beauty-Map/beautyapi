@@ -16,8 +16,25 @@ class Meta extends Model
         'value',
     ];
 
+    protected $appends = [
+        'formatted_value',
+    ];
+
     public function metaabble()
     {
         return $this->morphTo();
+    }
+
+    public function getFormattedValueAttribute()
+    {
+        try {
+            $value = json_decode($this->value);
+            if ($this->key == 'work_hours') {
+                $value = collect($value)->sortBy('day_index')->toArray();
+            }
+            return $value;
+        } catch (\Exception $exception) {
+            return $this->value;
+        }
     }
 }

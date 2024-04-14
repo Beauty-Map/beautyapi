@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('metaable_id');
             $table->string('metaable_type');
             $table->string('key');
-            $table->string('value');
+            $table->longText('value');
             $table->timestamps();
         });
     }

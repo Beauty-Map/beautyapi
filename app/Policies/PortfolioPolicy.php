@@ -15,7 +15,7 @@ class PortfolioPolicy
         //
     }
 
-    public function store(User $user)
+    public function storePortfolio(User $user)
     {
         return $user->hasRole('artist');
     }

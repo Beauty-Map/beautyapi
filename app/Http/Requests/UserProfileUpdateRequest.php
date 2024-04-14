@@ -24,7 +24,12 @@ class UserProfileUpdateRequest extends FormRequest
         return [
             'full_name' => 'required|string|min:3',
             'city_id' => 'nullable|exists:cities,id',
-            'birth_date' => 'nullable|date'
+            'birth_date' => 'nullable|date',
+            'work_hours' => 'nullable|array',
+            'work_hours.*' => 'required|array',
+            'work_hours.*.day_index' => 'required|min:1|max:7',
+            'work_hours.*.start_hour' => 'required|date_format:H:i',
+            'work_hours.*.end_hour' => 'required|date_format:H:i|after:start_hour',
         ];
     }
 }

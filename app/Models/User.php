@@ -76,4 +76,9 @@ class User extends Authenticatable
     {
         return Helper::getMeta($this, $key);
     }
+
+    public function setMeta($key = '', $value = '')
+    {
+        return Helper::setMeta($this, $key, $value);
+    }
 }
