@@ -47,4 +47,20 @@ class Helper
         }
         return $meta->value;
     }
+
+    public static function setMeta(Model $model = null, string $key = '', $value = '')
+    {
+        if (!$key || !$model) {
+            return '';
+        }
+        /** @var Meta $meta */
+        $meta = $model->metas()->where('key', $key)->first();
+        if ($meta) {
+            return $meta->value;
+        }
+        return $model->metas()->create([
+            'key' => $key,
+            'value' => (string) $value,
+        ]);
+    }
 }

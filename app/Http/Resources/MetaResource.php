@@ -17,7 +17,7 @@ class MetaResource extends JsonResource
         return [
             'id' => $this->id,
             'key' => $this->key,
-            'value' => $this->value,
+            'value' => $this->formatted_value,
         ];
     }
 }

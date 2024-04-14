@@ -24,18 +24,35 @@ class MetaRepository extends BaseRepository implements MetaInterface
         DB::beginTransaction();
         try {
             foreach ($values as $key => $value) {
+                if (gettype($value) == 'array') {
+                    $value = json_encode($value);
+                }
                 if ($value) {
-                    $this->model->newQuery()->updateOrInsert([
+                    $meta = $this->findOneBy([
                         'metaable_id' => $id,
                         'metaable_type' => $type,
                         'key' => $key,
                         'value' => $value,
                     ]);
+                    if ($meta) {
+                        $this->model->newQuery()->update([
+                            'key' => $key,
+                            'value' => $value,
+                        ]);
+                    } else {
+                        $this->model->newQuery()->create([
+                            'metaable_id' => $id,
+                            'metaable_type' => $type,
+                            'key' => $key,
+                            'value' => $value,
+                        ]);
+                    }
                 }
             }
             DB::commit();
             return true;
         } catch (\Exception $exception) {
+            dd($exception->getMessage());
             DB::rollBack();
             return false;
         }

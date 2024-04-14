@@ -36,6 +36,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('update-portfolio', [PortfolioPolicy::class, 'updatePortfolio']);
         Gate::define('show-portfolio', [PortfolioPolicy::class, 'showPortfolio']);
         Gate::define('delete-portfolio', [PortfolioPolicy::class, 'deletePortfolio']);
-        Gate::define('store-portfolio', [PortfolioPolicy::class, 'store']);
+        Gate::define('store-portfolio', [PortfolioPolicy::class, 'storePortfolio']);
     }
 }
