@@ -24,10 +24,14 @@ class Portfolio extends Model
         'discount_price',
         'showing_phone_number',
         'images',
+        'has_tel',
+        'has_phone_number',
     ];
 
     protected $casts = [
-        'images' => 'json'
+        'images' => 'json',
+        'has_tel' => 'boolean',
+        'has_phone_number' => 'boolean',
     ];
 
     protected $appends = [
