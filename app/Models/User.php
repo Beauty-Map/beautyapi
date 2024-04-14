@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -69,5 +70,10 @@ class User extends Authenticatable
     public function getProvinceAttribute()
     {
         return $this->city ? $this->city->province : null;
+    }
+
+    public function getMeta($key = '')
+    {
+        return Helper::getMeta($this, $key);
     }
 }

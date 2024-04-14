@@ -52,6 +52,6 @@ class PlanController extends Controller
      */
     public function update(PlanUpdateRequest $request, int $id)
     {
-        return $this->planRepository->update($request->validated(), $id);
+        return $this->planRepository->update($request->all(), $id);
     }
 }

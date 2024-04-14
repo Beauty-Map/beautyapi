@@ -17,6 +17,7 @@ use App\Interfaces\UserInterface;
 use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -142,5 +143,10 @@ class AuthController extends Controller
         ], $user->id);
         $otp->delete();
         return $this->createCustomResponse($user->remember_token);
+    }
+
+    public function logout()
+    {
+        return Auth::guard('sanctum')->user()->currentAccessToken()->delete();
     }
 }

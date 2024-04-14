@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class UploadController extends Controller
 {
-    public function adminUpload(UploadRequest $request)
+    public function upload(UploadRequest $request)
     {
         if (!$request->hasFile('file')) {
             return $this->createError('file', Constants::FILE_NOT_FOUND_ERROR, 404);
