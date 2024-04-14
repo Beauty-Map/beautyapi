@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Models\Meta;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Helper
@@ -31,5 +33,18 @@ class Helper
         } else {
             return "";
         }
+    }
+
+    public static function getMeta(Model $model = null, $key = ''): string
+    {
+        if (!$key || !$model) {
+            return '';
+        }
+        /** @var Meta $meta */
+        $meta = $model->metas()->where('key', $key)->first();
+        if (!$meta) {
+            return '';
+        }
+        return $meta->value;
     }
 }

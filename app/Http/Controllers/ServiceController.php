@@ -47,7 +47,7 @@ class ServiceController extends Controller
      */
     public function store(ServiceCreateRequest $request)
     {
-        return new ServiceResource($this->serviceRepository->create($request->validated()));
+        return new ServiceResource($this->serviceRepository->create($request->all()));
     }
 
     /**
@@ -63,7 +63,7 @@ class ServiceController extends Controller
      */
     public function update(ServiceUpdateRequest $request, int $id)
     {
-        return $this->serviceRepository->update($request->validated(), $id);
+        return $this->serviceRepository->update($request->all(), $id);
     }
 
     /**

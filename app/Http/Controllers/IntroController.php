@@ -42,7 +42,7 @@ class IntroController extends Controller
      */
     public function store(IntroCreateRequest $request)
     {
-        return new IntroResource($this->introRepository->create($request->validated()));
+        return new IntroResource($this->introRepository->create($request->all()));
     }
 
     /**
@@ -58,7 +58,7 @@ class IntroController extends Controller
      */
     public function update(IntroUpdateRequest $request, int $id)
     {
-        return $this->introRepository->update($request->validated(), $id);
+        return $this->introRepository->update($request->all(), $id);
     }
 
     /**

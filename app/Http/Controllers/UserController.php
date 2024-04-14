@@ -61,7 +61,7 @@ class UserController extends Controller
     public function updateProfile(UserProfileUpdateRequest $request)
     {
         $auth = $this->getAuth();
-        $request = $request->validated();
+        $request = $request->all();
         DB::beginTransaction();
         if ($request['full_name']) {
             $auth->update(['full_name' => $request['full_name']]);
