@@ -35,7 +35,7 @@ class MetaRepository extends BaseRepository implements MetaInterface
                         'value' => $value,
                     ]);
                     if ($meta) {
-                        $this->model->newQuery()->update([
+                        $meta->update([
                             'key' => $key,
                             'value' => $value,
                         ]);
@@ -52,7 +52,6 @@ class MetaRepository extends BaseRepository implements MetaInterface
             DB::commit();
             return true;
         } catch (\Exception $exception) {
-            dd($exception->getMessage());
             DB::rollBack();
             return false;
         }

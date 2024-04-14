@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Portfolio extends Model
 {
@@ -28,6 +29,21 @@ class Portfolio extends Model
     protected $casts = [
         'images' => 'json'
     ];
+
+    protected $appends = [
+        'work_hours',
+        'images_list',
+    ];
+
+    public function getWorkHoursAttribute()
+    {
+        return $this->user->getMeta('work_hours');
+    }
+
+    public function getImagesListAttribute()
+    {
+        return Str::length($this->images) > 0 ? explode(',', $this->images) : [];
+    }
 
     public function service()
     {
