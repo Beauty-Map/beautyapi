@@ -119,9 +119,9 @@ class PortfolioController extends Controller
         $auth = $this->getAuth();
         $request['user_id'] = $auth->id;
         $request['images'] = implode(',', $request['images']);
-        if ($request->has('tel') && $request['tel']) {
+        if ($request->has('has_tel') && $request['has_tel']) {
             $request['showing_phone_number'] = $auth->getMeta('tel');
-        } else if ($request->has('phone_number') && $request['phone_number']) {
+        } else if ($request->has('has_phone_number') && $request['has_phone_number']) {
             $request['showing_phone_number'] = $auth->phone_number;
         } else {
             $request['showing_phone_number'] = $auth->second_phone_number;
