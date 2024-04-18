@@ -10,7 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/intros', [AuthController::class, 'register'])->middleware('guest');
+Route::get('/intros', [IntroController::class, 'index'])->middleware('guest');
 
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
