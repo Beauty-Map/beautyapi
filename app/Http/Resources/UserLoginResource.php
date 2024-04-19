@@ -29,6 +29,8 @@ class UserLoginResource extends JsonResource
             'id' => $this->user->id,
             'full_name' => $this->user->full_name,
             'phone_number' => $this->user->phone_number,
+            'coins' => $this->user->coins,
+            'golds' => $this->user->golds,
             'city_id' => $this->user->city_id,
             'city' => $this->user->city,
             'province_id' => $this->user->province_id,

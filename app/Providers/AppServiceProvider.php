@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Portfolio;
 use App\Models\Service;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Policies\PortfolioPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -30,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
             'user' => User::class,
             'portfolio' => Portfolio::class,
             'service' => Service::class,
+            'wallet' => Wallet::class,
         ]);
 
         Gate::define('delete-own-account', [UserPolicy::class, 'deleteOwnAccount']);
