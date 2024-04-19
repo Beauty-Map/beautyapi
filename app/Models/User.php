@@ -55,6 +55,8 @@ class User extends Authenticatable
 
     protected $appends = [
         'province',
+        'golds',
+        'coins',
     ];
 
     public function metas()
@@ -80,5 +82,22 @@ class User extends Authenticatable
     public function setMeta($key = '', $value = '')
     {
         return Helper::setMeta($this, $key, $value);
+    }
+
+    public function wallets()
+    {
+        return $this->morphMany(Wallet::class, 'walletable');
+    }
+
+    public function getCoinsAttribute()
+    {
+        $wallet = $this->wallets()->where('type', 'coin')->firstOrCreate(['type' => 'coin']);
+        return $wallet->amount;
+    }
+
+    public function getGoldsAttribute()
+    {
+        $wallet = $this->wallets()->where('type', 'gold')->firstOrCreate(['type' => 'gold']);
+        return $wallet->amount;
     }
 }
