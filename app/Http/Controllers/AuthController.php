@@ -13,9 +13,12 @@ use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\SetRegisterPasswordRequest;
 use App\Http\Resources\UserLoginResource;
 use App\Interfaces\OtpInterface;
+use App\Interfaces\PlanInterface;
 use App\Interfaces\UserInterface;
+use App\Interfaces\UserPlanInterface;
 use App\Models\Otp;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,15 +28,21 @@ use Illuminate\Support\Str;
 class AuthController extends Controller
 {
     protected UserInterface $userRepository;
+    protected UserPlanInterface $userPlanRepository;
     protected OtpInterface $otpRepository;
+    protected PlanInterface $planRepository;
 
     public function __construct(
         UserInterface $userRepository,
-        OtpInterface $otpRepository
+        OtpInterface $otpRepository,
+        PlanInterface $planRepository,
+        UserPlanInterface $userPlanRepository,
     )
     {
         $this->userRepository = $userRepository;
         $this->otpRepository = $otpRepository;
+        $this->planRepository = $planRepository;
+        $this->userPlanRepository = $userPlanRepository;
     }
 
     public function register(RegisterUserRequest $request)
@@ -43,8 +52,10 @@ class AuthController extends Controller
         if ($user) {
             return $this->createError('USER_REGISTERED_BEFORE_ERROR', Constants::USER_REGISTERED_BEFORE_ERROR,403);
         }
+        $request['is_active'] = false;
         $user = $this->userRepository->create($request->only([
-            'phone_number'
+            'phone_number',
+            'is_active'
         ]));
         event(new SendRegisterOtpEvent($user));
         return $this->createCustomResponse('', 201);
@@ -76,7 +87,12 @@ class AuthController extends Controller
     public function login(LoginUserRequest $request)
     {
         $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
-        if(Auth::attempt(['phone_number' => $request->phone_number, 'password' => $request->password])){
+        $credentials = [
+            'phone_number' => $request->phone_number,
+            'password' => $request->password,
+            'is_active' => true,
+        ];
+        if(Auth::attempt($credentials)){
             /** @var User $user */
             $user = Auth::user();
             $token =  $user->createToken(env('APP_NAME'))->plainTextToken;
@@ -137,10 +153,14 @@ class AuthController extends Controller
         if (!$otp) {
             return $this->createError('INVALID_OTP_CODE_ERROR', Constants::INVALID_OTP_CODE_ERROR,404);
         }
+        /** @var User $user */
         $user = $this->userRepository->findOneBy(['phone_number' => $request['phone_number']]);
         $this->userRepository->update([
             'remember_token' => Helper::randomCode(10),
+            'is_active' => true,
         ], $user->id);
+        $plan = $this->planRepository->find(1);
+        $this->userPlanRepository->setPlan($user->id, $plan->id, null, null, -1, $plan->coins);
         $otp->delete();
         return $this->createCustomResponse($user->remember_token);
     }

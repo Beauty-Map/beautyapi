@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\Helper;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -57,6 +58,9 @@ class User extends Authenticatable
         'province',
         'golds',
         'coins',
+        'selected_plan',
+        'coin_wallet',
+        'gold_wallet',
     ];
 
     public function metas()
@@ -89,15 +93,42 @@ class User extends Authenticatable
         return $this->morphMany(Wallet::class, 'walletable');
     }
 
+    public function getCoinWalletAttribute()
+    {
+        return $this->wallets()->where('type', 'coin')->firstOrCreate(['type' => 'coin']);
+    }
+
     public function getCoinsAttribute()
     {
-        $wallet = $this->wallets()->where('type', 'coin')->firstOrCreate(['type' => 'coin']);
-        return $wallet->amount;
+        return $this->coin_wallet->amount;
+    }
+
+    public function getGoldWalletAttribute()
+    {
+        return $this->wallets()->where('type', 'gold')->firstOrCreate(['type' => 'gold']);
     }
 
     public function getGoldsAttribute()
     {
-        $wallet = $this->wallets()->where('type', 'gold')->firstOrCreate(['type' => 'gold']);
-        return $wallet->amount;
+        return $this->gold_wallet->amount;
+    }
+
+    public function plans()
+    {
+        return $this->hasMany(UserPlan::class);
+    }
+
+    public function getSelectedPlanAttribute()
+    {
+        $last = $this->plans()
+            ->where(function (Builder $q) {
+
+            })
+            ->orderByDesc('created_at')
+            ->first();
+        if ($last) {
+            return $last;
+        }
+        return $this->plans()->orderBy('created_at')->first();
     }
 }

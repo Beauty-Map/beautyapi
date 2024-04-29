@@ -28,10 +28,10 @@ class ServiceController extends Controller
         $filter = [];
         if (\request()->has('service_id')) {
             $filter['parent_id'] = \request()->get('service_id');
+        } else {
+            $filter['parent_id'] = null;
         }
-        if (\request()->has('is_active')) {
-            $filter['is_active'] = \request()->get('is_active');
-        }
+        $filter['is_active'] = true;
         if ($this->hasPage()) {
             $page = $this->getPage();
             $limit = $this->getLimit();

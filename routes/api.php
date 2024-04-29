@@ -7,10 +7,12 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserPlanController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/intros', [IntroController::class, 'index'])->middleware('guest');
+Route::get('/services', [ServiceController::class, 'index'])->middleware('guest');
 
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
@@ -26,6 +28,11 @@ Route::prefix('/own')->middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [PortfolioController::class, 'show']);
         Route::put('/{id}', [PortfolioController::class, 'update']);
         Route::delete('/{id}', [PortfolioController::class, 'destroy']);
+    });
+    Route::prefix('/plans')->group(function () {
+        Route::get('/', [UserPlanController::class, 'index']);
+        Route::post('/', [UserPlanController::class, 'selectPlan']);
+        Route::get('/{id}', [UserPlanController::class, 'show']);
     });
 });
 
