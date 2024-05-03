@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProvinceResource;
+use App\Interfaces\ProvinceInterface;
 use App\Models\Province;
 use Illuminate\Http\Request;
 
 class ProvinceController extends Controller
 {
+    public ProvinceInterface $provinceRepository;
+
+    public function __construct(
+        ProvinceInterface $provinceRepository,
+    )
+    {
+        $this->provinceRepository = $provinceRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return ProvinceResource::collection($this->provinceRepository->all('*', 'id', 'asc'));
     }
 
     /**

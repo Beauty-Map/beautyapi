@@ -8,6 +8,7 @@ use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\PlanInterface;
 use App\Interfaces\PortfolioInterface;
+use App\Interfaces\ProvinceInterface;
 use App\Interfaces\ServiceInterface;
 use App\Interfaces\UserInterface;
 use App\Interfaces\UserPlanInterface;
@@ -16,6 +17,7 @@ use App\Models\Meta;
 use App\Models\Otp;
 use App\Models\Plan;
 use App\Models\Portfolio;
+use App\Models\Province;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\UserPlan;
@@ -25,6 +27,7 @@ use App\Repositories\MetaRepository;
 use App\Repositories\OtpRepository;
 use App\Repositories\PlanRepository;
 use App\Repositories\PortfolioRepository;
+use App\Repositories\ProvinceRepository;
 use App\Repositories\ServiceRepository;
 use App\Repositories\UserPlanRepository;
 use App\Repositories\UserRepository;
@@ -87,6 +90,12 @@ class BackendServiceProvider extends ServiceProvider
             UserPlanInterface::class,
             function() {
                 return new UserPlanRepository(new UserPlan);
+            }
+        );
+        $this->app->bind(
+            ProvinceInterface::class,
+            function() {
+                return new ProvinceRepository(new Province);
             }
         );
     }
