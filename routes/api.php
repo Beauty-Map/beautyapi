@@ -40,6 +40,7 @@ Route::prefix('/auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
     Route::post('/register/otp', [AuthController::class, 'checkOtpCode'])->middleware('guest');
     Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('/password/forgot', [AuthController::class, 'forgotPassword'])->middleware('guest');
     Route::post('/password/otp', [AuthController::class, 'checkForgotPasswordOtpCode'])->middleware('guest');
     Route::post('/password', [AuthController::class, 'setPassword'])->middleware('guest');
