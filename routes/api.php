@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/intros', [IntroController::class, 'index'])->middleware('guest');
 Route::get('/services', [ServiceController::class, 'index'])->middleware('guest');
 Route::get('/provinces', [ProvinceController::class, 'index'])->middleware('guest');
+Route::get('/portfolios', [PortfolioController::class, 'index'])->middleware('guest');
 
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');

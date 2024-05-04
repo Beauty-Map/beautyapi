@@ -32,10 +32,10 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
     public function searchQuery(array $filter, string $orderBy = 'created_at', string $sortBy = 'desc'): Builder
     {
         $query = $this->model->newQuery();
-        if ($filter['user_id']) {
+        if (array_key_exists('user_id', $filter) && $filter['user_id']) {
             $query = $query->where('user_id', $filter['user_id']);
         }
-        if ($filter['services'] && count($filter['services']) > 0) {
+        if (array_key_exists('services', $filter) && $filter['services'] && count($filter['services']) > 0) {
             $query = $query->whereIn('service_id', $filter['services']);
         }
         return $query->orderBy($orderBy, $sortBy);
