@@ -35,7 +35,7 @@ class Helper
         }
     }
 
-    public static function getMeta(Model $model = null, $key = ''): string
+    public static function getMeta(Model $model = null, $key = ''): array
     {
         if (!$key || !$model) {
             return '';

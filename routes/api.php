@@ -12,11 +12,14 @@ use App\Http\Controllers\UserPlanController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/intros', [IntroController::class, 'index'])->middleware('guest');
-Route::get('/services', [ServiceController::class, 'index'])->middleware('guest');
-Route::get('/provinces', [ProvinceController::class, 'index'])->middleware('guest');
-Route::get('/portfolios', [PortfolioController::class, 'index'])->middleware('guest');
+Route::get('/intros', [IntroController::class, 'index']);
+Route::get('/provinces', [ProvinceController::class, 'index']);
+Route::get('/portfolios', [PortfolioController::class, 'index']);
 
+Route::prefix('/services')->group(function () {
+    Route::get('/', [ServiceController::class, 'index']);
+    Route::get('/{id}', [ServiceController::class, 'show']);
+});
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:sanctum');
