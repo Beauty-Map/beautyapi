@@ -5,6 +5,7 @@ use App\Http\Controllers\IntroController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
@@ -20,6 +21,9 @@ Route::prefix('/services')->group(function () {
     Route::get('/', [ServiceController::class, 'index']);
     Route::get('/{id}', [ServiceController::class, 'show']);
 });
+
+Route::get('/search', [SearchController::class, 'search']);
+
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:sanctum');

@@ -21,12 +21,14 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
 
     public function searchByPaginate(array $filter, int $page, int $limit, string $orderBy = 'created_at', string $sortBy = 'desc')
     {
-        return $this->searchQuery($filter)->offset(($page - 1) * $limit)->limit($limit);
+        $query = $this->searchQuery($filter, $orderBy, $sortBy);
+        return ['last_page' => ceil($query->count() / $limit), 'data' => $query->offset(($page - 1) * $limit)->limit($limit)->get()];
     }
 
     public function searchBy(array $filter, string $orderBy = 'created_at', string $sortBy = 'desc')
     {
-        return $this->searchQuery($filter)->get();
+        $query = $this->searchQuery($filter, $orderBy, $sortBy);
+        return ['last_page' => 1, 'data' => $query->get()];
     }
 
     public function searchQuery(array $filter, string $orderBy = 'created_at', string $sortBy = 'desc'): Builder
@@ -37,6 +39,9 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
         }
         if (array_key_exists('services', $filter) && $filter['services'] && count($filter['services']) > 0) {
             $query = $query->whereIn('service_id', $filter['services']);
+        }
+        if (array_key_exists('term', $filter) && $filter['term']) {
+            $query = $query->where('title', 'like', '%'.$filter['term'].'%');
         }
         return $query->orderBy($orderBy, $sortBy);
     }
