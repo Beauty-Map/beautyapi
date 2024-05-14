@@ -25,7 +25,7 @@ Route::prefix('/services')->group(function () {
 Route::get('/search', [SearchController::class, 'search']);
 
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/admin/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:sanctum');
 
 Route::prefix('/own')->middleware('auth:sanctum')->group(function () {
@@ -77,3 +77,4 @@ Route::prefix('/admin')->middleware(['auth:sanctum', AdminMiddleware::class])->g
         Route::put('/{id}', [PlanController::class, 'update']);
     });
 });
+

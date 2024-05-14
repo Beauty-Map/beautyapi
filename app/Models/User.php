@@ -26,6 +26,7 @@ class User extends Authenticatable
         'password',
         'is_active',
         'city_id',
+        'birth_date',
     ];
 
     /**
@@ -61,6 +62,7 @@ class User extends Authenticatable
         'selected_plan',
         'coin_wallet',
         'gold_wallet',
+        'avatar',
     ];
 
     public function metas()
@@ -111,6 +113,11 @@ class User extends Authenticatable
     public function getGoldsAttribute()
     {
         return $this->gold_wallet->amount;
+    }
+
+    public function getAvatarAttribute()
+    {
+        return $this->getMeta('avatar');
     }
 
     public function plans()

@@ -123,7 +123,7 @@ class AuthController extends Controller
 
     public function own()
     {
-        return new UserLoginResource($this->getAuth(), "");
+        return $this->getAuth();
     }
 
     public function forgotPassword(ForgotPasswordRequest $request)
@@ -167,6 +167,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        return Auth::guard('sanctum')->user()->currentAccessToken()->delete();
+        \auth('web')->logout();
+        return true;
     }
 }
