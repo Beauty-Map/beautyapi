@@ -7,6 +7,7 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TicketSubjectContorller;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPlanController;
@@ -25,12 +26,14 @@ Route::prefix('/services')->group(function () {
 Route::get('/search', [SearchController::class, 'search']);
 
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
-Route::post('/admin/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:sanctum');
 
 Route::prefix('/own')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
     Route::put('/', [UserController::class, 'updateProfile']);
+    Route::put('/password', [UserController::class, 'updatePassword']);
+    Route::post('/alt-number', [UserController::class, 'sendOtpForAltNumber']);
+    Route::put('/alt-number', [UserController::class, 'updateAltNumber']);
     Route::delete('/', [UserController::class, 'deleteAccount']);
     Route::prefix('/portfolios')->group(function () {
         Route::get('/', [PortfolioController::class, 'ownIndex']);
@@ -75,6 +78,13 @@ Route::prefix('/admin')->middleware(['auth:sanctum', AdminMiddleware::class])->g
         Route::get('/', [PlanController::class, 'index']);
         Route::get('/{id}', [PlanController::class, 'show']);
         Route::put('/{id}', [PlanController::class, 'update']);
+    });
+    Route::prefix('/subjects')->group(function () {
+        Route::get('/', [TicketSubjectContorller::class, 'index']);
+        Route::post('/', [TicketSubjectContorller::class, 'store']);
+        Route::get('/{id}', [TicketSubjectContorller::class, 'show']);
+        Route::put('/{id}', [TicketSubjectContorller::class, 'update']);
+        Route::delete('/{id}', [TicketSubjectContorller::class, 'destroy']);
     });
 });
 

@@ -12,5 +12,7 @@ use App\Http\Requests\RegisterUserRequest;
  */
 interface OtpInterface extends BaseInterface
 {
+    public function make(array $inputs);
 
+    public function validate(array $inputs);
 }

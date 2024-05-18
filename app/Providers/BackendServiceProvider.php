@@ -10,6 +10,7 @@ use App\Interfaces\PlanInterface;
 use App\Interfaces\PortfolioInterface;
 use App\Interfaces\ProvinceInterface;
 use App\Interfaces\ServiceInterface;
+use App\Interfaces\TicketSubjectInterface;
 use App\Interfaces\UserInterface;
 use App\Interfaces\UserPlanInterface;
 use App\Models\Intro;
@@ -19,6 +20,7 @@ use App\Models\Plan;
 use App\Models\Portfolio;
 use App\Models\Province;
 use App\Models\Service;
+use App\Models\TicketSubject;
 use App\Models\User;
 use App\Models\UserPlan;
 use App\Repositories\BaseRepository;
@@ -29,6 +31,7 @@ use App\Repositories\PlanRepository;
 use App\Repositories\PortfolioRepository;
 use App\Repositories\ProvinceRepository;
 use App\Repositories\ServiceRepository;
+use App\Repositories\TicketSubjectRepository;
 use App\Repositories\UserPlanRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
@@ -96,6 +99,12 @@ class BackendServiceProvider extends ServiceProvider
             ProvinceInterface::class,
             function() {
                 return new ProvinceRepository(new Province);
+            }
+        );
+        $this->app->bind(
+            TicketSubjectInterface::class,
+            function() {
+                return new TicketSubjectRepository(new TicketSubject);
             }
         );
     }

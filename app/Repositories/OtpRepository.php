@@ -31,4 +31,33 @@ class OtpRepository extends BaseRepository implements OtpInterface
             ->where('updated_at', '>=', Carbon::now()->subMinute())
             ->orderBy($orderBy, $sortBy)->first();
     }
+
+    public function make(array $inputs)
+    {
+        $otp = $this->findOneBy([
+            'phone_number' => $inputs['phone_number'],
+            'type' => $inputs['type'],
+        ]);
+        if ($otp) {
+            $otp->update([
+                'code' => $inputs['code']
+            ]);
+            return $otp;
+        } else {
+            return $this->create($inputs);
+        }
+    }
+
+    public function validate(array $inputs)
+    {
+        $otp = $this->findOneBy([
+            'phone_number' => $inputs['phone_number'],
+            'type' => $inputs['type'],
+        ]);
+        if (!$otp) {
+            return false;
+        }
+        $otp->delete();
+        return true;
+    }
 }
