@@ -63,4 +63,9 @@ class Helper
             'value' => (string) $value,
         ]);
     }
+
+    public function uploadFile(string $fileContent, string $src)
+    {
+        
+    }
 }
