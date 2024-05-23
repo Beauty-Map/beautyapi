@@ -48,6 +48,7 @@ class User extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -63,6 +64,14 @@ class User extends Authenticatable
         'coin_wallet',
         'gold_wallet',
         'avatar',
+        'national_code',
+        'tel_number',
+        'location',
+        'work_hours',
+        'work_on_holidays',
+        'is_artist',
+        'artist_banner',
+        'is_artist_profile_completed',
     ];
 
     public function metas()
@@ -120,6 +129,31 @@ class User extends Authenticatable
         return $this->getMeta('avatar');
     }
 
+    public function getNationalCodeAttribute()
+    {
+        return $this->getMeta('national_code');
+    }
+
+    public function getTelNumberAttribute()
+    {
+        return $this->getMeta('tel_number');
+    }
+
+    public function getWorkHoursAttribute()
+    {
+        return $this->getMeta('work_hours');
+    }
+
+    public function getWorkOnHolidaysAttribute()
+    {
+        return $this->getMeta('work_on_holidays');
+    }
+
+    public function getLocationAttribute()
+    {
+        return ['lat' => '34.79922', 'lng' => '48.51456'];
+    }
+
     public function plans()
     {
         return $this->hasMany(UserPlan::class);
@@ -137,5 +171,42 @@ class User extends Authenticatable
             return $last;
         }
         return $this->plans()->orderBy('created_at')->first();
+    }
+
+    public function getIsArtistAttribute()
+    {
+        return $this->hasRole('artist');
+    }
+
+    public function getIsArtistProfileCompletedAttribute()
+    {
+        if (!$this->hasRole('artist')) {
+            return false;
+        }
+        $isCompleted = true;
+        if (!$this->full_name) {
+            $isCompleted = false;
+        }
+        if (!$this->city_id) {
+            $isCompleted = false;
+        }
+        if (!$this->birth_date) {
+            $isCompleted = false;
+        }
+        if ($isCompleted) {
+            $metas = $this->metas;
+            $metas = $metas->map(function($i) {return $i->value ? $i->key : '';})->filter(function ($i) {return $i != '';})->toArray();
+            $isCompleted = in_array('national_code', $metas) &&
+                in_array('address', $metas) &&
+                in_array('tel', $metas) &&
+                in_array('work_hours', $metas) &&
+                in_array('bio', $metas);
+        }
+        return $isCompleted;
+    }
+
+    public function getArtistBannerAttribute()
+    {
+        return $this->getMeta('artist_banner');
     }
 }

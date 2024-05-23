@@ -19,6 +19,7 @@ Route::get('/intros', [IntroController::class, 'index']);
 Route::get('/provinces', [ProvinceController::class, 'index']);
 Route::get('/portfolios', [PortfolioController::class, 'index']);
 Route::get('/subjects', [TicketSubjectController::class, 'index']);
+Route::get('/nearest', [UserController::class, 'nearest']);
 
 Route::prefix('/services')->group(function () {
     Route::get('/', [ServiceController::class, 'index']);

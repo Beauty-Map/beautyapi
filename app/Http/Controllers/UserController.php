@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Http\Requests\UpdateAltNumberRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserProfileUpdateRequest;
+use App\Http\Resources\UserSimpleResource;
 use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\UserInterface;
@@ -30,6 +31,21 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
         $this->metaRepository = $metaRepository;
         $this->otpRepository = $otpRepository;
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function nearest()
+    {
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $nearest = $this->userRepository->nearestByPagination($page, $limit, 'desc');
+        } else {
+            $nearest = $this->userRepository->nearest('desc');
+        }
+            return UserSimpleResource::collection($nearest);
     }
 
     /**

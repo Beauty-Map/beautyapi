@@ -17,4 +17,20 @@ class UserRepository extends BaseRepository implements UserInterface
     {
         parent::__construct($model);
     }
+
+    public function nearest(string $sortBy = 'desc')
+    {
+        return $this->nearestQuery()->get();
+    }
+
+    public function nearestByPagination(int $page = 1, int $limit = 10, string $sortBy = 'desc')
+    {
+        return $this->nearestQuery()->paginate($limit);
+    }
+
+    public function nearestQuery(string $sortBy = 'desc')
+    {
+        $query = $this->model->newQuery();
+        return $query;
+    }
 }
