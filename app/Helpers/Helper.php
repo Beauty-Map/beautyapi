@@ -35,7 +35,7 @@ class Helper
         }
     }
 
-    public static function getMeta(Model $model = null, $key = ''): array | string
+    public static function getMeta(Model $model = null, $key = '')
     {
         if (!$key || !$model) {
             return '';
@@ -43,7 +43,7 @@ class Helper
         /** @var Meta $meta */
         $meta = $model->metas()->where('key', $key)->first();
         if (!$meta) {
-            return "";
+            $meta = $model->metas()->create(['key' => $key, 'value' => '']);
         }
         return $meta->formatted_value;
     }
@@ -66,6 +66,6 @@ class Helper
 
     public function uploadFile(string $fileContent, string $src)
     {
-        
+
     }
 }

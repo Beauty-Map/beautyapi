@@ -49,6 +49,8 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'is_closed' => 'boolean',
+            'is_all_day_open' => 'boolean',
         ];
     }
 
@@ -69,6 +71,8 @@ class User extends Authenticatable
         'location',
         'work_hours',
         'work_on_holidays',
+        'is_closed',
+        'is_all_day_open',
         'is_artist',
         'artist_banner',
         'is_artist_profile_completed',
@@ -147,6 +151,16 @@ class User extends Authenticatable
     public function getWorkOnHolidaysAttribute()
     {
         return $this->getMeta('work_on_holidays');
+    }
+
+    public function getIsClosedAttribute()
+    {
+        return $this->getMeta('is_closed');
+    }
+
+    public function getIsAllDayOpenAttribute()
+    {
+        return $this->getMeta('is_all_day_open');
     }
 
     public function getLocationAttribute()
