@@ -30,7 +30,19 @@ class Meta extends Model
         try {
             $value = json_decode($this->value);
             if ($this->key == 'work_hours') {
+                $value = $value ?? [];
                 $value = collect($value)->sortBy('day_index')->values()->all();
+            }
+            if ($this->key == 'social_media') {
+                $value = $value ?? [
+                    'telegram' => '',
+                    'instagram' => '',
+                    'bale' => '',
+                    'whatsapp' => '',
+                    'eita' => '',
+                    'rubika' => '',
+                    'web' => '',
+                ];
             }
             if ($this->key == 'work_on_holidays') {
                 $value = $value ?? false;

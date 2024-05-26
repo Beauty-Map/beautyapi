@@ -73,6 +73,7 @@ class User extends Authenticatable
         'work_on_holidays',
         'is_closed',
         'is_all_day_open',
+        'social_media',
         'is_artist',
         'artist_banner',
         'is_artist_profile_completed',
@@ -146,6 +147,11 @@ class User extends Authenticatable
     public function getWorkHoursAttribute()
     {
         return $this->getMeta('work_hours');
+    }
+
+    public function getSocialMediaAttribute()
+    {
+        return $this->getMeta('social_media');
     }
 
     public function getWorkOnHolidaysAttribute()
