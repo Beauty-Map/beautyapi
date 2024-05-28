@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants\Constants;
 use App\Helpers\Helper;
+use App\Http\Requests\ArtistProfileUpdateRequest;
 use App\Http\Requests\UpdateAltNumberRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserProfileUpdateRequest;
@@ -98,6 +99,36 @@ class UserController extends Controller
         if ($request['birth_date']) {
             $auth->update(['birth_date' => $request['birth_date']]);
             unset($request['birth_date']);
+        }
+        $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
+        if ($res) {
+            DB::commit();
+            return $this->createCustomResponse(1);
+        }
+        DB::rollBack();
+        return $this->createError('error', Constants::UNDEFINED_ERROR, 422);
+    }
+
+    public function updateArtistProfile(ArtistProfileUpdateRequest $request)
+    {
+        $auth = $this->getAuth();
+        $request = $request->all();
+        DB::beginTransaction();
+        if ($request['full_name']) {
+            $auth->update(['full_name' => $request['full_name']]);
+            unset($request['full_name']);
+        }
+        if ($request['city_id']) {
+            $auth->update(['city_id' => $request['city_id']]);
+            unset($request['city_id']);
+        }
+        if ($request['birth_date']) {
+            $auth->update(['birth_date' => $request['birth_date']]);
+            unset($request['birth_date']);
+        }
+        if ($request['location']) {
+            $auth->update(['lat' => $request['location']['lat'], 'lng' => $request['location']['lng']]);
+            unset($request['location']);
         }
         $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
         if ($res) {

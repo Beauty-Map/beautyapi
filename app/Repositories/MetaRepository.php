@@ -27,12 +27,14 @@ class MetaRepository extends BaseRepository implements MetaInterface
                 if (gettype($value) == 'array') {
                     $value = json_encode($value);
                 }
+                if (gettype($value) == 'boolean') {
+                    $value = $value ? 'true' : 'false';
+                }
                 if ($value) {
                     $meta = $this->findOneBy([
                         'metaable_id' => $id,
                         'metaable_type' => $type,
                         'key' => $key,
-                        'value' => $value,
                     ]);
                     if ($meta) {
                         $meta->update([

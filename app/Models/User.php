@@ -27,6 +27,8 @@ class User extends Authenticatable
         'is_active',
         'city_id',
         'birth_date',
+        'lat',
+        'lng',
     ];
 
     /**
@@ -74,6 +76,8 @@ class User extends Authenticatable
         'is_closed',
         'is_all_day_open',
         'social_media',
+        'address',
+        'bio',
         'is_artist',
         'artist_banner',
         'is_artist_profile_completed',
@@ -144,6 +148,16 @@ class User extends Authenticatable
         return $this->getMeta('tel_number');
     }
 
+    public function getAddressAttribute()
+    {
+        return $this->getMeta('address');
+    }
+
+    public function getBioAttribute()
+    {
+        return $this->getMeta('bio');
+    }
+
     public function getWorkHoursAttribute()
     {
         return $this->getMeta('work_hours');
@@ -171,7 +185,7 @@ class User extends Authenticatable
 
     public function getLocationAttribute()
     {
-        return ['lat' => '34.79922', 'lng' => '48.51456'];
+        return ['lat' => $this->lat, 'lng' => $this->lng];
     }
 
     public function plans()

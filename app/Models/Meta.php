@@ -9,6 +9,8 @@ class Meta extends Model
 {
     use HasFactory;
 
+    const STRING_ARRAY = ['tel_number', 'alt_number', 'avatar', 'national_code', 'artist_banner', 'address', 'bio'];
+
     protected $fillable = [
         'metaable_id',
         'metaable_type',
@@ -52,6 +54,9 @@ class Meta extends Model
             }
             if ($this->key == 'is_all_day_open') {
                 $value = $value ?? false;
+            }
+            if (in_array($this->key, self::STRING_ARRAY)) {
+                $value = $this->value;
             }
             return $value;
         } catch (\Exception $exception) {

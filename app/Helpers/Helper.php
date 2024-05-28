@@ -42,7 +42,7 @@ class Helper
         }
         /** @var Meta $meta */
         $meta = $model->metas()->where('key', $key)->first();
-        if (!$meta) {
+        if ($meta == null) {
             $meta = $model->metas()->create(['key' => $key, 'value' => '']);
         }
         return $meta->formatted_value;
@@ -56,6 +56,7 @@ class Helper
         /** @var Meta $meta */
         $meta = $model->metas()->where('key', $key)->first();
         if ($meta) {
+            $meta->update(['value' => $value]);
             return $meta;
         }
         return $model->metas()->create([

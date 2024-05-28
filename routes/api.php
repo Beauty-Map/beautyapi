@@ -38,6 +38,7 @@ Route::prefix('/own')->middleware('auth:sanctum')->group(function () {
     Route::post('/alt-number', [UserController::class, 'sendOtpForAltNumber']);
     Route::put('/alt-number', [UserController::class, 'updateAltNumber']);
     Route::delete('/', [UserController::class, 'deleteAccount']);
+    Route::put('/artist', [UserController::class, 'updateArtistProfile']);
     Route::prefix('/portfolios')->group(function () {
         Route::get('/', [PortfolioController::class, 'ownIndex']);
         Route::post('/', [PortfolioController::class, 'store']);
