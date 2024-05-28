@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Constants\Constants;
 use App\Helpers\Helper;
 use App\Http\Requests\ArtistProfileUpdateRequest;
+use App\Http\Requests\DoArtistAgreement;
 use App\Http\Requests\UpdateAltNumberRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserProfileUpdateRequest;
@@ -12,7 +13,6 @@ use App\Http\Resources\UserSimpleResource;
 use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\UserInterface;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -130,6 +130,20 @@ class UserController extends Controller
             $auth->update(['lat' => $request['location']['lat'], 'lng' => $request['location']['lng']]);
             unset($request['location']);
         }
+        $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
+        if ($res) {
+            DB::commit();
+            return $this->createCustomResponse(1);
+        }
+        DB::rollBack();
+        return $this->createError('error', Constants::UNDEFINED_ERROR, 422);
+    }
+
+    public function doArtistAgreement(DoArtistAgreement $request)
+    {
+        $auth = $this->getAuth();
+        $request = $request->all();
+        DB::beginTransaction();
         $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
         if ($res) {
             DB::commit();

@@ -23,8 +23,9 @@ class PortfolioCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:3|max:100',
-            'description' => 'required|string|max:250|min:3',
+            'title' => 'required|string|min:3|max:40',
+            'description' => 'required|string|max:200|min:3',
+            'maintenance' => 'nullable|string|max:200',
             'service_id' => 'required|exists:services,id',
             'price' => 'required|numeric|min:0',
             'discount_price' => 'required|numeric|min:0',

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\Helper;
+use App\Http\Resources\UserSelectedPlanResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -56,10 +57,6 @@ class User extends Authenticatable
         ];
     }
 
-    protected $with = [
-        'metas',
-    ];
-
     protected $appends = [
         'province',
         'golds',
@@ -79,6 +76,7 @@ class User extends Authenticatable
         'address',
         'bio',
         'is_artist',
+        'is_artist_agreed',
         'artist_banner',
         'is_artist_profile_completed',
     ];
@@ -153,6 +151,11 @@ class User extends Authenticatable
         return $this->getMeta('address');
     }
 
+    public function getIsArtistAgreedAttribute()
+    {
+        return $this->getMeta('is_artist_agreed');
+    }
+
     public function getBioAttribute()
     {
         return $this->getMeta('bio');
@@ -202,9 +205,9 @@ class User extends Authenticatable
             ->orderByDesc('created_at')
             ->first();
         if ($last) {
-            return $last;
+            return new UserSelectedPlanResource($last);
         }
-        return $this->plans()->orderBy('created_at')->first();
+        return new UserSelectedPlanResource($this->plans()->orderBy('created_at')->first());
     }
 
     public function getIsArtistAttribute()

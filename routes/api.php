@@ -24,6 +24,7 @@ Route::get('/nearest', [UserController::class, 'nearest']);
 Route::prefix('/services')->group(function () {
     Route::get('/', [ServiceController::class, 'index']);
     Route::get('/{id}', [ServiceController::class, 'show']);
+    Route::get('/{id}/children', [ServiceController::class, 'children']);
 });
 
 Route::get('/search', [SearchController::class, 'search']);
@@ -39,6 +40,7 @@ Route::prefix('/own')->middleware('auth:sanctum')->group(function () {
     Route::put('/alt-number', [UserController::class, 'updateAltNumber']);
     Route::delete('/', [UserController::class, 'deleteAccount']);
     Route::put('/artist', [UserController::class, 'updateArtistProfile']);
+    Route::put('/artist/agreement', [UserController::class, 'doArtistAgreement']);
     Route::prefix('/portfolios')->group(function () {
         Route::get('/', [PortfolioController::class, 'ownIndex']);
         Route::post('/', [PortfolioController::class, 'store']);

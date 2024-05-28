@@ -23,7 +23,7 @@ class UploadController extends Controller
         $name = Carbon::now()->format('Y_m_d_H_i_s').Str::random(4);
         $path = "/images/$type";
         if (!File::exists(storage_path($path))) {
-            File::makeDirectory($path, true, true);
+            File::makeDirectory($path, true, true, true);
         }
         Storage::disk('public')->putFileAs($path, $file, $name.'.'.$ext);
         return [

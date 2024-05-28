@@ -18,6 +18,7 @@ class PortfolioResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
+            'maintenance' => $this->maintenance,
             'price' => $this->price,
             'discount_price' => $this->discount_price,
             'has_tel' => $this->has_tel,

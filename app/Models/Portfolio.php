@@ -22,6 +22,7 @@ class Portfolio extends Model
         'user_id',
         'price',
         'discount_price',
+        'maintenance',
         'showing_phone_number',
         'images',
         'has_tel',

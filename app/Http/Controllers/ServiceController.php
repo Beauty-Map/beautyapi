@@ -60,6 +60,25 @@ class ServiceController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function children(int $id)
+    {
+        $filter = [
+            'parent_id' => $id,
+            'is_active' => true,
+        ];
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $services = $this->serviceRepository->findByPaginate($filter, $page, $limit, 'id', 'asc');
+        } else {
+            $services = $this->serviceRepository->findBy($filter, 'id', 'asc');
+        }
+        return ServiceResource::collection($services);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(ServiceUpdateRequest $request, int $id)
