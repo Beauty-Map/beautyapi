@@ -31,7 +31,7 @@ class PortfolioUpdateRequest extends FormRequest
             'discount_price' => 'required|numeric|min:0',
             'has_tel' => 'required|boolean',
             'has_phone_number' => 'required|boolean',
-            'second_phone_number' => Rule::requiredIf(!$this->get('has_tel') && !$this->get('has_phone_number')),
+            'second_phone_number' => [Rule::requiredIf(!$this->get('has_tel') && !$this->get('has_phone_number')), 'string'],
             'images' => 'required|array',
             'images.*' => 'required|string',
         ];

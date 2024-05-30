@@ -31,16 +31,17 @@ class PortfolioController extends Controller
         $services = \request()->input('services', '');
         $filter = [
             'user_id' => $auth->id,
-            'services' => explode(',', $services),
+            'services' => strlen($services) > 0 ?  explode(',', $services) : [],
         ];
         if ($this->hasPage()) {
             $page = $this->getPage();
             $limit = $this->getLimit();
-            $portfolios = $this->portfolioRepository->searchByPaginate($filter, $page, $limit, 'created_at', 'desc');
+            $data = $this->portfolioRepository->searchByPaginate($filter, $page, $limit, 'created_at', 'desc');
         } else {
-            $portfolios = $this->portfolioRepository->searchBy($filter, 'created_at', 'desc');
+            $data = $this->portfolioRepository->searchBy($filter, 'created_at', 'desc');
         }
-        return PortfolioResource::collection($portfolios);
+        $data['data'] = PortfolioResource::collection($data['data']);
+        return $data;
     }
 
     /**
