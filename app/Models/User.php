@@ -235,7 +235,7 @@ class User extends Authenticatable
             $metas = $metas->map(function($i) {return $i->value ? $i->key : '';})->filter(function ($i) {return $i != '';})->toArray();
             $isCompleted = in_array('national_code', $metas) &&
                 in_array('address', $metas) &&
-                in_array('tel', $metas) &&
+                in_array('tel_number', $metas) &&
                 in_array('work_hours', $metas) &&
                 in_array('bio', $metas);
         }
