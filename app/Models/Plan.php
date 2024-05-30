@@ -18,6 +18,7 @@ class Plan extends Model
         'has_blue_tick',
         'image_upload_count',
         'has_discount',
+        'color',
     ];
 
     protected $casts = [

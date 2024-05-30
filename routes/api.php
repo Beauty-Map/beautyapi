@@ -32,6 +32,9 @@ Route::get('/search', [SearchController::class, 'search']);
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:sanctum');
 
+Route::prefix('/plans')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [PlanController::class, 'indexBuyable']);
+});
 Route::prefix('/own')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
     Route::put('/', [UserController::class, 'updateProfile']);

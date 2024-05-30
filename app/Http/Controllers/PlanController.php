@@ -23,12 +23,6 @@ class PlanController extends Controller
     public function index()
     {
         $filter = [];
-        if (\request()->has('service_id')) {
-            $filter['parent_id'] = \request()->get('service_id');
-        }
-        if (\request()->has('is_active')) {
-            $filter['is_active'] = \request()->get('is_active');
-        }
         if ($this->hasPage()) {
             $page = $this->getPage();
             $limit = $this->getLimit();
@@ -37,6 +31,22 @@ class PlanController extends Controller
             $services = $this->planRepository->findBy($filter, 'id', 'asc');
         }
         return PlanResource::collection($services);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function indexBuyable()
+    {
+        $filter = [];
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $services = $this->planRepository->findByPaginate($filter, $page, $limit, 'id', 'asc');
+        } else {
+            $services = $this->planRepository->findBy($filter, 'id', 'asc');
+        }
+        return PlanResource::collection($services->where(function ($i) {return $i->id != 1;}));
     }
 
     /**
