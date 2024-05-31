@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IntroController;
+use App\Http\Controllers\PaymentOptionController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProvinceController;
@@ -34,6 +35,10 @@ Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:sa
 
 Route::prefix('/plans')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [PlanController::class, 'indexBuyable']);
+});
+Route::prefix('/payment-options')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [PaymentOptionController::class, 'index']);
+    Route::get('/{id}', [PaymentOptionController::class, 'show']);
 });
 Route::prefix('/own')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
@@ -100,6 +105,13 @@ Route::prefix('/admin')->middleware(['auth:sanctum', AdminMiddleware::class])->g
         Route::get('/{id}', [TicketSubjectController::class, 'show']);
         Route::put('/{id}', [TicketSubjectController::class, 'update']);
         Route::delete('/{id}', [TicketSubjectController::class, 'destroy']);
+    });
+    Route::prefix('/payment-options')->group(function () {
+        Route::get('/', [PaymentOptionController::class, 'index']);
+        Route::post('/', [PaymentOptionController::class, 'store']);
+        Route::get('/{id}', [PaymentOptionController::class, 'show']);
+        Route::put('/{id}', [PaymentOptionController::class, 'update']);
+        Route::delete('/{id}', [PaymentOptionController::class, 'destroy']);
     });
 });
 

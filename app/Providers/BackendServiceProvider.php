@@ -6,6 +6,7 @@ use App\Interfaces\BaseInterface;
 use App\Interfaces\IntroInterface;
 use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
+use App\Interfaces\PaymentOptionInterface;
 use App\Interfaces\PlanInterface;
 use App\Interfaces\PortfolioInterface;
 use App\Interfaces\ProvinceInterface;
@@ -17,6 +18,7 @@ use App\Interfaces\UserPlanInterface;
 use App\Models\Intro;
 use App\Models\Meta;
 use App\Models\Otp;
+use App\Models\PaymentOption;
 use App\Models\Plan;
 use App\Models\Portfolio;
 use App\Models\Province;
@@ -29,6 +31,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\IntroRepository;
 use App\Repositories\MetaRepository;
 use App\Repositories\OtpRepository;
+use App\Repositories\PaymentOptionRepository;
 use App\Repositories\PlanRepository;
 use App\Repositories\PortfolioRepository;
 use App\Repositories\ProvinceRepository;
@@ -114,6 +117,12 @@ class BackendServiceProvider extends ServiceProvider
             TicketInterface::class,
             function() {
                 return new TicketRepository(new Ticket);
+            }
+        );
+        $this->app->bind(
+            PaymentOptionInterface::class,
+            function() {
+                return new PaymentOptionRepository(new PaymentOption);
             }
         );
     }
