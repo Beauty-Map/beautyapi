@@ -77,6 +77,7 @@ class User extends Authenticatable
         'bio',
         'is_artist',
         'is_artist_agreed',
+        'documents',
         'artist_banner',
         'is_artist_profile_completed',
     ];
@@ -245,5 +246,10 @@ class User extends Authenticatable
     public function getArtistBannerAttribute()
     {
         return $this->getMeta('artist_banner');
+    }
+
+    public function getDocumentsAttribute()
+    {
+        return $this->getMeta('documents');
     }
 }

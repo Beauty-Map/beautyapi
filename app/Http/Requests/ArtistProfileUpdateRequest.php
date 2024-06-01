@@ -35,6 +35,8 @@ class ArtistProfileUpdateRequest extends FormRequest
             'work_on_holidays' => 'boolean',
             'city_id' => 'nullable|exists:cities,id',
             'birth_date' => 'nullable|date',
+            'documents' => 'nullable|array',
+            'documents.*' => 'string',
             'work_hours' => 'nullable|array',
             'work_hours.*' => 'required|array',
             'work_hours.*.day_index' => 'required|min:1|max:7',

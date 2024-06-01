@@ -46,6 +46,9 @@ class Meta extends Model
                     'web' => '',
                 ];
             }
+            if ($this->key == 'documents') {
+                $value = $value ?? [];
+            }
             if ($this->key == 'work_on_holidays') {
                 $value = $value ?? false;
             }
