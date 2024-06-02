@@ -74,6 +74,8 @@ class User extends Authenticatable
         'is_all_day_open',
         'social_media',
         'address',
+        'is_bookmarked',
+        'has_blue_tick',
         'bio',
         'is_artist',
         'is_artist_agreed',
@@ -251,5 +253,15 @@ class User extends Authenticatable
     public function getDocumentsAttribute()
     {
         return $this->getMeta('documents');
+    }
+
+    public function getIsBookmarkedAttribute()
+    {
+        return false;
+    }
+
+    public function getHasBlueTickAttribute()
+    {
+        return $this->selected_plan->plan->has_blue_tick;
     }
 }

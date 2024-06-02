@@ -9,6 +9,7 @@ use App\Http\Requests\DoArtistAgreement;
 use App\Http\Requests\UpdateAltNumberRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserProfileUpdateRequest;
+use App\Http\Resources\UserNearResource;
 use App\Http\Resources\UserSimpleResource;
 use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
@@ -39,14 +40,20 @@ class UserController extends Controller
      */
     public function nearest()
     {
+        $lat = \request()->input('lat', null);
+        $lng = \request()->input('lng', null);
+        $filter = [
+            'lat' => $lat,
+            'lng' => $lng,
+        ];
         if ($this->hasPage()) {
             $page = $this->getPage();
             $limit = $this->getLimit();
-            $nearest = $this->userRepository->nearestByPagination($page, $limit, 'desc');
+            $nearest = $this->userRepository->nearestByPagination($filter, $page, $limit, 'desc');
         } else {
-            $nearest = $this->userRepository->nearest('desc');
+            $nearest = $this->userRepository->nearest($filter, 'desc');
         }
-            return UserSimpleResource::collection($nearest);
+            return UserNearResource::collection($nearest);
     }
 
     /**
