@@ -17,7 +17,7 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['*', 'http://localhost:3000', 'https://app2.beautymap.ir'],
 
     'allowed_origins' => ['*'],
 
