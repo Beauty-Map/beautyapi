@@ -50,13 +50,17 @@ class AuthController extends Controller
         $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
         $user = $this->userRepository->findOneBy(['phone_number' => $request['phone_number']]);
         if ($user) {
-            return $this->createError('USER_REGISTERED_BEFORE_ERROR', Constants::USER_REGISTERED_BEFORE_ERROR,403);
+            $user->update($request->only([
+                'is_active'
+            ]));
+//            return $this->createError('USER_REGISTERED_BEFORE_ERROR', Constants::USER_REGISTERED_BEFORE_ERROR,403);
+        } else {
+            $request['is_active'] = false;
+            $user = $this->userRepository->create($request->only([
+                'phone_number',
+                'is_active'
+            ]));
         }
-        $request['is_active'] = false;
-        $user = $this->userRepository->create($request->only([
-            'phone_number',
-            'is_active'
-        ]));
         event(new SendRegisterOtpEvent($user));
         return $this->createCustomResponse('', 201);
     }
