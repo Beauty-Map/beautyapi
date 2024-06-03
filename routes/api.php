@@ -21,6 +21,7 @@ Route::get('/provinces', [ProvinceController::class, 'index']);
 Route::get('/portfolios', [PortfolioController::class, 'index']);
 Route::get('/subjects', [TicketSubjectController::class, 'index']);
 Route::get('/nearest', [UserController::class, 'nearest']);
+Route::post('/ladder', [UserController::class, 'doLadder'])->middleware('auth:sanctum');
 
 Route::prefix('/services')->group(function () {
     Route::get('/', [ServiceController::class, 'index']);
@@ -52,6 +53,7 @@ Route::prefix('/own')->middleware('auth:sanctum')->group(function () {
     Route::prefix('/portfolios')->group(function () {
         Route::get('/', [PortfolioController::class, 'ownIndex']);
         Route::post('/', [PortfolioController::class, 'store']);
+        Route::get('/laddering', [PortfolioController::class, 'indexLaddering']);
         Route::get('/{id}', [PortfolioController::class, 'show']);
         Route::put('/{id}', [PortfolioController::class, 'update']);
         Route::delete('/{id}', [PortfolioController::class, 'destroy']);

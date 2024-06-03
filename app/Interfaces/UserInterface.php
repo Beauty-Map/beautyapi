@@ -12,4 +12,6 @@ interface UserInterface extends BaseInterface
     public function nearest(array $filter = [], string $sortBy = 'desc');
 
     public function nearestByPagination(array $filter = [],  int $page = 1, int $limit = 10, string $sortBy = 'desc');
+
+    public function doLadder();
 }

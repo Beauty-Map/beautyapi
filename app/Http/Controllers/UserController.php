@@ -9,10 +9,11 @@ use App\Http\Requests\DoArtistAgreement;
 use App\Http\Requests\UpdateAltNumberRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserProfileUpdateRequest;
+use App\Http\Requests\LadderRequest;
 use App\Http\Resources\UserNearResource;
-use App\Http\Resources\UserSimpleResource;
 use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
+use App\Interfaces\PortfolioInterface;
 use App\Interfaces\UserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,16 +24,19 @@ class UserController extends Controller
     public UserInterface $userRepository;
     public MetaInterface $metaRepository;
     public OtpInterface $otpRepository;
+    public PortfolioInterface $portfolioRepository;
 
     public function __construct(
         UserInterface $userRepository,
         MetaInterface $metaRepository,
         OtpInterface $otpRepository,
+        PortfolioInterface $portfolioRepository,
     )
     {
         $this->userRepository = $userRepository;
         $this->metaRepository = $metaRepository;
         $this->otpRepository = $otpRepository;
+        $this->portfolioRepository = $portfolioRepository;
     }
 
     /**
@@ -220,5 +224,18 @@ class UserController extends Controller
     public function destroy(int $id)
     {
         //
+    }
+
+    public function doLadder(LadderRequest $request)
+    {
+        if ($request['type'] == 'all_portfolios') {
+            return $this->userRepository->doLadder();
+        }
+        return match ($request['type']) {
+            'all_portfolios' => $this->portfolioRepository->doLadder($request->toArray()),
+            'some_portfolios' => $this->portfolioRepository->doLadder($request->toArray()),
+            'profile' => $this->userRepository->doLadder(),
+            default => $this->createError('type', Constants::LADDERING_TYPE_ERROR, 422),
+        };
     }
 }

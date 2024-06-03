@@ -45,4 +45,9 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
         }
         return $query->orderBy($orderBy, $sortBy);
     }
+
+    public function doLadder(array $data)
+    {
+        return true;
+    }
 }

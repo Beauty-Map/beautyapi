@@ -39,4 +39,9 @@ class UserRepository extends BaseRepository implements UserInterface
         }
         return $query;
     }
+
+    public function doLadder()
+    {
+        return true;
+    }
 }
