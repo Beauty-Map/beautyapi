@@ -32,7 +32,6 @@ class LimooSMS
         $httpcode = curl_getinfo( $process, CURLINFO_HTTP_CODE);
         curl_close($process);
         $decoded = json_decode($return);
-        var_dump($decoded);
         return $decoded;
     }
 }
