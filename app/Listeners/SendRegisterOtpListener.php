@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\SendRegisterOtpEvent;
 use App\Helpers\Helper;
+use App\Helpers\LimooSMS;
 use App\Models\Otp;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,5 +32,6 @@ class SendRegisterOtpListener
             'type' => Otp::REGISTER_OTP_TYPE
         ]);
         //TODO: send sms
+        (new LimooSMS())->sendOtpCode($user->phone_number);
     }
 }
