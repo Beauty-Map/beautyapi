@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*', 'http://localhost:3000', 'https://app2.beautymap.ir'],
+    'allowed_origins' => ['*', 'http://localhost:3000', 'https://beautymap.ir'],
 
     'allowed_origins_patterns' => [],
 
