@@ -40,7 +40,7 @@ class UserLoginResource extends JsonResource
             'metas' => MetaResource::collection($this->metas),
             'permissions' => $this->getPermissionNames(),
             'roles' => $this->getRoleNames(),
-            'avatar' => $this->ge,
+            'avatar' => $this->avatar,
         ];
     }
 }
