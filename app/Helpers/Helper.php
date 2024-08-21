@@ -14,6 +14,7 @@ class Helper
         $keys = match ($type) {
             'both' => array_merge(range(0, 9), range('a', 'z'), range(0, 9), range('A', 'Z')),
             'string' => array_merge(range('a', 'z'), range('A', 'Z')),
+            'number' => array_merge(range(0, 9)),
             default => array_merge(range(0, 9)),
         };
         for ($i = 0; $i < $length; $i++) {

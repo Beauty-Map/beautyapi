@@ -22,7 +22,7 @@ class CheckRegisterOtpCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone_number' => 'required|string',
+            'email' => 'required|string',
             'code' => 'required|string'
         ];
     }

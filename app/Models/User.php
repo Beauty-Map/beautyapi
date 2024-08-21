@@ -23,6 +23,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'full_name',
+        'email',
         'phone_number',
         'password',
         'is_active',
@@ -30,6 +31,7 @@ class User extends Authenticatable
         'birth_date',
         'lat',
         'lng',
+        'remember_token',
     ];
 
     /**
@@ -82,6 +84,10 @@ class User extends Authenticatable
         'documents',
         'artist_banner',
         'is_artist_profile_completed',
+        'services_count',
+        'portfolios_count',
+        'licenses',
+        'rating',
     ];
 
     public function metas()
@@ -137,6 +143,21 @@ class User extends Authenticatable
     public function getAvatarAttribute()
     {
         return $this->getMeta('avatar');
+    }
+
+    public function getBannersAttribute()
+    {
+        return $this->getMeta('banners');
+    }
+
+    public function getLicensesAttribute()
+    {
+        return $this->getMeta('licenses');
+    }
+
+    public function getRatingAttribute()
+    {
+        return 4.5;
     }
 
     public function getNationalCodeAttribute()
@@ -263,5 +284,25 @@ class User extends Authenticatable
     public function getHasBlueTickAttribute()
     {
         return $this->selected_plan->plan->has_blue_tick;
+    }
+
+    public function portfolios()
+    {
+        return $this->hasMany(Portfolio::class);
+    }
+
+    public function getPortfoliosCountAttribute()
+    {
+        return $this->portfolios()->count();
+    }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class);
+    }
+
+    public function getServicesCountAttribute()
+    {
+        return $this->services()->count();
     }
 }

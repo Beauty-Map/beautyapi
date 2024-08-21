@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateAltNumberRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserProfileUpdateRequest;
 use App\Http\Requests\LadderRequest;
+use App\Http\Resources\ArtistResource;
 use App\Http\Resources\UserNearResource;
 use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
@@ -81,7 +82,7 @@ class UserController extends Controller
      */
     public function show(int $id)
     {
-        //
+        return new ArtistResource($this->userRepository->findOneOrFail($id));
     }
 
     /**

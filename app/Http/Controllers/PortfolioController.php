@@ -44,6 +44,24 @@ class PortfolioController extends Controller
         return $data;
     }
 
+    /**
+     * Display a listing of the resource.
+     */
+    public function userIndex(int $id)
+    {
+        $filter = [
+            'user_id' => $id,
+        ];
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $data = $this->portfolioRepository->findByPaginate($filter, $page, $limit, 'created_at', 'desc');
+        } else {
+            $data = $this->portfolioRepository->findBy($filter, 'created_at', 'desc');
+        }
+        return PortfolioResource::collection($data);
+    }
+
     public function indexLaddering()
     {
         $auth = $this->getAuth();

@@ -30,6 +30,7 @@ class PortfolioResource extends JsonResource
             'user' => new UserSimpleResource($this->user),
             'images' => $this->images_list,
             'work_hours' => $this->work_hours,
+            'is_bookmarked' => $this->is_bookmarked,
         ];
     }
 }

@@ -23,6 +23,10 @@ Route::get('/subjects', [TicketSubjectController::class, 'index']);
 Route::get('/nearest', [UserController::class, 'nearest']);
 Route::post('/ladder', [UserController::class, 'doLadder'])->middleware('auth:sanctum');
 
+Route::prefix('/users')->group(function () {
+    Route::get('/{id}', [UserController::class, 'show']);
+    Route::get('/{id}/portfolios', [PortfolioController::class, 'userIndex']);
+});
 Route::prefix('/services')->group(function () {
     Route::get('/', [ServiceController::class, 'index']);
     Route::get('/{id}', [ServiceController::class, 'show']);

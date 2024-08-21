@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('otps', function (Blueprint $table) {
+        Schema::create('service_user', function (Blueprint $table) {
             $table->id();
-            $table->string('phone_number');
-            $table->string('code', 6);
-            $table->string('type');
+            $table->foreignId('user_id')->references('id')
+                ->on('users')->cascadeOnDelete();
+            $table->foreignId('service_id')->references('id')
+                ->on('services')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('otps');
+        Schema::dropIfExists('service_user');
     }
 };

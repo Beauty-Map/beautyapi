@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
         /** @var User $superAdmin */
         $superAdmin = User::create([
             'full_name' => 'سوپرادمین',
+            'email' => 'saeedhpro@gmail.com',
             'phone_number' => '09381412419',
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
@@ -33,6 +34,7 @@ class UserSeeder extends Seeder
         /** @var User $admin */
         $admin = User::create([
             'full_name' => 'ادمین',
+            'email' => 'saeedhpro2@gmail.com',
             'phone_number' => '09381412418',
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
