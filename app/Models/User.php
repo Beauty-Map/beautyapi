@@ -248,6 +248,9 @@ class User extends Authenticatable
         if (!$this->full_name) {
             $isCompleted = false;
         }
+        if (!$this->phone_number) {
+            $isCompleted = false;
+        }
         if (!$this->city_id) {
             $isCompleted = false;
         }

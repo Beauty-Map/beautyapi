@@ -130,6 +130,10 @@ class UserController extends Controller
             $auth->update(['full_name' => $request['full_name']]);
             unset($request['full_name']);
         }
+        if ($request['phone_number']) {
+            $auth->update(['phone_number' => $request['phone_number']]);
+            unset($request['phone_number']);
+        }
         if ($request['city_id']) {
             $auth->update(['city_id' => $request['city_id']]);
             unset($request['city_id']);
@@ -144,6 +148,7 @@ class UserController extends Controller
         }
         $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
         if ($res) {
+            $auth->assignRole('artist');
             DB::commit();
             return $this->createCustomResponse(1);
         }
