@@ -22,7 +22,7 @@ class ForgotPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone_number' => 'required|string|min:9|max:13'
+            'email' => 'required|string|email'
         ];
     }
 }

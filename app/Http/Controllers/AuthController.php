@@ -87,9 +87,9 @@ class AuthController extends Controller
 
     public function setPassword(SetRegisterPasswordRequest $request)
     {
-        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
+//        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
         $user = $this->userRepository->findOneBy([
-            'phone_number' => $request['phone_number'],
+            'email' => $request['email'],
             'remember_token' => $request['remember_token'],
         ]);
         if (!$user) {
@@ -147,8 +147,8 @@ class AuthController extends Controller
 
     public function forgotPassword(ForgotPasswordRequest $request)
     {
-        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
-        $user = $this->userRepository->findOneBy(['phone_number' => $request['phone_number']]);
+//        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
+        $user = $this->userRepository->findOneBy(['email' => $request['email']]);
         if (!$user) {
             return $this->createError('USER_NOT_FOUND_ERROR', Constants::USER_NOT_FOUND_ERROR,404);
         }
@@ -169,6 +169,7 @@ class AuthController extends Controller
         $code = $request['code'];
         $validated = Otp::query()
             ->where('phone_number', $email)
+            ->where('type', $type)
             ->where('code', $code)
             ->where('created_at', '>=', Carbon::now()->subMinute())
             ->first();
@@ -176,7 +177,7 @@ class AuthController extends Controller
             return $this->createError('INVALID_OTP_CODE_ERROR', Constants::INVALID_OTP_CODE_ERROR,404);
         }
         /** @var User $user */
-        $user = $this->userRepository->findOneBy(['phone_number' => $request['phone_number']]);
+        $user = $this->userRepository->findOneBy(['email' => $request['email']]);
         $token = Helper::randomCode(10);
         $this->userRepository->update([
             'remember_token' => $token,
