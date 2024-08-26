@@ -41,6 +41,7 @@ class UserLoginResource extends JsonResource
             'permissions' => $this->getPermissionNames(),
             'roles' => $this->getRoleNames(),
             'avatar' => $this->avatar,
+            'birth_date' => $this->birth_date
         ];
     }
 }

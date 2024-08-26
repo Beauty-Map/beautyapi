@@ -45,7 +45,7 @@ Route::prefix('/payment-options')->middleware('auth:sanctum')->group(function ()
     Route::get('/', [PaymentOptionController::class, 'index']);
     Route::get('/{id}', [PaymentOptionController::class, 'show']);
 });
-Route::prefix('/own')->middleware('auth:sanctum')->group(function () {
+Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
     Route::put('/', [UserController::class, 'updateProfile']);
     Route::put('/password', [UserController::class, 'updatePassword']);

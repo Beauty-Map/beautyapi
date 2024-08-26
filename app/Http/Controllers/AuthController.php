@@ -114,7 +114,7 @@ class AuthController extends Controller
         if(Auth::attempt($credentials)){
             /** @var User $user */
             $user = Auth::user();
-            $token =  $user->createToken(env('APP_NAME'))->plainTextToken;
+            $token =  $user->createToken(env('APP_NAME'))->accessToken;
             return new UserLoginResource($user, $token);
         }
         else{
@@ -142,7 +142,7 @@ class AuthController extends Controller
 
     public function own()
     {
-        return $this->getAuth();
+        return new UserLoginResource($this->getAuth(), "");
     }
 
     public function forgotPassword(ForgotPasswordRequest $request)
