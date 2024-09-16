@@ -32,6 +32,7 @@ class User extends Authenticatable
         'lat',
         'lng',
         'remember_token',
+        'referrer_code',
     ];
 
     /**
@@ -212,7 +213,10 @@ class User extends Authenticatable
 
     public function getLocationAttribute()
     {
-        return ['lat' => $this->lat, 'lng' => $this->lng];
+        if ($this->lat && $this->lng) {
+            return ['lat' => $this->lat, 'lng' => $this->lng];
+        }
+        return null;
     }
 
     public function plans()
@@ -241,9 +245,6 @@ class User extends Authenticatable
 
     public function getIsArtistProfileCompletedAttribute()
     {
-        if (!$this->hasRole('artist')) {
-            return false;
-        }
         $isCompleted = true;
         if (!$this->full_name) {
             $isCompleted = false;
@@ -265,6 +266,11 @@ class User extends Authenticatable
                 in_array('tel_number', $metas) &&
                 in_array('work_hours', $metas) &&
                 in_array('bio', $metas);
+        }
+        if ($isCompleted) {
+            if (!$this->hasRole('artist')) {
+                $this->assignRole('artist');
+            }
         }
         return $isCompleted;
     }

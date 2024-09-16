@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IntroController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentOptionController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TicketController;
@@ -19,9 +22,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/intros', [IntroController::class, 'index']);
 Route::get('/provinces', [ProvinceController::class, 'index']);
 Route::get('/portfolios', [PortfolioController::class, 'index']);
+Route::get('/portfolios/{id}', [PortfolioController::class, 'show']);
 Route::get('/subjects', [TicketSubjectController::class, 'index']);
 Route::get('/nearest', [UserController::class, 'nearest']);
-Route::post('/ladder', [UserController::class, 'doLadder'])->middleware('auth:sanctum');
+Route::post('/ladder', [UserController::class, 'doLadder'])->middleware('auth:api');
 
 Route::prefix('/users')->group(function () {
     Route::get('/{id}', [UserController::class, 'show']);
@@ -36,17 +40,22 @@ Route::prefix('/services')->group(function () {
 Route::get('/search', [SearchController::class, 'search']);
 
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
-Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:sanctum');
+Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:api');
 
-Route::prefix('/plans')->middleware('auth:sanctum')->group(function () {
+Route::prefix('/plans')->middleware('auth:api')->group(function () {
     Route::get('/', [PlanController::class, 'indexBuyable']);
 });
-Route::prefix('/payment-options')->middleware('auth:sanctum')->group(function () {
+Route::prefix('/payment-options')->middleware('auth:api')->group(function () {
     Route::get('/', [PaymentOptionController::class, 'index']);
     Route::get('/{id}', [PaymentOptionController::class, 'show']);
 });
+Route::prefix('/payments')->middleware('auth:api')->group(function () {
+    Route::post('/', [PaymentController::class, 'store']);
+});
 Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
+    Route::get('/notifications', [NotificationController::class, 'indexNotifications']);
+    Route::get('/notifications/unread', [NotificationController::class, 'indexUnreadNotifications']);
     Route::put('/', [UserController::class, 'updateProfile']);
     Route::put('/password', [UserController::class, 'updatePassword']);
     Route::post('/alt-number', [UserController::class, 'sendOtpForAltNumber']);
@@ -79,13 +88,13 @@ Route::prefix('/auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
     Route::post('/register/otp', [AuthController::class, 'checkOtpCode'])->middleware('guest');
     Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
     Route::post('/password/forgot', [AuthController::class, 'forgotPassword'])->middleware('guest');
     Route::post('/password/otp', [AuthController::class, 'checkForgotPasswordOtpCode'])->middleware('guest');
     Route::post('/password', [AuthController::class, 'setPassword'])->middleware('guest');
 });
 
-Route::prefix('/admin')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
+Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group(function () {
     Route::prefix('/intros')->group(function () {
         Route::get('/', [IntroController::class, 'index']);
         Route::post('/', [IntroController::class, 'store']);
@@ -121,3 +130,4 @@ Route::prefix('/admin')->middleware(['auth:sanctum', AdminMiddleware::class])->g
     });
 });
 
+Route::get('/referrals', [ReferralController::class, 'index']);

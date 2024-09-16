@@ -142,25 +142,25 @@ class RoleAndPermissionSeeder extends Seeder
                      ...$artistPermissions, ...$marketerPermissions,
                      ...$managerPermissions, ...$adminPermissions,
                      ...$supportPermissions, ...$superAdminPermissions] as $p) {
-            if (Permission::query()->where('name', $p)->count() == 0) {
-                Permission::create(['name' => $p]);
+            if (Permission::query()->where('name', $p)->where('guard_name', 'api')->count() == 0) {
+                Permission::create(['name' => $p, 'guard_name' => 'api']);
             }
         }
 
         /** @var Role $superAdminRole */
-        $superAdminRole = Role::create(['name' => $superAdmin]);
+        $superAdminRole = Role::create(['name' => $superAdmin, 'guard_name' => 'api']);
         /** @var Role $adminRole */
-        $adminRole = Role::create(['name' => $admin]);
+        $adminRole = Role::create(['name' => $admin, 'guard_name' => 'api']);
         /** @var Role $supportRole */
-        $supportRole = Role::create(['name' => $support]);
+        $supportRole = Role::create(['name' => $support, 'guard_name' => 'api']);
         /** @var Role $userRole */
-        $userRole = Role::create(['name' => $user]);
+        $userRole = Role::create(['name' => $user, 'guard_name' => 'api']);
         /** @var Role $marketerRole */
-        $marketerRole = Role::create(['name' => $marketer]);
+        $marketerRole = Role::create(['name' => $marketer, 'guard_name' => 'api']);
         /** @var Role $managerRole */
-        $managerRole = Role::create(['name' => $manager]);
+        $managerRole = Role::create(['name' => $manager, 'guard_name' => 'api']);
         /** @var Role $artistRole */
-        $artistRole = Role::create(['name' => $artist]);
+        $artistRole = Role::create(['name' => $artist, 'guard_name' => 'api']);
 
         $superAdminRole->syncPermissions(
             ...$superAdminPermissions

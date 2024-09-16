@@ -44,4 +44,19 @@ class UserRepository extends BaseRepository implements UserInterface
     {
         return true;
     }
+
+    public function referredBy(array $filter = [], string $sortBy = 'desc')
+    {
+        return $this->referredByQuery($filter)->get();
+    }
+
+    public function referredByPagination(array $filter = [], int $page = 1, int $limit = 10, string $sortBy = 'desc')
+    {
+        return $this->referredByQuery($filter)->paginate($limit);
+    }
+
+    public function referredByQuery(array $filter = [],string $sortBy = 'desc')
+    {
+        return $this->model->newQuery()->where('referrer_code', $filter['referrer_code']);
+    }
 }

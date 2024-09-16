@@ -65,6 +65,7 @@ class AuthController extends Controller
                 'password',
                 'is_active',
                 'remember_token',
+                'referrer_code',
             ]));
             $plan = Plan::query()->orderBy('id')->first();
             $user->plans()->create([

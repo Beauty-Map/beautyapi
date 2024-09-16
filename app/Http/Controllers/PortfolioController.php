@@ -117,12 +117,7 @@ class PortfolioController extends Controller
      */
     public function show(int $id)
     {
-        $auth = $this->getAuth();
-        $portfolio = $this->portfolioRepository->findOneOrFail($id);
-        if (!$auth->can('show-portfolio', $portfolio)) {
-            abort(403, Constants::ACCESS_ERROR);
-        }
-        return new PortfolioResource($portfolio);
+        return new PortfolioResource($this->portfolioRepository->findOneOrFail($id));
     }
 
     /**
@@ -163,6 +158,9 @@ class PortfolioController extends Controller
         } else {
             $request['showing_phone_number'] = $auth->second_phone_number;
         }
-        return $request;
+        if (!$request['showing_phone_number']) {
+            $request['showing_phone_number'] = $auth->phone_number;
+        }
+            return $request;
     }
 }
