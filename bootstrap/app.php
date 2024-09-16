@@ -17,7 +17,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(
             except: ['*']
         );
-        $middleware->append(AdminTokenMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
