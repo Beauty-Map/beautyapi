@@ -96,7 +96,8 @@ class PortfolioController extends Controller
         } else {
             $portfolios = $this->portfolioRepository->searchBy($filter, 'created_at', 'desc');
         }
-        return PortfolioResource::collection($portfolios);
+        $portfolios['data'] = PortfolioResource::collection($portfolios['data']);
+        return $portfolios;
     }
 
     /**
