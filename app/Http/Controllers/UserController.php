@@ -126,33 +126,38 @@ class UserController extends Controller
         $auth = $this->getAuth();
         $request = $request->all();
         DB::beginTransaction();
-        if (array_key_exists('full_name', $request) && $request['full_name']) {
-            $auth->update(['full_name' => $request['full_name']]);
-            unset($request['full_name']);
+        try {
+            if (array_key_exists('full_name', $request) && $request['full_name']) {
+                $auth->update(['full_name' => $request['full_name']]);
+                unset($request['full_name']);
+            }
+            if (array_key_exists('phone_number', $request) && $request['phone_number']) {
+                $auth->update(['phone_number' => $request['phone_number']]);
+                unset($request['phone_number']);
+            }
+            if (array_key_exists('city_id', $request) && $request['city_id']) {
+                $auth->update(['city_id' => $request['city_id']]);
+                unset($request['city_id']);
+            }
+            if (array_key_exists('birth_date', $request) && $request['birth_date']) {
+                $auth->update(['birth_date' => $request['birth_date']]);
+                unset($request['birth_date']);
+            }
+            if (array_key_exists('location', $request) && $request['location']) {
+                $auth->update(['lat' => $request['location']['lat'], 'lng' => $request['location']['lng']]);
+                unset($request['location']);
+            }
+            $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
+            if ($res) {
+                $auth->assignRole('artist');
+                DB::commit();
+                return $this->createCustomResponse(1);
+            }
+            DB::rollBack();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->createError('error', 'در حال حاضر سرور پاسخ نمی دهد.', 500);
         }
-        if (array_key_exists('phone_number', $request) && $request['phone_number']) {
-            $auth->update(['phone_number' => $request['phone_number']]);
-            unset($request['phone_number']);
-        }
-        if (array_key_exists('city_id', $request) && $request['city_id']) {
-            $auth->update(['city_id' => $request['city_id']]);
-            unset($request['city_id']);
-        }
-        if (array_key_exists('birth_date', $request) && $request['birth_date']) {
-            $auth->update(['birth_date' => $request['birth_date']]);
-            unset($request['birth_date']);
-        }
-        if (array_key_exists('location', $request) && $request['location']) {
-            $auth->update(['lat' => $request['location']['lat'], 'lng' => $request['location']['lng']]);
-            unset($request['location']);
-        }
-        $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
-        if ($res) {
-            $auth->assignRole('artist');
-            DB::commit();
-            return $this->createCustomResponse(1);
-        }
-        DB::rollBack();
         return $this->createError('error', Constants::UNDEFINED_ERROR, 422);
     }
 
@@ -244,4 +249,23 @@ class UserController extends Controller
             default => $this->createError('type', Constants::LADDERING_TYPE_ERROR, 422),
         };
     }
+
+    public function indexFavouriteArtists()
+    {
+        $auth = $this->getAuth();
+        $filter = [
+            'user_id' => $auth->id,
+            'services' => [],
+        ];
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $data = $this->portfolioRepository->searchByPaginate($filter, $page, $limit, 'created_at', 'desc');
+        } else {
+            $data = $this->portfolioRepository->searchBy($filter, 'created_at', 'desc');
+        }
+        $data['data'] = PortfolioResource::collection($data['data']);
+        return $data;
+    }
+
 }

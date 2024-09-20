@@ -23,6 +23,7 @@ Route::get('/intros', [IntroController::class, 'index']);
 Route::get('/provinces', [ProvinceController::class, 'index']);
 Route::get('/portfolios', [PortfolioController::class, 'index']);
 Route::get('/portfolios/{id}', [PortfolioController::class, 'show']);
+Route::post('/portfolios/{id}/like', [PortfolioController::class, 'like'])->middleware('auth:api');
 Route::get('/subjects', [TicketSubjectController::class, 'index']);
 Route::get('/nearest', [UserController::class, 'nearest']);
 Route::post('/ladder', [UserController::class, 'doLadder'])->middleware('auth:api');
@@ -56,6 +57,8 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
     Route::get('/notifications', [NotificationController::class, 'indexNotifications']);
     Route::get('/notifications/unread', [NotificationController::class, 'indexUnreadNotifications']);
+    Route::get('/artist/notifications', [NotificationController::class, 'indexArtistNotifications']);
+    Route::get('/artist/notifications/unread', [NotificationController::class, 'indexArtistUnreadNotifications']);
     Route::put('/', [UserController::class, 'updateProfile']);
     Route::put('/password', [UserController::class, 'updatePassword']);
     Route::post('/alt-number', [UserController::class, 'sendOtpForAltNumber']);
@@ -63,10 +66,12 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::delete('/', [UserController::class, 'deleteAccount']);
     Route::put('/artist', [UserController::class, 'updateArtistProfile']);
     Route::put('/artist/agreement', [UserController::class, 'doArtistAgreement']);
+    Route::get('/artists/favourite', [UserController::class, 'indexFavouriteArtists']);
     Route::prefix('/portfolios')->group(function () {
         Route::get('/', [PortfolioController::class, 'ownIndex']);
         Route::post('/', [PortfolioController::class, 'store']);
         Route::get('/laddering', [PortfolioController::class, 'indexLaddering']);
+        Route::get('/favourite', [PortfolioController::class, 'indexFavouritePortfolios']);
         Route::get('/{id}', [PortfolioController::class, 'show']);
         Route::put('/{id}', [PortfolioController::class, 'update']);
         Route::delete('/{id}', [PortfolioController::class, 'destroy']);

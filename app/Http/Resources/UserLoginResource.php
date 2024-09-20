@@ -51,7 +51,9 @@ class UserLoginResource extends JsonResource
             'permissions' => $this->getPermissionNames(),
             'roles' => $this->getRoleNames(),
             'avatar' => $this->avatar,
-            'birth_date' => $this->birth_date
+            'birth_date' => $this->birth_date,
+            'social_media' => $this->social_media,
+            'is_artist_profile_completed' => $this->is_artist_profile_completed,
         ];
     }
 }

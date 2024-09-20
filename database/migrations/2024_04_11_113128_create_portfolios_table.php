@@ -20,9 +20,9 @@ return new class extends Migration
             $table->unsignedBigInteger('discount_price')->default(0);
             $table->string('showing_phone_number');
             $table->foreignId('service_id')->references('id')
-                ->on('services')->cascadeOnUpdate();
+                ->on('services')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('user_id')->references('id')
-                ->on('users')->cascadeOnUpdate();
+                ->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

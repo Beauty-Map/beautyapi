@@ -7,6 +7,7 @@ use App\Http\Requests\PortfolioCreateRequest;
 use App\Http\Requests\PortfolioUpdateRequest;
 use App\Http\Resources\PortfolioResource;
 use App\Interfaces\PortfolioInterface;
+use App\Models\Portfolio;
 use App\Policies\PortfolioPolicy;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Http\FormRequest;
@@ -80,6 +81,24 @@ class PortfolioController extends Controller
         return $data;
     }
 
+    public function indexFavouritePortfolios()
+    {
+        $auth = $this->getAuth();
+        $filter = [
+            'user_id' => $auth->id,
+            'services' => [],
+        ];
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $data = $this->portfolioRepository->searchByPaginate($filter, $page, $limit, 'created_at', 'desc');
+        } else {
+            $data = $this->portfolioRepository->searchBy($filter, 'created_at', 'desc');
+        }
+        $data['data'] = PortfolioResource::collection($data['data']);
+        return $data;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -106,9 +125,9 @@ class PortfolioController extends Controller
     public function store(PortfolioCreateRequest $request)
     {
         $auth = $this->getAuth();
-        if (!$auth->hasRole('artist')) {
-            abort(403, Constants::ACCESS_ERROR);
-        }
+//        if (!$auth->hasRole('artist')) {
+//            abort(403, Constants::ACCESS_ERROR);
+//        }
         $request = $this->initRequest($request);
         return new PortfolioResource($this->portfolioRepository->create($request->all()));
     }
@@ -119,6 +138,14 @@ class PortfolioController extends Controller
     public function show(int $id)
     {
         return new PortfolioResource($this->portfolioRepository->findOneOrFail($id));
+    }
+
+    public function like(int $id)
+    {
+        $auth = $this->getAuth();
+        /** @var Portfolio $portfolio */
+        $portfolio = $this->portfolioRepository->findOneOrFail($id);
+        return $portfolio->toggleLike($auth->id);
     }
 
     /**

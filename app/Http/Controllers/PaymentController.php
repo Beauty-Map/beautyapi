@@ -35,13 +35,14 @@ class PaymentController extends Controller
      */
     public function store(PaymentCreateRequest $request)
     {
-        $paymentOption = $this->planRepository->findOneOrFail($request->get('payment_id', null));
+        $paymentOption = $this->paymentOptionRepository->findOneOrFail($request->get('payment_id', null));
         $user = $this->getAuth();
         $walletAddress = env('WALLET_ADDRESS');
 
         $transactionId = base64_encode("user:$user->id,payment:$paymentOption->id");
 
-        $paymentLink = "https://tonkeeper.com/transfer/$walletAddress?amount=$paymentOption->price&text=$transactionId";
+        $price = $paymentOption->price;
+        $paymentLink = "ton://transfer/$walletAddress?amount=$price&text=$transactionId";
 
         return response()->json(['payment_url' => $paymentLink]);
     }

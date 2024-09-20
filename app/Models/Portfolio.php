@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Trait\Likeable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Portfolio extends Model
 {
-    use HasFactory;
+    use HasFactory, Likeable;
 
     protected $with = [
         'user',

@@ -54,6 +54,11 @@ class AuthController extends Controller
         if ($user) {
             if ($user->is_active != 0) {
                 return $this->createError('USER_REGISTERED_BEFORE_ERROR', Constants::USER_REGISTERED_BEFORE_ERROR,403);
+            } else {
+                $request['password'] = Hash::make($request['password']);
+                $this->userRepository->update($request->only([
+                    'password',
+                ]), $user->id);
             }
         } else {
             $request['is_active'] = false;
@@ -83,7 +88,18 @@ class AuthController extends Controller
 
     public function checkOtpCode(CheckRegisterOtpCodeRequest $request)
     {
-        return $this->getOtpCodeByType($request);
+        if(!$this->getOtpCodeByType($request)) {
+            return $this->createError('INVALID_OTP_CODE_ERROR', Constants::INVALID_OTP_CODE_ERROR,404);
+        }
+        /** @var User $user */
+        $user = $this->userRepository->findOneBy(['email' => $request['email']]);
+        $this->userRepository->update([
+            'is_active' => 1
+        ], $user->id);
+        $plan = $this->planRepository->find(1);
+        $this->userPlanRepository->setPlan($user->id, $plan->id, null, null, -1, $plan->coins);
+        $token =  $user->createToken(env('APP_NAME'))->accessToken;
+        return new UserLoginResource($user, $token);
     }
 
     public function setPassword(SetRegisterPasswordRequest $request)
@@ -101,8 +117,7 @@ class AuthController extends Controller
             'remember_token' => null,
             'is_active' => true,
         ], $user->id);
-        $token = $user->createToken(env('APP_NAME'))->plainTextToken;
-        return new UserLoginResource($user, $token);
+        return $this->createCustomResponse('done');
     }
 
     public function login(LoginUserRequest $request)
@@ -159,7 +174,17 @@ class AuthController extends Controller
 
     public function checkForgotPasswordOtpCode(CheckRegisterOtpCodeRequest $request)
     {
-        return $this->getOtpCodeByType($request, Otp::FORGOT_PASSWORD_OTP_TYPE);
+        if(!$this->getOtpCodeByType($request, Otp::FORGOT_PASSWORD_OTP_TYPE)) {
+            return $this->createError('INVALID_OTP_CODE_ERROR', Constants::INVALID_OTP_CODE_ERROR,404);
+        }
+        /** @var User $user */
+        $user = $this->userRepository->findOneBy(['email' => $request['email']]);
+        $token = Helper::randomCode(10);
+        $this->userRepository->update([
+            'remember_token' => $token,
+            'is_active' => 1
+        ], $user->id);
+        return $this->createCustomResponse(['token' => $token]);
     }
 
     private function getOtpCodeByType(FormRequest $request, string $type = Otp::REGISTER_OTP_TYPE)
@@ -172,21 +197,13 @@ class AuthController extends Controller
             ->where('phone_number', $email)
             ->where('type', $type)
             ->where('code', $code)
-            ->where('created_at', '>=', Carbon::now()->subMinute())
+            ->where('created_at', '>=', Carbon::now()->subMinutes(2))
             ->first();
-        if (!$validated) {
-            return $this->createError('INVALID_OTP_CODE_ERROR', Constants::INVALID_OTP_CODE_ERROR,404);
+        if($validated) {
+            return true;
+        } else {
+            return false;
         }
-        /** @var User $user */
-        $user = $this->userRepository->findOneBy(['email' => $request['email']]);
-        $token = Helper::randomCode(10);
-        $this->userRepository->update([
-            'remember_token' => $token,
-            'is_active' => 1
-        ], $user->id);
-        $plan = $this->planRepository->find(1);
-        $this->userPlanRepository->setPlan($user->id, $plan->id, null, null, -1, $plan->coins);
-        return $this->createCustomResponse(['token' => $token]);
     }
 
     public function logout()

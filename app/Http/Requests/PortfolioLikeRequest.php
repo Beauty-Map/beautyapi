@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SetRegisterPasswordRequest extends FormRequest
+class PortfolioLikeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return !auth()->check();
+        return auth()->check();
     }
 
     /**
@@ -22,9 +22,7 @@ class SetRegisterPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|string',
-            'remember_token' => 'required|string',
-            'password' => 'required|string|confirmed',
+
         ];
     }
 }

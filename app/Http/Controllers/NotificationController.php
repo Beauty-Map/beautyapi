@@ -19,4 +19,17 @@ class NotificationController extends Controller
         return $auth->unreadNotifications;
 //        $user->notify(new TransactionNotification($transactionType, $amount));
     }
+    public function indexArtistNotifications()
+    {
+        $auth = $this->getAuth();
+        return $auth->notifications;
+//        $user->notify(new TransactionNotification($transactionType, $amount));
+    }
+
+    public function indexArtistUnreadNotifications()
+    {
+        $auth = $this->getAuth();
+        return $auth->unreadNotifications;
+//        $user->notify(new TransactionNotification($transactionType, $amount));
+    }
 }

@@ -22,7 +22,7 @@ class ArtistProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone_number' => 'required|string|min:3',
+            'phone_number' => 'required|string|min:3|unique',
             'full_name' => 'required|string|min:3',
             'national_code' => 'nullable|string',
             'tel_number' => 'nullable|string',
