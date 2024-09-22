@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\Helper;
 use App\Http\Resources\UserSelectedPlanResource;
+use App\Trait\Likeable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,7 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, HasPermissions, HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, HasPermissions, HasApiTokens, Likeable;
 
     /**
      * The attributes that are mass assignable.
@@ -89,7 +90,17 @@ class User extends Authenticatable
         'portfolios_count',
         'licenses',
         'rating',
+        'is_bookmarked',
     ];
+
+    public function getIsBookmarkedAttribute()
+    {
+        if (auth('api')->user()) {
+            $auth = auth('api')->user();
+            return $this->isLikedBy($auth->id);
+        }
+        return false;
+    }
 
     public function metas()
     {
@@ -255,17 +266,14 @@ class User extends Authenticatable
         if (!$this->city_id) {
             $isCompleted = false;
         }
-        if (!$this->birth_date) {
-            $isCompleted = false;
-        }
         if ($isCompleted) {
             $metas = $this->metas;
             $metas = $metas->map(function($i) {return $i->value ? $i->key : '';})->filter(function ($i) {return $i != '';})->toArray();
-            $isCompleted = in_array('national_code', $metas) &&
-                in_array('address', $metas) &&
-                in_array('tel_number', $metas) &&
-                in_array('work_hours', $metas) &&
-                in_array('bio', $metas);
+//            $isCompleted = in_array('national_code', $metas) &&
+//                in_array('address', $metas) &&
+//                in_array('tel_number', $metas) &&
+//                in_array('work_hours', $metas) &&
+//                in_array('bio', $metas);
         }
         if ($isCompleted) {
             if (!$this->hasRole('artist')) {
@@ -283,11 +291,6 @@ class User extends Authenticatable
     public function getDocumentsAttribute()
     {
         return $this->getMeta('documents');
-    }
-
-    public function getIsBookmarkedAttribute()
-    {
-        return false;
     }
 
     public function getHasBlueTickAttribute()
@@ -313,5 +316,21 @@ class User extends Authenticatable
     public function getServicesCountAttribute()
     {
         return $this->services()->count();
+    }
+
+    public function likedItems($modelType = null)
+    {
+        $query = $this->likes()->with('likeable');
+
+        if ($modelType) {
+            $query->where('likeable_type', $modelType);
+        }
+
+        return $query->get()->pluck('likeable');
+    }
+
+    public function likedItemsByTrait($modelClass)
+    {
+        return $modelClass::likedByUser($this->id);
     }
 }

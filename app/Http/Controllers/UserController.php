@@ -16,6 +16,8 @@ use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\PortfolioInterface;
 use App\Interfaces\UserInterface;
+use App\Models\Portfolio;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -253,19 +255,17 @@ class UserController extends Controller
     public function indexFavouriteArtists()
     {
         $auth = $this->getAuth();
-        $filter = [
-            'user_id' => $auth->id,
-            'services' => [],
-        ];
-        if ($this->hasPage()) {
-            $page = $this->getPage();
-            $limit = $this->getLimit();
-            $data = $this->portfolioRepository->searchByPaginate($filter, $page, $limit, 'created_at', 'desc');
-        } else {
-            $data = $this->portfolioRepository->searchBy($filter, 'created_at', 'desc');
-        }
-        $data['data'] = PortfolioResource::collection($data['data']);
+        $artists = $auth->likedItemsByTrait(User::class);
+        $data['data'] = ArtistResource::collection($artists);
         return $data;
+    }
+
+    public function like(int $id)
+    {
+        $auth = $this->getAuth();
+        /** @var User $user */
+        $user = $this->userRepository->findOneOrFail($id);
+        return $user->toggleLike($auth->id);
     }
 
 }

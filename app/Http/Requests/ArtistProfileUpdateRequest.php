@@ -22,7 +22,7 @@ class ArtistProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone_number' => 'required|string|min:3|unique',
+            'phone_number' => 'required|string|min:3|unique:users,phone_number,' . $this->user()->id,
             'full_name' => 'required|string|min:3',
             'national_code' => 'nullable|string',
             'tel_number' => 'nullable|string',

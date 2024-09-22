@@ -24,6 +24,7 @@ Route::get('/provinces', [ProvinceController::class, 'index']);
 Route::get('/portfolios', [PortfolioController::class, 'index']);
 Route::get('/portfolios/{id}', [PortfolioController::class, 'show']);
 Route::post('/portfolios/{id}/like', [PortfolioController::class, 'like'])->middleware('auth:api');
+Route::post('/artists/{id}/like', [UserController::class, 'like'])->middleware('auth:api');
 Route::get('/subjects', [TicketSubjectController::class, 'index']);
 Route::get('/nearest', [UserController::class, 'nearest']);
 Route::post('/ladder', [UserController::class, 'doLadder'])->middleware('auth:api');

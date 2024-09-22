@@ -84,18 +84,8 @@ class PortfolioController extends Controller
     public function indexFavouritePortfolios()
     {
         $auth = $this->getAuth();
-        $filter = [
-            'user_id' => $auth->id,
-            'services' => [],
-        ];
-        if ($this->hasPage()) {
-            $page = $this->getPage();
-            $limit = $this->getLimit();
-            $data = $this->portfolioRepository->searchByPaginate($filter, $page, $limit, 'created_at', 'desc');
-        } else {
-            $data = $this->portfolioRepository->searchBy($filter, 'created_at', 'desc');
-        }
-        $data['data'] = PortfolioResource::collection($data['data']);
+        $portfolios = $auth->likedItemsByTrait(Portfolio::class);
+        $data['data'] = PortfolioResource::collection($portfolios);
         return $data;
     }
 

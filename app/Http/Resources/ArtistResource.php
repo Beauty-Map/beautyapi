@@ -18,6 +18,7 @@ class ArtistResource extends JsonResource
             'id' => $this->id,
             'full_name' => $this->full_name,
             'phone_number' => $this->phone_number,
+            'email' => $this->email,
             'bio' => $this->bio,
             'distance' => $this->distance,
             'is_bookmarked' => $this->is_bookmarked,

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Trait\Likeable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class Portfolio extends Model
@@ -39,7 +40,17 @@ class Portfolio extends Model
     protected $appends = [
         'work_hours',
         'images_list',
+        'is_bookmarked',
     ];
+
+    public function getIsBookmarkedAttribute()
+    {
+        if (auth('api')->user()) {
+            $auth = auth('api')->user();
+            return $this->isLikedBy($auth->id);
+        }
+        return false;
+    }
 
     public function getWorkHoursAttribute()
     {
