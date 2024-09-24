@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IntroController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentOptionController;
+use App\Http\Controllers\PaymentRequestController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProvinceController;
@@ -28,6 +30,7 @@ Route::post('/artists/{id}/like', [UserController::class, 'like'])->middleware('
 Route::get('/subjects', [TicketSubjectController::class, 'index']);
 Route::get('/nearest', [UserController::class, 'nearest']);
 Route::post('/ladder', [UserController::class, 'doLadder'])->middleware('auth:api');
+Route::get('/applications', [ApplicationController::class, 'index']);
 
 Route::prefix('/users')->group(function () {
     Route::get('/{id}', [UserController::class, 'show']);
@@ -56,11 +59,11 @@ Route::prefix('/payments')->middleware('auth:api')->group(function () {
 });
 Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
+    Route::put('/', [UserController::class, 'updateProfile']);
     Route::get('/notifications', [NotificationController::class, 'indexNotifications']);
     Route::get('/notifications/unread', [NotificationController::class, 'indexUnreadNotifications']);
     Route::get('/artist/notifications', [NotificationController::class, 'indexArtistNotifications']);
     Route::get('/artist/notifications/unread', [NotificationController::class, 'indexArtistUnreadNotifications']);
-    Route::put('/', [UserController::class, 'updateProfile']);
     Route::put('/password', [UserController::class, 'updatePassword']);
     Route::post('/alt-number', [UserController::class, 'sendOtpForAltNumber']);
     Route::put('/alt-number', [UserController::class, 'updateAltNumber']);
@@ -87,6 +90,17 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
         Route::get('/', [UserPlanController::class, 'index']);
         Route::post('/', [UserPlanController::class, 'selectPlan']);
         Route::get('/{id}', [UserPlanController::class, 'show']);
+    });
+    Route::prefix('/payments')->group(function () {
+        Route::prefix('/requests')->group(function () {
+            Route::get('/', [PaymentRequestController::class, 'indexOwn']);
+            Route::post('/', [PaymentRequestController::class, 'store']);
+            Route::get('/{id}', [PaymentRequestController::class, 'show']);
+            Route::delete('/{id}', [PaymentRequestController::class, 'destroy']);
+        });
+    });
+    Route::prefix('/referrals')->group(function () {
+        Route::get('/', [UserController::class, 'indexBestReferrals']);
     });
 });
 

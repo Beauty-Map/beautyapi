@@ -34,6 +34,7 @@ class User extends Authenticatable
         'lng',
         'remember_token',
         'referrer_code',
+        'referral_code',
     ];
 
     /**
@@ -92,6 +93,17 @@ class User extends Authenticatable
         'rating',
         'is_bookmarked',
     ];
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            do {
+                $referralCode = Helper::randomCode(6, 'number');
+            } while (User::where('referral_code', $referralCode)->exists());
+            $user->referral_code = $referralCode;
+            $user->save();
+        });
+    }
 
     public function getIsBookmarkedAttribute()
     {
@@ -332,5 +344,10 @@ class User extends Authenticatable
     public function likedItemsByTrait($modelClass)
     {
         return $modelClass::likedByUser($this->id);
+    }
+
+    public function paymentRequests()
+    {
+        return $this->hasMany(PaymentRequest::class);
     }
 }

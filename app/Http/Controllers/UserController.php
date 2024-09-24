@@ -12,6 +12,7 @@ use App\Http\Requests\UserProfileUpdateRequest;
 use App\Http\Requests\LadderRequest;
 use App\Http\Resources\ArtistResource;
 use App\Http\Resources\UserNearResource;
+use App\Http\Resources\UserSimpleResource;
 use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\PortfolioInterface;
@@ -102,15 +103,15 @@ class UserController extends Controller
         $auth = $this->getAuth();
         $request = $request->all();
         DB::beginTransaction();
-        if ($request['full_name']) {
+        if (array_key_exists('full_name', $request) && $request['full_name']) {
             $auth->update(['full_name' => $request['full_name']]);
             unset($request['full_name']);
         }
-        if ($request['city_id']) {
+        if (array_key_exists('city_id', $request) && $request['city_id']) {
             $auth->update(['city_id' => $request['city_id']]);
             unset($request['city_id']);
         }
-        if ($request['birth_date']) {
+        if (array_key_exists('birth_date', $request) && $request['birth_date']) {
             $auth->update(['birth_date' => $request['birth_date']]);
             unset($request['birth_date']);
         }
@@ -268,4 +269,19 @@ class UserController extends Controller
         return $user->toggleLike($auth->id);
     }
 
+    public function indexBestReferrals()
+    {
+        $auth = $this->getAuth();
+        $filter = [
+            'referrer_code' => $auth->referral_code
+        ];
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $users = $this->userRepository->findByPaginate($filter, $page, $limit, 'id', 'desc');
+        } else {
+            $users = $this->userRepository->findBy($filter, 'id', 'desc');
+        }
+        return UserSimpleResource::collection($users);
+    }
 }

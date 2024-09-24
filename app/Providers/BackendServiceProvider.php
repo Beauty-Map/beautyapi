@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Interfaces\ApplicationInterface;
 use App\Interfaces\BaseInterface;
 use App\Interfaces\IntroInterface;
 use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\PaymentOptionInterface;
+use App\Interfaces\PaymentRequestInterface;
 use App\Interfaces\PlanInterface;
 use App\Interfaces\PortfolioInterface;
 use App\Interfaces\ProvinceInterface;
@@ -15,10 +17,12 @@ use App\Interfaces\TicketInterface;
 use App\Interfaces\TicketSubjectInterface;
 use App\Interfaces\UserInterface;
 use App\Interfaces\UserPlanInterface;
+use App\Models\Application;
 use App\Models\Intro;
 use App\Models\Meta;
 use App\Models\Otp;
 use App\Models\PaymentOption;
+use App\Models\PaymentRequest;
 use App\Models\Plan;
 use App\Models\Portfolio;
 use App\Models\Province;
@@ -27,11 +31,13 @@ use App\Models\Ticket;
 use App\Models\TicketSubject;
 use App\Models\User;
 use App\Models\UserPlan;
+use App\Repositories\ApplicationRepository;
 use App\Repositories\BaseRepository;
 use App\Repositories\IntroRepository;
 use App\Repositories\MetaRepository;
 use App\Repositories\OtpRepository;
 use App\Repositories\PaymentOptionRepository;
+use App\Repositories\PaymentRequestRepository;
 use App\Repositories\PlanRepository;
 use App\Repositories\PortfolioRepository;
 use App\Repositories\ProvinceRepository;
@@ -123,6 +129,18 @@ class BackendServiceProvider extends ServiceProvider
             PaymentOptionInterface::class,
             function() {
                 return new PaymentOptionRepository(new PaymentOption);
+            }
+        );
+        $this->app->bind(
+            ApplicationInterface::class,
+            function() {
+                return new ApplicationRepository(new Application);
+            }
+        );
+        $this->app->bind(
+            PaymentRequestInterface::class,
+            function() {
+                return new PaymentRequestRepository(new PaymentRequest);
             }
         );
     }
