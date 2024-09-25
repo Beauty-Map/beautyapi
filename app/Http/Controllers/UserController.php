@@ -115,6 +115,10 @@ class UserController extends Controller
             $auth->update(['birth_date' => $request['birth_date']]);
             unset($request['birth_date']);
         }
+        if (array_key_exists('phone_number', $request) && $request['phone_number']) {
+            $auth->update(['phone_number' => $request['phone_number']]);
+            unset($request['phone_number']);
+        }
         $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
         if ($res) {
             DB::commit();
