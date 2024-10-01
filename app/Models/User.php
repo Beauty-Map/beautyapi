@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -92,6 +93,7 @@ class User extends Authenticatable
         'licenses',
         'rating',
         'is_bookmarked',
+        'wallet_address',
     ];
 
     protected static function booted()
@@ -224,6 +226,11 @@ class User extends Authenticatable
         return $this->getMeta('work_on_holidays');
     }
 
+    public function getWalletAddressAttribute()
+    {
+        return $this->getMeta('wallet_address');
+    }
+
     public function getIsClosedAttribute()
     {
         return $this->getMeta('is_closed');
@@ -288,8 +295,9 @@ class User extends Authenticatable
 //                in_array('bio', $metas);
         }
         if ($isCompleted) {
-            if (!$this->hasRole('artist')) {
-                $this->assignRole('artist');
+            if (!$this->hasRole('artist', 'api')) {
+                $artist = Role::query()->where(['name' => 'artist', 'guard_name' => 'api'])->first();
+                $this->assignRole($artist);
             }
         }
         return $isCompleted;

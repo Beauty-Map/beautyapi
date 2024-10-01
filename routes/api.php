@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IntroController;
@@ -44,7 +45,6 @@ Route::prefix('/services')->group(function () {
 
 Route::get('/search', [SearchController::class, 'search']);
 
-Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:api');
 
 Route::prefix('/plans')->middleware('auth:api')->group(function () {
@@ -114,7 +114,17 @@ Route::prefix('/auth')->group(function () {
     Route::post('/password', [AuthController::class, 'setPassword'])->middleware('guest');
 });
 
+Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group(function () {
+    Route::get('/own', [AuthController::class, 'own']);
+    Route::get('/roles', [AdminController::class, 'indexRoles']);
+    Route::prefix('/users')->group(function () {
+        Route::get('/', [AdminController::class, 'indexUsers']);
+        Route::post('/', [AdminController::class, 'storeUsers']);
+        Route::get('/{id}', [AdminController::class, 'showUsers']);
+        Route::put('/{id}', [AdminController::class, 'updateUsers']);
+        Route::delete('/{id}', [AdminController::class, 'destroyUsers']);
+    });
     Route::prefix('/intros')->group(function () {
         Route::get('/', [IntroController::class, 'index']);
         Route::post('/', [IntroController::class, 'store']);

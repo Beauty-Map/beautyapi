@@ -140,15 +140,15 @@ class AuthController extends Controller
 
     public function adminLogin(LoginUserRequest $request)
     {
-        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
-        if(Auth::attempt(['phone_number' => $request->phone_number, 'password' => $request->password])){
+//        $request['phone_number'] = Helper::normalizePhoneNumber($request['phone_number']);
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             /** @var User $user */
             $user = Auth::user();
             if (!$user->hasAnyRole(['admin', 'super-admin'])) {
                 Auth::logout();
                 return $this->createError('INVALID_LOGIN_ERROR', Constants::INVALID_LOGIN_ERROR, 422);
             }
-            $token =  $user->createToken(env('APP_NAME'))->plainTextToken;
+            $token =  $user->createToken(env('APP_NAME'))->accessToken;
             return new UserLoginResource($user, $token);
         }
         else{
