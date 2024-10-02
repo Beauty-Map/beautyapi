@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TicketCreateRequest extends FormRequest
+class AdminUserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,12 @@ class TicketCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:3',
-            'subject_id' => 'required|exists:ticket_subjects,id',
-            'parent_id' => 'nullable|exists:tickets,id',
-            'description' => 'required|string|min:3',
-            'new_file' => 'nullable|string'
+            'full_name' => 'required|string|min:3',
+            'national_code' => 'nullable|string|min:3',
+            'phone_number' => 'nullable|string|min:3',
+            'city_id' => 'nullable|exists:cities,id',
+            'birth_date' => 'nullable|date',
+            'work_hours' => 'nullable|array',
         ];
     }
 }

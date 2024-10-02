@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TicketCreateRequest extends FormRequest
+class ApplicationCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,9 @@ class TicketCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:3',
-            'subject_id' => 'required|exists:ticket_subjects,id',
-            'parent_id' => 'nullable|exists:tickets,id',
-            'description' => 'required|string|min:3',
-            'new_file' => 'nullable|string'
+            'app_id' => 'required|string|unique:applications,app_id,'. $this->user()->id,
+            'app_name' => 'required|string|unique:applications,app_name,'. $this->user()->id,
+            'app_link' => 'required|string|unique:applications,app_link,'. $this->user()->id,
         ];
     }
 }

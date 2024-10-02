@@ -44,10 +44,30 @@ class ServiceController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function adminIndex()
+    {
+        $filter = [];
+        if (\request()->has('service_id')) {
+            $filter['parent_id'] = \request()->get('service_id');
+        }
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $services = $this->serviceRepository->findByPaginate($filter, $page, $limit, 'id', 'desc');
+        } else {
+            $services = $this->serviceRepository->findBy($filter, 'id', 'desc');
+        }
+        return ServiceResource::collection($services);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(ServiceCreateRequest $request)
     {
+        $request['image'] = '';
         return new ServiceResource($this->serviceRepository->create($request->all()));
     }
 
@@ -83,6 +103,7 @@ class ServiceController extends Controller
      */
     public function update(ServiceUpdateRequest $request, int $id)
     {
+        $request['image'] = '';
         return $this->serviceRepository->update($request->all(), $id);
     }
 

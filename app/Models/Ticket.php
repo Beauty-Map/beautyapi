@@ -9,6 +9,10 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    const CREATED_STATUS = 'created';
+    const CLOSED_STATUS = 'closed';
+    const ANSWERED_STATUS = 'answered';
+
     protected $fillable = [
         'title',
         'status',
@@ -19,6 +23,29 @@ class Ticket extends Model
         'parent_id',
         'is_published',
     ];
+
+    protected $appends = [
+        'status_fa',
+        'children_desc',
+    ];
+
+    public function getStatusFaAttribute() {
+        return match ($this->status) {
+            self::CREATED_STATUS => 'درانتظار بررسی',
+            self::ANSWERED_STATUS => 'پاسخ داده شده',
+            self::CLOSED_STATUS => 'بسته شده',
+            default => 'رد شده',
+        };
+    }
+
+    public function getChildrenDescAttribute() {
+        return $this->children()->orderByDesc('created_at', 'desc')->get();
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Ticket::class, 'parent_id', 'id');
+    }
 
     public function user()
     {

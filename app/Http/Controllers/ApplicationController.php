@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ApplicationCreateRequest;
+use App\Http\Requests\ApplicationUpdateRequest;
 use App\Http\Resources\ApplicationResource;
 use App\Interfaces\ApplicationInterface;
 use App\Models\Application;
@@ -36,32 +38,41 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ApplicationCreateRequest $request)
     {
-        //
+        $app = $this->applicationRepository->create($request->only([
+            'app_id',
+            'app_name',
+            'app_link',
+        ]));
+        return new ApplicationResource($app);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Application $application)
+    public function show(int $id)
     {
-        //
+        return new ApplicationResource($this->applicationRepository->findOneOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Application $application)
+    public function update(ApplicationUpdateRequest $request, int $id)
     {
-        //
+        return $this->applicationRepository->update($request->only([
+            'app_id',
+            'app_name',
+            'app_link',
+        ]), $id);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Application $application)
+    public function destroy(int $id)
     {
-        //
+        return $this->applicationRepository->delete($id);
     }
 }

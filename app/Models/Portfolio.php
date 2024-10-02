@@ -29,6 +29,7 @@ class Portfolio extends Model
         'images',
         'has_tel',
         'has_phone_number',
+        'status',
     ];
 
     protected $casts = [

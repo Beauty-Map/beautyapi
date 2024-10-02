@@ -120,10 +120,33 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
     Route::get('/roles', [AdminController::class, 'indexRoles']);
     Route::prefix('/users')->group(function () {
         Route::get('/', [AdminController::class, 'indexUsers']);
-        Route::post('/', [AdminController::class, 'storeUsers']);
-        Route::get('/{id}', [AdminController::class, 'showUsers']);
-        Route::put('/{id}', [AdminController::class, 'updateUsers']);
-        Route::delete('/{id}', [AdminController::class, 'destroyUsers']);
+        Route::get('/{id}', [AdminController::class, 'showUser']);
+        Route::put('/{id}', [AdminController::class, 'updateUser']);
+        Route::delete('/{id}', [AdminController::class, 'destroyUser']);
+
+        Route::prefix('/{id}/portfolios')->group(function () {
+            Route::get('/', [AdminController::class, 'indexUserPortfolios']);
+            Route::get('/{portfolio}', [AdminController::class, 'showUserPortfolio']);
+            Route::put('/{portfolio}', [AdminController::class, 'updateUserPortfolio']);
+            Route::patch('/{portfolio}', [AdminController::class, 'updateUserPortfolioStatus']);
+            Route::delete('/{portfolio}', [AdminController::class, 'destroyUserPortfolio']);
+        });
+    });
+
+    Route::prefix('/portfolios')->group(function () {
+        Route::get('/', [AdminController::class, 'indexPortfolios']);
+        Route::get('/{portfolio}', [AdminController::class, 'showPortfolio']);
+        Route::put('/{portfolio}', [AdminController::class, 'updatePortfolio']);
+        Route::patch('/{portfolio}', [AdminController::class, 'updatePortfolioStatus']);
+        Route::delete('/{portfolio}', [AdminController::class, 'destroyPortfolio']);
+    });
+
+    Route::prefix('/requests')->group(function () {
+        Route::get('/', [AdminController::class, 'indexPaymentRequests']);
+        Route::get('/{id}', [AdminController::class, 'showPaymentRequest']);
+        Route::put('/{id}', [AdminController::class, 'updatePaymentRequest']);
+        Route::patch('/{id}', [AdminController::class, 'updatePaymentRequestStatus']);
+        Route::delete('/{id}', [AdminController::class, 'destroyPaymentRequest']);
     });
     Route::prefix('/intros')->group(function () {
         Route::get('/', [IntroController::class, 'index']);
@@ -132,8 +155,17 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
         Route::put('/{id}', [IntroController::class, 'update']);
         Route::delete('/{id}', [IntroController::class, 'destroy']);
     });
+
+    Route::prefix('/applications')->group(function () {
+        Route::get('/', [ApplicationController::class, 'index']);
+        Route::post('/', [ApplicationController::class, 'store']);
+        Route::get('/{id}', [ApplicationController::class, 'show']);
+        Route::put('/{id}', [ApplicationController::class, 'update']);
+        Route::delete('/{id}', [ApplicationController::class, 'destroy']);
+    });
+
     Route::prefix('/services')->group(function () {
-        Route::get('/', [ServiceController::class, 'index']);
+        Route::get('/', [ServiceController::class, 'adminIndex']);
         Route::post('/', [ServiceController::class, 'store']);
         Route::get('/{id}', [ServiceController::class, 'show']);
         Route::put('/{id}', [ServiceController::class, 'update']);
@@ -143,6 +175,13 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
         Route::get('/', [PlanController::class, 'index']);
         Route::get('/{id}', [PlanController::class, 'show']);
         Route::put('/{id}', [PlanController::class, 'update']);
+    });
+    Route::prefix('/tickets')->group(function () {
+        Route::get('/', [AdminController::class, 'indexTickets']);
+        Route::post('/', [AdminController::class, 'storeTicket']);
+        Route::post('/{id}/answer', [AdminController::class, 'storeTicketAnswer']);
+        Route::get('/{id}', [AdminController::class, 'showTicket']);
+        Route::put('/{id}', [AdminController::class, 'closeTicket']);
     });
     Route::prefix('/subjects')->group(function () {
         Route::get('/', [TicketSubjectController::class, 'index']);

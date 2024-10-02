@@ -16,6 +16,10 @@ class Service extends Model
         'parent_id'
     ];
 
+    protected $casts = [
+        'is_active' => 'boolean'
+    ];
+
     public function parent()
     {
         return $this->belongsTo(Service::class);

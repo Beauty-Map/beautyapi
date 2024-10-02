@@ -23,7 +23,7 @@ class ServiceCreateRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
-            'image' => 'required|string',
+            'image' => 'nullable|string',
             'parent_id' => 'nullable|exists:services,id',
         ];
     }

@@ -31,6 +31,9 @@ class PortfolioResource extends JsonResource
             'images' => $this->images_list,
             'work_hours' => $this->work_hours,
             'is_bookmarked' => $this->is_bookmarked,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TicketResource extends JsonResource
+class TicketAdminResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -29,6 +29,7 @@ class TicketResource extends JsonResource
             'parent_id' => $this->parent_id,
             'parent' => $this->parent,
             'created_at' => $this->created_at,
+            'children' => TicketAdminResource::collection($this->children_desc)
         ];
     }
 }
