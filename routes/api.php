@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BonusTransactionController;
 use App\Http\Controllers\IntroController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
@@ -80,6 +81,9 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
         Route::put('/{id}', [PortfolioController::class, 'update']);
         Route::delete('/{id}', [PortfolioController::class, 'destroy']);
     });
+    Route::prefix('/bonuses')->group(function () {
+        Route::get('/', [BonusTransactionController::class, 'ownIndex']);
+    });
     Route::prefix('/tickets')->group(function () {
         Route::get('/', [TicketController::class, 'index']);
         Route::post('/', [TicketController::class, 'store']);
@@ -123,6 +127,11 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
         Route::get('/{id}', [AdminController::class, 'showUser']);
         Route::put('/{id}', [AdminController::class, 'updateUser']);
         Route::delete('/{id}', [AdminController::class, 'destroyUser']);
+
+
+        Route::prefix('/{id}/bonuses')->group(function () {
+            Route::get('/', [BonusTransactionController::class, 'userIndex']);
+        });
 
         Route::prefix('/{id}/portfolios')->group(function () {
             Route::get('/', [AdminController::class, 'indexUserPortfolios']);

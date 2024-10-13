@@ -2,48 +2,58 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BonusTransactionResource;
 use App\Models\BonusTransaction;
 use Illuminate\Http\Request;
 
 class BonusTransactionController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $bonuses = BonusTransaction::query()->paginate($limit);
+        } else {
+            $bonuses = BonusTransaction::query()->get();
+        }
+        return BonusTransactionResource::collection($bonuses);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
      */
-    public function store(Request $request)
+    public function ownIndex()
     {
-        //
+        $auth = $this->getAuth();
+        $filter = ['user_id' => $auth->id];
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $bonuses = BonusTransaction::query()->where($filter)->paginate($limit);
+        } else {
+            $bonuses = BonusTransaction::query()->where($filter)->get();
+        }
+        return BonusTransactionResource::collection($bonuses);
     }
 
     /**
-     * Display the specified resource.
+     * Display a listing of the resource.
      */
-    public function show(BonusTransaction $bonusTransaction)
+    public function userIndex(int $id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, BonusTransaction $bonusTransaction)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(BonusTransaction $bonusTransaction)
-    {
-        //
+        $filter = ['user_id' => $id];
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $bonuses = BonusTransaction::query()->where($filter)->paginate($limit);
+        } else {
+            $bonuses = BonusTransaction::query()->where($filter)->get();
+        }
+        return BonusTransactionResource::collection($bonuses);
     }
 }

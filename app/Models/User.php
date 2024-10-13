@@ -259,9 +259,6 @@ class User extends Authenticatable
     public function getSelectedPlanAttribute()
     {
         $last = $this->plans()
-            ->where(function (Builder $q) {
-
-            })
             ->orderByDesc('created_at')
             ->first();
         if ($last) {
@@ -317,7 +314,7 @@ class User extends Authenticatable
 
     public function getHasBlueTickAttribute()
     {
-        return $this->selected_plan->plan->has_blue_tick;
+        return $this->selected_plan->resource && $this->selected_plan->plan ? $this->selected_plan->plan->has_blue_tick : false;
     }
 
     public function portfolios()
@@ -373,7 +370,7 @@ class User extends Authenticatable
 
     public function referrer()
     {
-        return $this->belongsTo(User::class, 'referral_code', 'referrer_code');
+        return $this->belongsTo(User::class, 'referrer_code', 'referral_code');
     }
 
     function getAllReferrers()
@@ -400,13 +397,13 @@ class User extends Authenticatable
         foreach (self::PERCENTAGES as $level => $percentage) {
             if ($referrer) {
                 $bonus = ($amount * $percentage) / 100;
-                $referrer->bonusTransactions()->create([
+                $bt = $referrer->bonusTransactions()->create([
                     'status' => BonusTransaction::STATUS_PENDING,
                     'amount' => $bonus,
                     'referrer_id' => $this->id,
                     'level' => $level,
                 ]);
-                $bonuses[] = $bonus;
+                $bonuses[] = $bt;
                 $referrer = $referrer->referrer;
             } else {
                 break;
