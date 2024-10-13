@@ -43,7 +43,7 @@ class PaymentController extends Controller
 
         $price = $paymentOption->price;
 //        $price *=  10 ** 9;
-        $price = 100 * 10 ** 9;
+        $price = 100;
         $walletAddress = "UQCdN7eLj50eFEvwNBAkrvEN3Z8_ETg60uAfxfQI4a3L7BCR";
         $paymentLink = "ton://transfer/$walletAddress?amount=$price&text=$transactionId&comment=$transactionId";
 
