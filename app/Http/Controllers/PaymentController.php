@@ -42,6 +42,7 @@ class PaymentController extends Controller
         $transactionId = base64_encode("user:$user->id,payment:$paymentOption->id");
 
         $price = $paymentOption->price;
+        $price *=  10 ** 9;
         $paymentLink = "ton://transfer/$walletAddress?amount=$price&text=$transactionId";
 
         return response()->json(['payment_url' => $paymentLink]);
