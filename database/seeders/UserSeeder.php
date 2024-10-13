@@ -49,34 +49,38 @@ class UserSeeder extends Seeder
         $marketerRole = Role::query()->where('name', 'marketer')->first();
         $artistRole = Role::query()->where('name', 'artist')->first();
         $users = [];
-        for ($i = 0; $i < 20; $i++) {
-            /** @var User $u */
-            $u = User::create([
-                'full_name' => $faker->name,
-                'email' => $faker->unique()->safeEmail,
-                'phone_number' => $faker->unique()->e164PhoneNumber(),
-                'password' => Hash::make('password'),
-                'remember_token' => Str::random(10),
-                'is_active' => 1,
-                'city_id' => 1225,
-            ]);
-            $u->assignRole($userRole, $marketerRole, $artistRole);
-            $users[] = $u;
+        for ($i = 0; $i < 10; $i++) {
+           try {
+               /** @var User $u */
+               $u = User::create([
+                   'full_name' => $faker->name,
+                   'email' => $faker->unique()->safeEmail,
+                   'phone_number' => $faker->unique()->e164PhoneNumber(),
+                   'password' => Hash::make('password'),
+                   'remember_token' => Str::random(10),
+                   'is_active' => 1,
+                   'city_id' => 1225,
+               ]);
+               $u->assignRole($userRole, $marketerRole, $artistRole);
+               $users[] = $u;
+           } catch (\Exception $e) {
+
+            }
         }
-        for ($j = 0; $j < 30; $j++) {
-            $randInt = random_int(10, 100);
+        for ($j = 0; $j < 20; $j++) {
+            $randInt = random_int(3, 10);
             $users = $this->createUsers($users, count($users) * $randInt);
         }
     }
 
-    public function createUsers($parentUsers = [], $count = 20)
+    public function createUsers($parentUsers = [], $count = 2)
     {
         $userRole = Role::query()->where('name', 'user')->first();
         $marketerRole = Role::query()->where('name', 'marketer')->first();
         $artistRole = Role::query()->where('name', 'artist')->first();
         $users = [];
         $faker = Faker::create();
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $randomKey = array_rand($parentUsers);
             $randomUser = $parentUsers[$randomKey];
             /** @var User $u */
@@ -99,7 +103,7 @@ class UserSeeder extends Seeder
 
     private function createActivities(User $u)
     {
-        $randInt = random_int(30, 200);
+        $randInt = random_int(10, 40);
         for ($i = 0; $i < $randInt; $i++) {
             $amount = random_int(10, 10000);
             $u->activities()->create([

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TicketSubjectSeeder::class);
         $this->call(PaymentOptionSeeder::class);
         $this->call(ApplicationSeeder::class);
+        $this->call(PortfolioSeeder::class);
 //        $this->call(PaymentRequestSeeder::class);
     }
 }
