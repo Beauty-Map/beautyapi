@@ -18,6 +18,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, HasPermissions, HasApiTokens, Likeable;
 
+    const PERCENTAGES = [10, 7, 4, 2];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -357,5 +359,59 @@ class User extends Authenticatable
     public function paymentRequests()
     {
         return $this->hasMany(PaymentRequest::class);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(UserActivity::class);
+    }
+
+    public function bonusTransactions()
+    {
+        return $this->hasMany(BonusTransaction::class);
+    }
+
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referral_code', 'referrer_code');
+    }
+
+    function getAllReferrers()
+    {
+        $referrers = [];
+        $user = $this;
+
+        while ($user && $user->referrer_code) {
+            $referrer = User::where('referral_code', $this->referrer_code)->first();
+            if ($referrer) {
+                $referrers[] = $referrer;
+                $user = $referrer;
+            } else {
+                break;
+            }
+        }
+        return $referrers;
+    }
+
+    function distributeCoins($amount) {
+        $user = $this;
+        $referrer = $user->referrer;
+        $bonuses = [];
+        foreach (self::PERCENTAGES as $level => $percentage) {
+            if ($referrer) {
+                $bonus = ($amount * $percentage) / 100;
+                $referrer->bonusTransactions()->create([
+                    'status' => BonusTransaction::STATUS_PENDING,
+                    'amount' => $bonus,
+                    'referrer_id' => $this->id,
+                    'level' => $level,
+                ]);
+                $bonuses[] = $bonus;
+                $referrer = $referrer->referrer;
+            } else {
+                break;
+            }
+        }
+        return $bonuses;
     }
 }

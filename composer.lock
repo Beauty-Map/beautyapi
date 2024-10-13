@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74116c99188a117e0321c0960043e2f6",
+    "content-hash": "64c4a97d4bb082ac301d39c92aa09dba",
     "packages": [
         {
             "name": "brick/math",
@@ -6590,76 +6590,6 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.2.7"
             },
             "time": "2023-12-08T13:03:43+00:00"
-        },
-        {
-            "name": "turahe/laravel-likeable",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/turahe/laravel-likeable.git",
-                "reference": "010a88abfa8288c9e7da3fe10328356b0815ab20"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/turahe/laravel-likeable/zipball/010a88abfa8288c9e7da3fe10328356b0815ab20",
-                "reference": "010a88abfa8288c9e7da3fe10328356b0815ab20",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/database": "5.* | ^6.0 | ^7.0 | ^8.0 | ^9.0 | ^10.0  | ^11.0",
-                "illuminate/support": "5.* | ^6.0 | ^7.0 | ^8.0 | ^9.0 | ^10.0  | ^11.0",
-                "php": "^7.3|^8.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.1",
-                "mockery/mockery": "^1.3",
-                "orchestra/testbench": "^5.0|^6.0|^7.0|^8.0|^9.0",
-                "phpunit/phpunit": "^8.5|^9.3||^10.0|^11.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Turahe\\Likeable\\LikeableServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Turahe\\Likeable\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nur Wachid",
-                    "email": "wachid@outlook.com",
-                    "homepage": "https://turahe.id",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Trait for Laravel Eloquent models to allow easy implementation of a 'like' or 'favorite' or 'remember' feature.",
-            "homepage": "https://github.com/turahe/laravel-likeable",
-            "keywords": [
-                "Follow",
-                "eloquent",
-                "favorite",
-                "favourite",
-                "laravel",
-                "likable",
-                "like",
-                "likeable",
-                "remember",
-                "trait"
-            ],
-            "support": {
-                "issues": "https://github.com/turahe/laravel-likeable/issues",
-                "source": "https://github.com/turahe/laravel-likeable/tree/v1.0.0"
-            },
-            "time": "2024-08-01T13:52:59+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

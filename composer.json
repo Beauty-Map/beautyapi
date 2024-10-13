@@ -10,8 +10,7 @@
         "laravel/framework": "^11.0",
         "laravel/passport": "^12.0",
         "laravel/tinker": "^2.9",
-        "spatie/laravel-permission": "^6.4",
-        "turahe/laravel-likeable": "*"
+        "spatie/laravel-permission": "^6.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
