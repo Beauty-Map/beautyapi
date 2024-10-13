@@ -96,6 +96,9 @@ class User extends Authenticatable
         'rating',
         'is_bookmarked',
         'wallet_address',
+        'pending_bonuses',
+        'payed_bonuses',
+        'pending_income',
     ];
 
     protected static function booted()
@@ -156,6 +159,25 @@ class User extends Authenticatable
     public function getCoinsAttribute()
     {
         return $this->coin_wallet->amount;
+    }
+
+    public function getPendingBonusesAttribute()
+    {
+        return $this->bonusTransactions()
+            ->where('status', BonusTransaction::STATUS_PENDING);
+    }
+
+    public function getPayedBonusesAttribute()
+    {
+        return $this->bonusTransactions()
+            ->where('status', BonusTransaction::STATUS_PAYED);
+    }
+
+    public function getPendingIncomeAttribute()
+    {
+        return $this->bonusTransactions()
+            ->where('status', BonusTransaction::STATUS_PENDING)
+            ->sum('amount');
     }
 
     public function getGoldWalletAttribute()
