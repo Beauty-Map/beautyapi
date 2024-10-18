@@ -19,8 +19,8 @@ class UserSimpleResource extends JsonResource
             'full_name' => $this->full_name,
             'phone_number' => $this->phone_number,
             'email' => $this->email,
-            'rating' => $this->rating,
-            'portfolios_count' => $this->portfolios_count,
+            'rating' => $this->getRating(),
+            'portfolios_count' => $this->getPortfoliosCount(),
         ];
     }
 }

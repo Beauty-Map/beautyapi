@@ -28,10 +28,10 @@ class SetPlanSeeder extends Seeder
                 'duration' => -1,
                 'amount' => $plan->coins,
             ]);
-            $goldWallet = $user->gold_wallet;
+            $goldWallet = $user->getGoldWallet();
             $goldWallet->amount = $plan->coins;
             $goldWallet->save();
-            $coinWallet = $user->coin_wallet;
+            $coinWallet = $user->getCoinWallet();
         }
     }
 }

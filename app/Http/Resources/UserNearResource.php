@@ -17,15 +17,15 @@ class UserNearResource extends JsonResource
         return [
             'id' => $this->id,
             'full_name' => $this->full_name,
-            'portfolios_count' => $this->portfolios_count,
-            'services_count' => $this->services_count,
+            'portfolios_count' => $this->getPortfoliosCount(),
+            'services_count' => $this->getServicesCount(),
             'services' => $this->services,
-            'address' => $this->address,
+            'address' => $this->getAddress(),
             'distance' => $this->distance,
-            'rating' => $this->rating,
+            'rating' => $this->getRating(),
             'is_bookmarked' => $this->is_bookmarked,
-            'avatar' => $this->avatar,
-            'has_blue_tick' => $this->has_blue_tick,
+            'avatar' => $this->getAvatar(),
+            'has_blue_tick' => $this->getHasBlueTick(),
             'created_at' => $this->created_at,
         ];
     }

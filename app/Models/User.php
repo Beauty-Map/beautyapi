@@ -65,41 +65,41 @@ class User extends Authenticatable
         ];
     }
 
-    protected $appends = [
-        'province',
-        'golds',
-        'coins',
-        'selected_plan',
-        'coin_wallet',
-        'gold_wallet',
-        'avatar',
-        'national_code',
-        'tel_number',
-        'location',
-        'work_hours',
-        'work_on_holidays',
-        'is_closed',
-        'is_all_day_open',
-        'social_media',
-        'address',
-        'is_bookmarked',
-        'has_blue_tick',
-        'bio',
-        'is_artist',
-        'is_artist_agreed',
-        'documents',
-        'artist_banner',
-        'is_artist_profile_completed',
-        'services_count',
-        'portfolios_count',
-        'licenses',
-        'rating',
-        'is_bookmarked',
-        'wallet_address',
-        'pending_bonuses',
-        'payed_bonuses',
-        'pending_income',
-    ];
+//    protected $appends = [
+//        'province',
+//        'golds',
+//        'coins',
+//        'selected_plan',
+//        'coin_wallet',
+//        'gold_wallet',
+//        'avatar',
+//        'national_code',
+//        'tel_number',
+//        'location',
+//        'work_hours',
+//        'work_on_holidays',
+//        'is_closed',
+//        'is_all_day_open',
+//        'social_media',
+//        'address',
+//        'is_bookmarked',
+//        'has_blue_tick',
+//        'bio',
+//        'is_artist',
+//        'is_artist_agreed',
+//        'documents',
+//        'artist_banner',
+//        'is_artist_profile_completed',
+//        'services_count',
+//        'portfolios_count',
+//        'licenses',
+//        'rating',
+//        'is_bookmarked',
+//        'wallet_address',
+//        'pending_bonuses',
+//        'payed_bonuses',
+//        'pending_income',
+//    ];
 
     protected static function booted()
     {
@@ -131,7 +131,7 @@ class User extends Authenticatable
         return $this->belongsTo(City::class);
     }
 
-    public function getProvinceAttribute()
+    public function getProvince()
     {
         return $this->city ? $this->city->province : null;
     }
@@ -151,23 +151,23 @@ class User extends Authenticatable
         return $this->morphMany(Wallet::class, 'walletable');
     }
 
-    public function getCoinWalletAttribute()
+    public function getCoinWallet()
     {
         return $this->wallets()->where('type', 'coin')->firstOrCreate(['type' => 'coin']);
     }
 
-    public function getCoinsAttribute()
+    public function getCoins()
     {
-        return $this->coin_wallet->amount;
+        return $this->getCoinWallet()->amount;
     }
 
-    public function getPendingBonusesAttribute()
+    public function getPendingBonuses()
     {
         return $this->bonusTransactions()
             ->where('status', BonusTransaction::STATUS_PENDING);
     }
 
-    public function getPayedBonusesAttribute()
+    public function getPayedBonuses()
     {
         return $this->bonusTransactions()
             ->where('status', BonusTransaction::STATUS_PAYED);
@@ -180,92 +180,92 @@ class User extends Authenticatable
             ->sum('amount');
     }
 
-    public function getGoldWalletAttribute()
+    public function getGoldWallet()
     {
         return $this->wallets()->where('type', 'gold')->firstOrCreate(['type' => 'gold']);
     }
 
-    public function getGoldsAttribute()
+    public function getGolds()
     {
-        return $this->gold_wallet->amount;
+        return $this->getGoldWallet()->amount;
     }
 
-    public function getAvatarAttribute()
+    public function getAvatar()
     {
         return $this->getMeta('avatar');
     }
 
-    public function getBannersAttribute()
+    public function getBanners()
     {
         return $this->getMeta('banners');
     }
 
-    public function getLicensesAttribute()
+    public function getLicenses()
     {
         return $this->getMeta('licenses');
     }
 
-    public function getRatingAttribute()
+    public function getRating()
     {
         return 4.5;
     }
 
-    public function getNationalCodeAttribute()
+    public function getNationalCode()
     {
         return $this->getMeta('national_code');
     }
 
-    public function getTelNumberAttribute()
+    public function getTelNumber()
     {
         return $this->getMeta('tel_number');
     }
 
-    public function getAddressAttribute()
+    public function getAddress()
     {
         return $this->getMeta('address');
     }
 
-    public function getIsArtistAgreedAttribute()
+    public function getIsArtistAgreed()
     {
         return $this->getMeta('is_artist_agreed');
     }
 
-    public function getBioAttribute()
+    public function getBio()
     {
         return $this->getMeta('bio');
     }
 
-    public function getWorkHoursAttribute()
+    public function getWorkHours()
     {
         return $this->getMeta('work_hours');
     }
 
-    public function getSocialMediaAttribute()
+    public function getSocialMedia()
     {
         return $this->getMeta('social_media');
     }
 
-    public function getWorkOnHolidaysAttribute()
+    public function getWorkOnHolidays()
     {
         return $this->getMeta('work_on_holidays');
     }
 
-    public function getWalletAddressAttribute()
+    public function getWalletAddress()
     {
         return $this->getMeta('wallet_address');
     }
 
-    public function getIsClosedAttribute()
+    public function getIsClosed()
     {
         return $this->getMeta('is_closed');
     }
 
-    public function getIsAllDayOpenAttribute()
+    public function getIsAllDayOpen()
     {
         return $this->getMeta('is_all_day_open');
     }
 
-    public function getLocationAttribute()
+    public function getLocation()
     {
         if ($this->lat && $this->lng) {
             return ['lat' => $this->lat, 'lng' => $this->lng];
@@ -278,7 +278,7 @@ class User extends Authenticatable
         return $this->hasMany(UserPlan::class);
     }
 
-    public function getSelectedPlanAttribute()
+    public function getSelectedPlan()
     {
         $last = $this->plans()
             ->orderByDesc('created_at')
@@ -289,12 +289,12 @@ class User extends Authenticatable
         return new UserSelectedPlanResource($this->plans()->orderBy('created_at')->first());
     }
 
-    public function getIsArtistAttribute()
+    public function getIsArtist()
     {
         return $this->hasRole('artist');
     }
 
-    public function getIsArtistProfileCompletedAttribute()
+    public function getIsArtistProfileCompleted()
     {
         $isCompleted = true;
         if (!$this->full_name) {
@@ -324,19 +324,19 @@ class User extends Authenticatable
         return $isCompleted;
     }
 
-    public function getArtistBannerAttribute()
+    public function getArtistBanner()
     {
         return $this->getMeta('artist_banner');
     }
 
-    public function getDocumentsAttribute()
+    public function getDocuments()
     {
         return $this->getMeta('documents');
     }
 
-    public function getHasBlueTickAttribute()
+    public function getHasBlueTick()
     {
-        return $this->selected_plan->resource && $this->selected_plan->plan ? $this->selected_plan->plan->has_blue_tick : false;
+        return $this->getSelectedPlan()->resource && $this->getSelectedPlan()->plan ? $this->getSelectedPlan()->plan->has_blue_tick : false;
     }
 
     public function portfolios()
@@ -344,7 +344,7 @@ class User extends Authenticatable
         return $this->hasMany(Portfolio::class);
     }
 
-    public function getPortfoliosCountAttribute()
+    public function getPortfoliosCount()
     {
         return $this->portfolios()->count();
     }
@@ -354,7 +354,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Service::class);
     }
 
-    public function getServicesCountAttribute()
+    public function getServicesCount()
     {
         return $this->services()->count();
     }
