@@ -61,7 +61,7 @@ class UserController extends Controller
         } else {
             $nearest = $this->userRepository->nearest($filter, 'desc');
         }
-            return UserNearResource::collection($nearest);
+        return UserNearResource::collection($nearest);
     }
 
     /**
