@@ -14,10 +14,11 @@ class UploadController extends Controller
 {
     public function upload(UploadRequest $request)
     {
-        if (!$request->hasFile('file')) {
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+        } else if (!$request->hasFile('file')) {
             return $this->createError('file', Constants::FILE_NOT_FOUND_ERROR, 404);
         }
-        $file = $request->file('file');
         $type = $request->input('type', 'avatar');
         $ext = $file->getClientOriginalExtension();
         $name = Carbon::now()->format('Y_m_d_H_i_s').Str::random(4);

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadRequest extends FormRequest
+class CourseCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,8 @@ class UploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'nullable',
-            'upload' => 'nullable',
+            'title' => 'required|string',
+            'body' => 'required|string',
         ];
     }
 }

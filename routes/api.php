@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BonusTransactionController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\IntroController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
@@ -108,6 +109,11 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
     });
 });
 
+Route::prefix('/courses')->group(function () {
+    Route::get('/', [CourseController::class, 'index']);
+    Route::get('/{course}', [CourseController::class, 'show']);
+});
+
 Route::prefix('/auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
     Route::post('/register/otp', [AuthController::class, 'checkOtpCode'])->middleware('guest');
@@ -120,6 +126,14 @@ Route::prefix('/auth')->group(function () {
 
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group(function () {
+
+    Route::prefix('/courses')->group(function () {
+        Route::get('/', [CourseController::class, 'index']);
+        Route::post('/', [CourseController::class, 'store'])->middleware('auth:api');
+        Route::get('/{course}', [CourseController::class, 'show']);
+        Route::put('/{course}', [CourseController::class, 'update'])->middleware('auth:api');
+        Route::delete('/{course}', [CourseController::class, 'destroy'])->middleware('auth:api');
+    });
     Route::get('/own', [AuthController::class, 'own']);
     Route::get('/roles', [AdminController::class, 'indexRoles']);
     Route::prefix('/users')->group(function () {

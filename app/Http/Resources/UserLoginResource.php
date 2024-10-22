@@ -53,6 +53,7 @@ class UserLoginResource extends JsonResource
             'avatar' => $this->getAvatar(),
             'birth_date' => $this->birth_date,
             'social_media' => $this->getSocialMedia(),
+            'referral_code' => $this->referral_code,
             'is_artist_profile_completed' => $this->getIsArtistProfileCompleted(),
         ];
     }
