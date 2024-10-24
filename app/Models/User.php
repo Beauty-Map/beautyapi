@@ -178,6 +178,9 @@ class User extends Authenticatable
 
     public function getOldWithdraws()
     {
+        if ($this->getAllIncome() == 0) {
+            return 0;
+        }
         return $this->getWithdraw() / $this->getAllIncome();
     }
 
