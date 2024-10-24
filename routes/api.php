@@ -85,6 +85,8 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::prefix('/bonuses')->group(function () {
         Route::get('/', [BonusTransactionController::class, 'ownIndex']);
     });
+    Route::get('/incomes', [BonusTransactionController::class, 'ownIncome']);
+    Route::get('/refers', [UserController::class, 'refers']);
     Route::prefix('/tickets')->group(function () {
         Route::get('/', [TicketController::class, 'index']);
         Route::post('/', [TicketController::class, 'store']);

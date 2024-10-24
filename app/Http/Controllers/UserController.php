@@ -276,16 +276,27 @@ class UserController extends Controller
     public function indexBestReferrals()
     {
         $auth = $this->getAuth();
-        $filter = [
-            'referrer_code' => $auth->referral_code
-        ];
         if ($this->hasPage()) {
             $page = $this->getPage();
             $limit = $this->getLimit();
-            $users = $this->userRepository->findByPaginate($filter, $page, $limit, 'id', 'desc');
+            $users = User::query()->where('referrer_code', $auth->referral_code)->paginate($limit);
         } else {
-            $users = $this->userRepository->findBy($filter, 'id', 'desc');
+            $users = User::query()->where('referrer_code', $auth->referral_code)->get();
         }
         return UserSimpleResource::collection($users);
+    }
+
+    public function refers()
+    {
+        $startTime = \request()->input('startTime', null);
+        $endTime = \request()->input('endTime', null);
+        $query = User::query();
+        if ($startTime) {
+            $query = $query->where('created_at', '>=', $startTime);
+        }
+        if ($endTime) {
+            $query = $query->where('created_at', '<=', $endTime);
+        }
+        return $query->count();
     }
 }

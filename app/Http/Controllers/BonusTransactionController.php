@@ -56,4 +56,13 @@ class BonusTransactionController extends Controller
         }
         return BonusTransactionResource::collection($bonuses);
     }
+
+    public function ownIncome()
+    {
+        $auth = $this->getAuth();
+        $appID = \request()->input('app_id', null);
+        return $auth->bonusTransactions()
+            ->where('status', BonusTransaction::STATUS_PAYED)
+            ->sum('amount');
+    }
 }

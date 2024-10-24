@@ -156,6 +156,31 @@ class User extends Authenticatable
         return $this->wallets()->where('type', 'coin')->firstOrCreate(['type' => 'coin']);
     }
 
+    public function getIncome()
+    {
+        return floatval($this->bonusTransactions()
+            ->where('status', BonusTransaction::STATUS_PENDING)
+            ->sum('amount'));
+    }
+
+    public function getWithdraw()
+    {
+        return floatval($this->bonusTransactions()
+            ->where('status', BonusTransaction::STATUS_PAYED)
+            ->sum('amount'));
+    }
+
+    public function getAllIncome()
+    {
+        return floatval($this->bonusTransactions()
+            ->sum('amount'));
+    }
+
+    public function getOldWithdraws()
+    {
+        return $this->getWithdraw() / $this->getAllIncome();
+    }
+
     public function getCoins()
     {
         return $this->getCoinWallet()->amount;
