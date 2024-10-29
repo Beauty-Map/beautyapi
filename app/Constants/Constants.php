@@ -10,6 +10,7 @@ class Constants
     const FILE_NOT_FOUND_ERROR = 'فایل یافت نشد';
     const USER_NOT_FOUND_ERROR = 'کاربر یافت نشد';
     const INVALID_PHONE_NUMBER_ERROR = 'شماره تماس اشتباه است';
+    const INVALID_EMAIL_ERROR = 'ایمیل اشتباه است';
     const INVALID_LOGIN_ERROR = 'ایمیل یا کلمه عبور اشتباه است';
     const UNDEFINED_ERROR = 'متاسفانه خطایی رخ داده است';
     const LADDERING_TYPE_ERROR = 'نوع عملیات نردبان ضروری است';

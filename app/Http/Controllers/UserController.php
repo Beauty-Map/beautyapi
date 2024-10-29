@@ -209,13 +209,19 @@ class UserController extends Controller
 
     public function sendOtpForAltNumber(UpdateAltNumberRequest $request)
     {
-        $otp = Helper::randomCode(4, 'digit');
-        $this->otpRepository->make([
-            'phone_number' => $request->get('alt_number'),
-            'code' => $otp,
-            'type' => 'alt_number',
-        ]);
-        return $otp;
+        $auth = $this->getAuth();
+        $altNumber = $request->input('alt_number', '');
+        if (!$altNumber) {
+            return $this->createError('alt_number', Constants::INVALID_EMAIL_ERROR, 422);
+        }
+        return $auth->setMeta('alt_number', $altNumber);
+//        $otp = Helper::randomCode(6, 'digit');
+//        $this->otpRepository->make([
+//            'email' => $request->get('alt_number'),
+//            'code' => $otp,
+//            'type' => 'alt_number',
+//        ]);
+//        return $otp;
     }
 
     public function updateAltNumber(UpdateAltNumberRequest $request)
@@ -227,7 +233,7 @@ class UserController extends Controller
             return $this->createError('code', Constants::INVALID_OTP_CODE_ERROR, 422);
         }
         $data = [
-            'phone_number' => $altNumber,
+            'email' => $altNumber,
             'code' => $code,
             'type' => 'alt_number'
         ];

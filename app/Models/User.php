@@ -268,6 +268,11 @@ class User extends Authenticatable
         return $this->getMeta('tel_number');
     }
 
+    public function getAltNumber()
+    {
+        return $this->getMeta('alt_number');
+    }
+
     public function getAddress()
     {
         return $this->getMeta('address');
