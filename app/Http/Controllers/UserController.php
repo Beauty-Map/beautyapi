@@ -301,7 +301,8 @@ class UserController extends Controller
     {
         $startTime = \request()->input('startTime', null);
         $endTime = \request()->input('endTime', null);
-        $query = User::query();
+        $auth = $this->getAuth();
+        $query = User::query()->where('referrer_code', $auth->referral_code);
         if ($startTime) {
             $query = $query->where('created_at', '>=', $startTime);
         }
