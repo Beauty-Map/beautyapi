@@ -18,6 +18,8 @@ class UploadController extends Controller
             $file = $request->file('upload');
         } else if (!$request->hasFile('file')) {
             return $this->createError('file', Constants::FILE_NOT_FOUND_ERROR, 404);
+        } else {
+            $file = $request->file('file');
         }
         $type = $request->input('type', 'avatar');
         $ext = $file->getClientOriginalExtension();

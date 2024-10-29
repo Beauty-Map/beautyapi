@@ -43,6 +43,9 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
         if (array_key_exists('term', $filter) && $filter['term']) {
             $query = $query->where('title', 'like', '%'.$filter['term'].'%');
         }
+        if ($orderBy == 'discount') {
+            $query = $query->selectRaw('*, (price - discount_price) as discount');
+        }
         return $query->orderBy($orderBy, $sortBy);
     }
 

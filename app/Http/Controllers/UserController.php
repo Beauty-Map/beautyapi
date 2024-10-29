@@ -89,6 +89,17 @@ class UserController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function addView(int $id)
+    {
+        /** @var User $user */
+        $user = $this->userRepository->find($id);
+        $user?->addView();
+        return true;
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(UserProfileUpdateRequest $request, int $id)

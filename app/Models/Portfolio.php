@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
 use App\Trait\Likeable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class Portfolio extends Model
 {
@@ -71,5 +70,37 @@ class Portfolio extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function metas()
+    {
+        return $this->morphMany(Meta::class, 'metaable');
+    }
+
+    public function addView()
+    {
+        $view = $this->getMeta('view');
+        if (!$view) {
+            $view = 0;
+        }
+        $this->setMeta('view', $view + 1);
+    }
+
+    public function getView()
+    {
+        $view = $this->getMeta('view');
+        if (!$view) {
+            $view = 0;
+        }
+        return $view;
+    }
+
+    public function getMeta($key = '')
+    {
+        return Helper::getMeta($this, $key);
+    }
+
+    public function setMeta($key = '', $value = '')
+    {
+        return Helper::setMeta($this, $key, $value);
     }
 }

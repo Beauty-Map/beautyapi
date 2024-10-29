@@ -18,4 +18,6 @@ interface UserInterface extends BaseInterface
     public function referredBy(array $filter = [], string $sortBy = 'desc');
 
     public function referredByPagination(array $filter = [],  int $page = 1, int $limit = 10, string $sortBy = 'desc');
+
+    public function searchByPaginate(array $filter, int $page, int $limit, mixed $orderBy, mixed $sortBy);
 }

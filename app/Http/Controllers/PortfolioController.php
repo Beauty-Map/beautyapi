@@ -130,6 +130,17 @@ class PortfolioController extends Controller
         return new PortfolioResource($this->portfolioRepository->findOneOrFail($id));
     }
 
+    /**
+     * Display the specified resource.
+     */
+    public function addView(int $id)
+    {
+        /** @var Portfolio $portfolio */
+        $portfolio = $this->portfolioRepository->find($id);
+        $portfolio?->addView();
+        return true;
+    }
+
     public function like(int $id)
     {
         $auth = $this->getAuth();

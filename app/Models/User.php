@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasPermissions;
@@ -49,6 +50,25 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function addView()
+    {
+        $view = $this->getMeta('view');
+        if (!$view) {
+            $view = 0;
+        }
+        $this->setMeta('view', $view + 1);
+    }
+
+    public function getView()
+    {
+        $view = $this->getMeta('view');
+        if (!$view) {
+            $view = 0;
+        }
+        return $view;
+
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -354,7 +374,7 @@ class User extends Authenticatable
 
     public function getArtistBanner()
     {
-        return $this->getMeta('artist_banner');
+        return Str::length($this->getMeta('artist_banner')) > 0 ? explode(',', $this->getMeta('artist_banner')): [];
     }
 
     public function getDocuments()

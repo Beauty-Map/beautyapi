@@ -35,6 +35,8 @@ class ArtistResource extends JsonResource
             'work_hours' => $this->getWorkHours(),
             'licenses' => $this->getLicenses(),
             'location' => $this->getLocation(),
+            'socials' => $this->getSocialMedia(),
+            'view' => $this->getView(),
         ];
     }
 }

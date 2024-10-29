@@ -28,6 +28,7 @@ Route::get('/intros', [IntroController::class, 'index']);
 Route::get('/provinces', [ProvinceController::class, 'index']);
 Route::get('/portfolios', [PortfolioController::class, 'index']);
 Route::get('/portfolios/{id}', [PortfolioController::class, 'show']);
+Route::post('/portfolios/{id}/view', [PortfolioController::class, 'addView']);
 Route::post('/portfolios/{id}/like', [PortfolioController::class, 'like'])->middleware('auth:api');
 Route::post('/artists/{id}/like', [UserController::class, 'like'])->middleware('auth:api');
 Route::get('/subjects', [TicketSubjectController::class, 'index']);
@@ -37,15 +38,18 @@ Route::get('/applications', [ApplicationController::class, 'index']);
 
 Route::prefix('/users')->group(function () {
     Route::get('/{id}', [UserController::class, 'show']);
+    Route::post('/{id}/view', [UserController::class, 'addView']);
     Route::get('/{id}/portfolios', [PortfolioController::class, 'userIndex']);
 });
 Route::prefix('/services')->group(function () {
     Route::get('/', [ServiceController::class, 'index']);
+    Route::get('/children', [ServiceController::class, 'indexChildren']);
     Route::get('/{id}', [ServiceController::class, 'show']);
     Route::get('/{id}/children', [ServiceController::class, 'children']);
 });
 
 Route::get('/search', [SearchController::class, 'search']);
+Route::get('/search/artists', [SearchController::class, 'searchArtists']);
 
 Route::post('/upload', [UploadController::class, 'upload'])->middleware('auth:api');
 

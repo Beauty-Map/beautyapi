@@ -46,6 +46,26 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function indexChildren()
+    {
+        $filter = [];
+        if (\request()->has('service_id')) {
+            $filter['parent_id'] = \request()->get('service_id');
+        }
+        $filter['is_active'] = true;
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $services = $this->serviceRepository->findChildrenByPaginate($filter, $page, $limit, 'id', 'asc');
+        } else {
+            $services = $this->serviceRepository->findChildrenBy($filter, 'id', 'asc');
+        }
+        return ServiceResource::collection($services);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
     public function adminIndex()
     {
         $filter = [];
