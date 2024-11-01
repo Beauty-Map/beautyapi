@@ -8,9 +8,12 @@ use App\Http\Requests\AdminUserUpdateRequest;
 use App\Http\Requests\PaymentRequestUpdateStatusRequest;
 use App\Http\Requests\PortfolioUpdateRequest;
 use App\Http\Requests\PortfolioUpdateStatusRequest;
+use App\Http\Requests\SubscriptionCreateRequest;
+use App\Http\Requests\SubscriptionUpdateRequest;
 use App\Http\Requests\TicketCreateRequest;
 use App\Http\Resources\PaymentRequestResource;
 use App\Http\Resources\PortfolioResource;
+use App\Http\Resources\SubscriptionResource;
 use App\Http\Resources\TicketAdminResource;
 use App\Http\Resources\TicketResource;
 use App\Http\Resources\UserSimpleResource;
@@ -20,6 +23,7 @@ use App\Interfaces\PaymentRequestInterface;
 use App\Interfaces\PortfolioInterface;
 use App\Interfaces\TicketInterface;
 use App\Interfaces\UserInterface;
+use App\Models\Subscription;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -309,5 +313,46 @@ class AdminController extends Controller
         return $this->ticketRepository->update([
             'status' => 'closed'
         ], $id);
+    }
+
+    public function indexSubscriptions()
+    {
+        if ($this->hasPage()) {
+            $page = $this->getPage();
+            $limit = $this->getLimit();
+            $subscriptions = Subscription::query()->orderBy('period')->paginate($limit);
+        } else {
+            $subscriptions = Subscription::query()->orderBy('period')->get();
+        }
+        return SubscriptionResource::collection($subscriptions);
+    }
+
+    public function storeSubscriptions(SubscriptionCreateRequest $request, int $id)
+    {
+        $subscription = Subscription::query()->create($request->only([
+            'title',
+            'period',
+            'price',
+        ]));
+        return new SubscriptionResource($subscription);
+    }
+
+    public function showSubscription(Subscription $subscription)
+    {
+        return new SubscriptionResource($subscription);
+    }
+
+    public function updateSubscription(SubscriptionUpdateRequest $request, Subscription $subscription)
+    {
+        return $subscription->update($request->only([
+            'title',
+            'period',
+            'price',
+        ]));
+    }
+
+    public function destroySubscription(Subscription $subscription)
+    {
+        return $subscription->delete();
     }
 }

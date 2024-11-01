@@ -16,6 +16,7 @@ use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketSubjectController;
 use App\Http\Controllers\UploadController;
@@ -114,7 +115,10 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
         Route::get('/', [UserController::class, 'indexBestReferrals']);
     });
 });
-
+Route::prefix('/subscriptions')->group(function () {
+    Route::get('/', [SubscriptionController::class, 'index'])->middleware('auth:api');
+    Route::get('/{subscription}', [AdminController::class, 'showSubscription'])->middleware('auth:api');
+});
 Route::prefix('/courses')->group(function () {
     Route::get('/', [CourseController::class, 'index']);
     Route::get('/{course}', [CourseController::class, 'show']);
@@ -139,6 +143,13 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
         Route::get('/{course}', [CourseController::class, 'show']);
         Route::put('/{course}', [CourseController::class, 'update'])->middleware('auth:api');
         Route::delete('/{course}', [CourseController::class, 'destroy'])->middleware('auth:api');
+    });
+    Route::prefix('/subscriptions')->group(function () {
+        Route::get('/', [AdminController::class, 'indexSubscriptions'])->middleware('auth:api');
+        Route::post('/', [AdminController::class, 'storeSubscription'])->middleware('auth:api');
+        Route::get('/{subscription}', [AdminController::class, 'showSubscription'])->middleware('auth:api');
+        Route::put('/{subscription}', [AdminController::class, 'updateSubscription'])->middleware('auth:api');
+        Route::delete('/{subscription}', [AdminController::class, 'destroySubscription'])->middleware('auth:api');
     });
     Route::get('/own', [AuthController::class, 'own']);
     Route::get('/roles', [AdminController::class, 'indexRoles']);
