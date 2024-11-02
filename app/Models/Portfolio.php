@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\Helper;
 use App\Trait\Likeable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -74,6 +75,16 @@ class Portfolio extends Model
     public function metas()
     {
         return $this->morphMany(Meta::class, 'metaable');
+    }
+
+    public function ladders()
+    {
+        return $this->hasMany(Ladder::class);
+    }
+
+    public function isLaddered()
+    {
+        return $this->ladders()->where('end_at', '>', Carbon::now())->count() > 0;
     }
 
     public function addView()

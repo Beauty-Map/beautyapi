@@ -17,8 +17,10 @@ use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\PortfolioInterface;
 use App\Interfaces\UserInterface;
+use App\Models\Ladder;
 use App\Models\Portfolio;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -267,11 +269,45 @@ class UserController extends Controller
             return $this->userRepository->doLadder();
         }
         return match ($request['type']) {
-            'all_portfolios' => $this->portfolioRepository->doLadder($request->toArray()),
-            'some_portfolios' => $this->portfolioRepository->doLadder($request->toArray()),
+            'all_portfolios' => $this->doLadderPortfolios($request),
+            'some_portfolios' => $this->doLadderPortfolios($request),
             'profile' => $this->userRepository->doLadder(),
             default => $this->createError('type', Constants::LADDERING_TYPE_ERROR, 422),
         };
+    }
+
+    public function doLadderPortfolios(LadderRequest $request): bool
+    {
+        $auth = $this->getAuth();
+        $endAt = Carbon::now()->addWeek();
+        DB::beginTransaction();
+        try {
+            if ($request['type'] == 'all_portfolios') {
+                $portfolios = $auth->portfolios;
+                /** @var Portfolio $portfolio */
+                foreach ($portfolios as $portfolio) {
+                    $portfolio->ladders()->create([
+                        'end_at' => $endAt,
+                        'user_id' => $auth->id,
+                    ]);
+                }
+
+            } else {
+                $portfolios = $request['data'];
+                foreach ($portfolios as $portfolio) {
+                    Ladder::query()->create([
+                        'portfolio_id' => $portfolio,
+                        'end_at' => $endAt,
+                        'user_id' => $auth->id,
+                    ]);
+                }
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false;
+        }
     }
 
     public function indexFavouriteArtists()

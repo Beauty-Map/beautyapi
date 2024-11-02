@@ -33,7 +33,8 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
 
     public function searchQuery(array $filter, string $orderBy = 'created_at', string $sortBy = 'desc'): Builder
     {
-        $query = $this->model->newQuery();
+        $query = $this->model->newQuery()
+            ->leftJoin('ladders', 'ladders.portfolio_id', '=', 'portfolios.id');
         if (array_key_exists('user_id', $filter) && $filter['user_id']) {
             $query = $query->where('user_id', $filter['user_id']);
         }
@@ -44,8 +45,31 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
             $query = $query->where('title', 'like', '%'.$filter['term'].'%');
         }
         if ($orderBy == 'discount') {
-            $query = $query->selectRaw('*, (price - discount_price) as discount');
+            $query = $query->selectRaw('portfolios.*, (price - discount_price) as discount,
+            (
+           (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(portfolios.created_at)) / 3600 * -1
+                    +
+                    CASE
+                        WHEN ladders.end_at >= NOW() THEN
+                            0.1
+                        ELSE
+                            0
+                    END
+                ) as score');
+        } else {
+            $query = $query->selectRaw('portfolios.*,
+             (
+           (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(portfolios.created_at)) / 3600 * -1
+                    +
+                    CASE
+                        WHEN ladders.end_at >= NOW() THEN
+                            0.1
+                        ELSE
+                            0
+                    END
+             )as score');
         }
+        $query = $query->orderByDesc('score');
         return $query->orderBy($orderBy, $sortBy);
     }
 
