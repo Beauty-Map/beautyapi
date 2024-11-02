@@ -327,7 +327,7 @@ class AdminController extends Controller
         return SubscriptionResource::collection($subscriptions);
     }
 
-    public function storeSubscriptions(SubscriptionCreateRequest $request, int $id)
+    public function storeSubscription(SubscriptionCreateRequest $request, int $id)
     {
         $subscription = Subscription::query()->create($request->only([
             'title',
