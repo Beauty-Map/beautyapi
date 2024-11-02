@@ -51,7 +51,7 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
                     +
                     CASE
                         WHEN ladders.end_at >= NOW() THEN
-                            0.1
+                            150
                         ELSE
                             0
                     END
@@ -63,7 +63,7 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
                     +
                     CASE
                         WHEN ladders.end_at >= NOW() THEN
-                            0.1
+                            150
                         ELSE
                             0
                     END
