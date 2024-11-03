@@ -36,13 +36,13 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
         $query = $this->model->newQuery()
             ->leftJoin('ladders', 'ladders.portfolio_id', '=', 'portfolios.id');
         if (array_key_exists('user_id', $filter) && $filter['user_id']) {
-            $query = $query->where('user_id', $filter['user_id']);
+            $query = $query->where('portfolios.user_id', $filter['user_id']);
         }
         if (array_key_exists('services', $filter) && $filter['services'] && count($filter['services']) > 0) {
-            $query = $query->whereIn('service_id', $filter['services']);
+            $query = $query->whereIn('portfolios.service_id', $filter['services']);
         }
         if (array_key_exists('term', $filter) && $filter['term']) {
-            $query = $query->where('title', 'like', '%'.$filter['term'].'%');
+            $query = $query->where('portfolios.title', 'like', '%'.$filter['term'].'%');
         }
         if ($orderBy == 'discount') {
             $query = $query->selectRaw('portfolios.*, (price - discount_price) as discount,
