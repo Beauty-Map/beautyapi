@@ -7,6 +7,7 @@ use App\Trait\Likeable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Portfolio extends Model
 {
@@ -61,7 +62,7 @@ class Portfolio extends Model
 
     public function getImagesListAttribute()
     {
-        return $this->images;
+        return Str::length($this->images) > 0 ? explode(',', $this->images) : [];
     }
 
     public function service()
