@@ -33,6 +33,7 @@ class Portfolio extends Model
     ];
 
     protected $casts = [
+        'images_list' => 'json',
         'images' => 'json',
         'has_tel' => 'boolean',
         'has_phone_number' => 'boolean',
