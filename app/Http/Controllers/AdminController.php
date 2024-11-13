@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Constants\Constants;
 use App\Events\UploadTicketFileEvent;
 use App\Http\Requests\AdminUserUpdateRequest;
+use App\Http\Requests\NotificationCreateRequest;
 use App\Http\Requests\PaymentRequestUpdateStatusRequest;
 use App\Http\Requests\PortfolioUpdateRequest;
 use App\Http\Requests\PortfolioUpdateStatusRequest;
 use App\Http\Requests\SubscriptionCreateRequest;
 use App\Http\Requests\SubscriptionUpdateRequest;
 use App\Http\Requests\TicketCreateRequest;
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PaymentRequestResource;
 use App\Http\Resources\PortfolioResource;
 use App\Http\Resources\SubscriptionResource;
@@ -23,6 +25,7 @@ use App\Interfaces\PaymentRequestInterface;
 use App\Interfaces\PortfolioInterface;
 use App\Interfaces\TicketInterface;
 use App\Interfaces\UserInterface;
+use App\Models\Notification;
 use App\Models\Subscription;
 use App\Models\Ticket;
 use App\Models\User;
@@ -354,5 +357,36 @@ class AdminController extends Controller
     public function destroySubscription(Subscription $subscription)
     {
         return $subscription->delete();
+    }
+
+    public function indexNotifications()
+    {
+        if ($this->hasPage()) {
+            $limit = $this->getLimit();
+            $notifications = Notification::query()->paginate($limit);
+        } else {
+            $notifications = Notification::query()->get();
+        }
+        return NotificationResource::collection($notifications);
+    }
+
+    public function storeNotification(NotificationCreateRequest $request)
+    {
+        $notification = Notification::query()->create($request->only([
+            'type',
+            'title',
+            'description',
+        ]));
+        return new NotificationResource($notification);
+    }
+
+    public function showNotification(Notification $notification)
+    {
+        return new NotificationResource($notification);
+    }
+
+    public function destroyNotification(Notification $notification)
+    {
+        return $notification->delete();
     }
 }

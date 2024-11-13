@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BonusTransactionController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\IntroController;
+use App\Http\Controllers\MainSliderController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentOptionController;
@@ -49,6 +50,7 @@ Route::prefix('/services')->group(function () {
     Route::get('/{id}/children', [ServiceController::class, 'children']);
 });
 
+Route::get('/main-sliders', [MainSliderController::class, 'index']);
 Route::get('/search', [SearchController::class, 'search']);
 Route::get('/search/artists', [SearchController::class, 'searchArtists']);
 
@@ -136,6 +138,15 @@ Route::prefix('/auth')->group(function () {
 
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->middleware('guest');
 Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group(function () {
+    Route::get('/sliders', [MainSliderController::class, 'index']);
+    Route::put('/sliders/{slider}', [MainSliderController::class, 'update']);
+
+    Route::prefix('/notifications')->group(function () {
+        Route::get('/', [AdminController::class, 'indexNotifications']);
+        Route::post('/', [AdminController::class, 'storeNotification'])->middleware('auth:api');
+        Route::get('/{notification}', [AdminController::class, 'showNotification']);
+        Route::delete('/{notification}', [AdminController::class, 'destroyNotification'])->middleware('auth:api');
+    });
 
     Route::prefix('/courses')->group(function () {
         Route::get('/', [CourseController::class, 'index']);

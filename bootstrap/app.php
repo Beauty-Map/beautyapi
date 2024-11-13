@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\AdminTokenMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;

@@ -62,7 +62,10 @@ class Portfolio extends Model
 
     public function getImagesListAttribute()
     {
-        return Str::length($this->images) > 0 ? explode(',', $this->images) : [];
+        if (is_string($this->images) && Str::length($this->images) > 0) {
+            return explode(',', $this->images);
+        }
+        return is_array($this->images) ? $this->images : [];
     }
 
     public function service()

@@ -205,7 +205,7 @@ class UserController extends Controller
             }
             return $this->createError('error', Constants::UNDEFINED_ERROR, 500);
         } else {
-            return $this->createError('old_password', Constants::INVALID_PASSWORD_ERROR, 422);
+            return $this->createError('old_password', Constants::INVALID_OLD_PASSWORD_ERROR, 422);
         }
     }
 

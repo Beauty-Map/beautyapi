@@ -27,5 +27,6 @@ class DatabaseSeeder extends Seeder
 //        $this->call(PaymentRequestSeeder::class);
 //        $this->call(CourseSeeder::class);
 //        $this->call(SubscriptionSeeder::class);
+//        $this->call(MainSliderSeeder::class);
     }
 }
