@@ -18,8 +18,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, HasPermissions, HasApiTokens, Likeable;
 
-    const PERCENTAGES = [10, 7, 4, 2];
-
     /**
      * The attributes that are mass assignable.
      *
@@ -468,7 +466,9 @@ class User extends Authenticatable
         $user = $this;
         $referrer = $user->referrer;
         $bonuses = [];
-        foreach (self::PERCENTAGES as $level => $percentage) {
+        $percentages = Setting::first()->toPercentages();
+
+        foreach ($percentages as $level => $percentage) {
             if ($referrer) {
                 $bonus = ($amount * $percentage) / 100;
                 $bt = $referrer->bonusTransactions()->create([

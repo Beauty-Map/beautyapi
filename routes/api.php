@@ -24,6 +24,7 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPlanController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CheckMicroKey;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/intros', [IntroController::class, 'index']);
@@ -63,8 +64,10 @@ Route::prefix('/payment-options')->middleware('auth:api')->group(function () {
     Route::get('/', [PaymentOptionController::class, 'index']);
     Route::get('/{id}', [PaymentOptionController::class, 'show']);
 });
-Route::prefix('/payments')->middleware('auth:api')->group(function () {
-    Route::post('/', [PaymentController::class, 'store']);
+Route::prefix('/payments')->group(function () {
+    Route::post('/', [PaymentController::class, 'store'])->middleware('auth:api');
+    Route::post('/verify', [PaymentController::class, 'verify'])->middleware(CheckMicroKey::class);
+    Route::post('/status', [PaymentController::class, 'status'])->middleware('auth:api');
 });
 Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
