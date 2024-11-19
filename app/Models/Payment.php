@@ -23,6 +23,11 @@ class Payment extends Model
         'payment_option_id',
     ];
 
+    protected $with = [
+        'user',
+        'paymentOption',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

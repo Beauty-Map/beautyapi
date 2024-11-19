@@ -66,6 +66,7 @@ Route::prefix('/payment-options')->middleware('auth:api')->group(function () {
 });
 Route::prefix('/payments')->group(function () {
     Route::post('/', [PaymentController::class, 'store'])->middleware('auth:api');
+    Route::get('/{id}', [PaymentController::class, 'show'])->middleware('auth:api');
     Route::post('/verify', [PaymentController::class, 'verify'])->middleware(CheckMicroKey::class);
     Route::post('/status', [PaymentController::class, 'status'])->middleware('auth:api');
 });
