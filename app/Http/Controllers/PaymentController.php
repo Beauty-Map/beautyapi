@@ -108,9 +108,9 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Payment $payment)
+    public function show(string $code)
     {
-        return $payment;
+        return Payment::query()->where('code', $code)->firstOrFail();
     }
 
     /**
