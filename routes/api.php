@@ -27,6 +27,10 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CheckMicroKey;
 use Illuminate\Support\Facades\Route;
 
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+
 Route::get('/intros', [IntroController::class, 'index']);
 Route::get('/provinces', [ProvinceController::class, 'index']);
 Route::get('/portfolios', [PortfolioController::class, 'index']);
@@ -255,3 +259,40 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
 });
 
 Route::get('/referrals', [ReferralController::class, 'index']);
+
+Route::get('/test', function () {
+    $walletAddress = env('WALLET_ADDRESS');
+    $url = "https://toncenter.com/api/v3/transactions?account=UQD3wIxsLLoj5G0CVHozvI_4doCEl7PpuJ0wgU4qKBzOnGg3";
+    $client = new Client([
+        'base_uri' => 'https://toncenter.com/api/v3/',
+    ]);
+
+    try {
+        $response = $client->get('transactions', [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'query' => [
+                'account' => "UQD3wIxsLLoj5G0CVHozvI_4doCEl7PpuJ0wgU4qKBzOnGg3",
+            ],
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+        return $data;
+        $transactions = $data["transactions"];
+        $list = collect([]);
+        return $transactions;
+        foreach ($transactions as $transaction) {
+            if ($transaction["in_msg"]) {
+                $message = $transaction["in_msg"]["message_content"];
+                if ($message["decoded"]) {
+                    $list[] = $message["decoded"]["comment"];
+                }
+            }
+        }
+        return $list;
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        return null;
+    }
+});

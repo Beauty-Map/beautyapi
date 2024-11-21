@@ -47,7 +47,7 @@ class PaymentController extends Controller
         $walletAddress = env('WALLET_ADDRESS');
 
         $transactionId = "beauty_".Carbon::now()->unix();
-
+        $transactionId = urlencode($transactionId);
         $price = $paymentOption->price;
         $paymentLink = "ton://transfer/$walletAddress?amount=$price&text=$transactionId&comment=$transactionId";
         Payment::query()->create([
