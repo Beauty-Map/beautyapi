@@ -66,10 +66,10 @@ Route::prefix('/payment-options')->middleware('auth:api')->group(function () {
 });
 Route::prefix('/payments')->group(function () {
     Route::post('/', [PaymentController::class, 'store'])->middleware('auth:api');
-    Route::get('/{code}', [PaymentController::class, 'show'])->middleware('auth:api');
+    Route::get('/{code}', [PaymentController::class, 'show']);
     Route::post('/verify', [PaymentController::class, 'verify'])->middleware(CheckMicroKey::class);
     Route::post('/status', [PaymentController::class, 'status'])->middleware('auth:api');
-});
+})->middleware('auth:api');
 Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
     Route::put('/', [UserController::class, 'updateProfile']);

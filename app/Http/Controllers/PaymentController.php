@@ -46,7 +46,7 @@ class PaymentController extends Controller
         $user = $this->getAuth();
         $walletAddress = env('WALLET_ADDRESS');
 
-        $transactionId = "pay_".Carbon::now()->unix();
+        $transactionId = "beauty_".Carbon::now()->unix();
 
         $price = $paymentOption->price;
         $paymentLink = "ton://transfer/$walletAddress?amount=$price&text=$transactionId&comment=$transactionId";
@@ -58,7 +58,10 @@ class PaymentController extends Controller
             'coins' => $paymentOption->coins,
             'payment_option_id' => $paymentOption->id,
         ]);
-        return response()->json(['payment_url' => $paymentLink]);
+        return response()->json([
+            'payment_url' => $paymentLink,
+            'payment_id' => $transactionId,
+        ]);
     }
 
     public function verify(VerifyPaymentBeautymapRequest $request)
@@ -81,7 +84,7 @@ class PaymentController extends Controller
             /** @var User $user */
             $user = $payment->user;
             $wc = $user->getCoinWallet();
-            $wc->amount += $payment->coins;
+            $wc->amount += ($payment->coins + $payment->gift);
             $wc->save();
             $payment->status = Payment::PAYED;
             $payment->save();
