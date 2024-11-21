@@ -100,7 +100,6 @@ class PaymentController extends Controller
             /** @var Payment $payment */
             $payment = Payment::query()
                 ->where('code', $paymentCode)
-                ->where('status', Payment::CREATED)
                 ->firstOrFail();
             return $this->createCustomResponse($payment->status);
         } else {
