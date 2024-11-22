@@ -26,6 +26,7 @@ use App\Interfaces\PortfolioInterface;
 use App\Interfaces\TicketInterface;
 use App\Interfaces\UserInterface;
 use App\Models\Notification;
+use App\Models\PaymentRequest;
 use App\Models\Subscription;
 use App\Models\Ticket;
 use App\Models\User;
@@ -226,9 +227,22 @@ class AdminController extends Controller
 
     public function updatePaymentRequestStatus(PaymentRequestUpdateStatusRequest $request, int $id)
     {
-        return $this->paymentRequestRepository->update($request->only([
-            'status',
-        ]), $id);
+        /** @var PaymentRequest $paymentRequest */
+        $paymentRequest = $this->paymentRequestRepository->findOneOrFail($id);
+        if ($paymentRequest->status == PaymentRequest::CREATED_STATUS) {
+            /** @var User $user */
+            $user = $paymentRequest->user;
+            $wallet = $user->getCoinWallet();
+            if ($paymentRequest->status == PaymentRequest::ACCEPTED_STATUS) {
+                $wallet->update([
+                    'amount' => $wallet->amount - $paymentRequest->amount
+                ]);
+            }
+            return $this->paymentRequestRepository->update($request->only([
+                'status',
+            ]), $id);
+        }
+        return $this->createError('status', 'درخواست برداشت پیشتر تایید یا رد شده است', 522);
     }
 
     /**

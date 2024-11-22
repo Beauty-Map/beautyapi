@@ -44,7 +44,7 @@ class PaymentRequestController extends Controller
     public function store(PaymentRequestCreateRequest $request)
     {
         $auth = $this->getAuth();
-        $coins = $auth->coins;
+        $coins = $auth->getCoins();
         if ($request['amount'] > $coins) {
             return $this->createError('amount', Constants::NOT_ENOUGH_COINS, 422);
         }
