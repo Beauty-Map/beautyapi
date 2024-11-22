@@ -21,7 +21,7 @@ class ArtistResource extends JsonResource
             'email' => $this->email,
             'bio' => $this->getBio(),
             'distance' => $this->distance,
-            'is_bookmarked' => $this->is_bookmarked,
+            'is_bookmarked' => $this->isBookmarked(),
             'avatar' => $this->getAvatar(),
             'has_blue_tick' => $this->getHasBlueTick(),
             'banners' => $this->getArtistBanner(),

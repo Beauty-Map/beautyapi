@@ -50,7 +50,11 @@ class DistributeReferralBonus
                 'amount' => $bonusAmount,
                 'level' => $level,
                 'referrer_id' => $user->id,
-                'status' => BonusTransaction::STATUS_PENDING,
+                'status' => BonusTransaction::STATUS_PAYED,
+            ]);
+            $wallet = $referrer->getCoinWallet();
+            $wallet->update([
+                'amount' => $wallet->amount += $bonusAmount,
             ]);
 
             // Move up the referral chain

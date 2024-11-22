@@ -23,7 +23,7 @@ class UserNearResource extends JsonResource
             'address' => $this->getAddress(),
             'distance' => $this->distance,
             'rating' => $this->getRating(),
-            'is_bookmarked' => $this->is_bookmarked,
+            'is_bookmarked' => $this->isBookmarked(),
             'avatar' => $this->getAvatar(),
             'has_blue_tick' => $this->getHasBlueTick(),
             'created_at' => $this->created_at,

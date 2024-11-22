@@ -129,7 +129,7 @@ class User extends Authenticatable
         });
     }
 
-    public function getIsBookmarkedAttribute()
+    public function isBookmarked()
     {
         if (auth('api')->user()) {
             $auth = auth('api')->user();
