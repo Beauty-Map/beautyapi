@@ -403,7 +403,14 @@ class User extends Authenticatable
 
     public function services()
     {
-        return $this->belongsToMany(Service::class);
+        return $this->hasManyThrough(
+            Service::class,
+            Portfolio::class,
+            'user_id',
+            'id',
+            'id',
+            'service_id'
+        );
     }
 
     public function getServicesCount()
