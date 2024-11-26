@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
+use Morilog\Jalali\Jalalian;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
@@ -50,6 +51,21 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+            'is_active' => 'boolean',
+            'is_closed' => 'boolean',
+            'is_all_day_open' => 'boolean',
+        ];
+    }
+
     public function addView()
     {
         $view = $this->getMeta('view');
@@ -69,19 +85,37 @@ class User extends Authenticatable
 
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function levelOneReferrals()
     {
-        return [
-            'password' => 'hashed',
-            'is_active' => 'boolean',
-            'is_closed' => 'boolean',
-            'is_all_day_open' => 'boolean',
-        ];
+        return $this->hasMany(User::class, 'referrer_code', 'referral_code');
+    }
+
+    public function levelTwoReferrals()
+    {
+        return $this->levelOneReferrals()
+            ->join('users AS u2', 'users.referral_code', '=', 'u2.referrer_code')
+            ->select('u2.*');
+    }
+
+    public function levelThreeReferrals()
+    {
+        return $this->levelTwoReferrals()
+            ->join('users AS u3', 'users.referral_code', '=', 'u3.referrer_code')
+            ->select('u3.*');
+    }
+
+    public function levelFourReferrals()
+    {
+        return $this->levelThreeReferrals()
+            ->join('users AS u4', 'users.referral_code', '=', 'u4.referrer_code')
+            ->select('u4.*');
+    }
+
+    public function getMonthPortfolios()
+    {
+        $startOfMonth = Jalalian::now()->getFirstDayOfMonth()->toCarbon();
+        $endOfMonth = Jalalian::now()->getEndDayOfMonth()->toCarbon();
+        return $this->portfolios()->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
     }
 
 //    protected $appends = [
@@ -415,7 +449,7 @@ class User extends Authenticatable
 
     public function getServicesCount()
     {
-        return $this->services()->count();
+        return $this->services()->pluck('services.id')->count();
     }
 
     public function likedItems($modelType = null)
@@ -481,13 +515,17 @@ class User extends Authenticatable
             if ($referrer) {
                 $bonus = ($amount * $percentage) / 100;
                 $bt = $referrer->bonusTransactions()->create([
-                    'status' => BonusTransaction::STATUS_PENDING,
+                    'status' => BonusTransaction::STATUS_PAYED,
                     'amount' => $bonus,
                     'referrer_id' => $this->id,
                     'level' => $level,
                     'app' => $app,
                 ]);
                 $bonuses[] = $bt;
+                $w = $referrer->getGoldWallet();
+                $w->update([
+                    'amount' => $w->amount + $bonus,
+                ]);
                 $referrer = $referrer->referrer;
             } else {
                 break;

@@ -7,6 +7,7 @@ use App\Http\Requests\PortfolioCreateRequest;
 use App\Http\Requests\PortfolioUpdateRequest;
 use App\Http\Resources\PortfolioResource;
 use App\Interfaces\PortfolioInterface;
+use App\Models\Plan;
 use App\Models\Portfolio;
 use App\Policies\PortfolioPolicy;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -115,9 +116,11 @@ class PortfolioController extends Controller
     public function store(PortfolioCreateRequest $request)
     {
         $auth = $this->getAuth();
-//        if (!$auth->hasRole('artist')) {
-//            abort(403, Constants::ACCESS_ERROR);
-//        }
+        /** @var Plan $plan */
+        $plan = $auth->getSelectedPlan()->plan;
+        if ($plan->portfolio_count <= $auth->getMonthPortfolios()->count()) {
+            return $this->createError('portfolio_count', 'محدودیت ثبت نمونه کار ماهیانه شما تکمیل شده است. برای ثبت نمونه کار جدید حساب خود را ارتقا دهید.', 422);
+        }
         $request = $this->initRequest($request);
         return new PortfolioResource($this->portfolioRepository->create($request->all()));
     }
