@@ -358,15 +358,15 @@ class User extends Authenticatable
         if (!$this->city_id) {
             $isCompleted = false;
         }
-        if ($isCompleted) {
-            $metas = $this->metas;
-            $metas = $metas->map(function($i) {return $i->value ? $i->key : '';})->filter(function ($i) {return $i != '';})->toArray();
+//        if ($isCompleted) {
+//            $metas = $this->metas;
+//            $metas = $metas->map(function($i) {return $i->value ? $i->key : '';})->filter(function ($i) {return $i != '';})->toArray();
 //            $isCompleted = in_array('national_code', $metas) &&
 //                in_array('address', $metas) &&
 //                in_array('tel_number', $metas) &&
 //                in_array('work_hours', $metas) &&
 //                in_array('bio', $metas);
-        }
+//        }
         if ($isCompleted) {
             if (!$this->hasRole('artist', 'api')) {
                 $artist = Role::query()->where(['name' => 'artist', 'guard_name' => 'api'])->first();
