@@ -21,11 +21,13 @@ class Payment extends Model
         'expire_at',
         'coins',
         'payment_option_id',
+        'subscription_id',
     ];
 
     protected $with = [
         'user',
         'paymentOption',
+        'subscription',
     ];
 
     public function user()
@@ -36,5 +38,10 @@ class Payment extends Model
     public function paymentOption()
     {
         return $this->belongsTo(PaymentOption::class);
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
     }
 }

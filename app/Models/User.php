@@ -36,6 +36,7 @@ class User extends Authenticatable
         'remember_token',
         'referrer_code',
         'referral_code',
+        'subscription_id',
     ];
 
     /**
@@ -484,5 +485,16 @@ class User extends Authenticatable
             }
         }
         return $bonuses;
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class);
+    }
+
+    public function activeSubscription()
+    {
+        $sub = $this->subscriptions()->orderByDesc('start_at')->first();
+        return $sub;
     }
 }

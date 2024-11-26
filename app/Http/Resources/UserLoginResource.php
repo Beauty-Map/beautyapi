@@ -59,6 +59,7 @@ class UserLoginResource extends JsonResource
             'birth_date' => $this->birth_date,
             'social_media' => $this->getSocialMedia(),
             'referral_code' => $this->referral_code,
+            'subscription' => $this->subscription,
             'is_artist_profile_completed' => $this->getIsArtistProfileCompleted(),
         ];
     }

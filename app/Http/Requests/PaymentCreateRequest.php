@@ -22,7 +22,9 @@ class PaymentCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_id' => 'required|exists:payment_options,id'
+            'payment_id' => 'required_without:subscription_id|exists:payment_options,id',
+            'subscription_id' => 'required_without:payment_id|exists:subscriptions,id',
+            'app' => 'required|string|in:polmap,beauty'
         ];
     }
 }

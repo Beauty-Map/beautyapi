@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->decimal('price', 12, 12)->default(0);
-            $table->unsignedSmallInteger('period')->default(1);
-            $table->timestamps();
+        Schema::table('payments', function (Blueprint $table) {
+            $table->foreignId('subscription_id')
+                ->nullable()
+                ->references('id')->on('subscriptions')->cascadeOnDelete();
         });
     }
 
@@ -25,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::table('payments', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -17,6 +17,7 @@ use App\Interfaces\OtpInterface;
 use App\Interfaces\PlanInterface;
 use App\Interfaces\UserInterface;
 use App\Interfaces\UserPlanInterface;
+use App\Mail\SendRegisterVerifyCodeEmail;
 use App\Models\Otp;
 use App\Models\Plan;
 use App\Models\User;
@@ -25,6 +26,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -82,6 +84,12 @@ class AuthController extends Controller
                 'amount' => 0,
             ]);
         }
+        $code = Helper::randomCode(6, 'number');
+        Otp::query()->updateOrCreate([
+            'phone_number' => $user->email,
+            'code' => $code,
+            'type' => Otp::REGISTER_OTP_TYPE
+        ]);
         event(new SendRegisterOtpEvent($user));
         return $this->createCustomResponse($request['remember_token'], 201);
     }
