@@ -21,6 +21,7 @@ class UserSimpleResource extends JsonResource
             'email' => $this->email,
             'rating' => $this->getRating(),
             'portfolios_count' => $this->getPortfoliosCount(),
+            'subscription' => $this->activeSubscription(),
         ];
     }
 }

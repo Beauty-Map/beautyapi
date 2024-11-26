@@ -134,7 +134,8 @@ class PaymentController extends Controller
             'period' => $subscription->period
         ]);
         $payment->status = Payment::PAYED;
-        return $payment->save();
+        $payment->save();
+        return $user->distributeCoins($payment->amount);
     }
 
     public function status(Request $request)

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Helpers\Helper;
 use App\Http\Resources\UserSelectedPlanResource;
 use App\Trait\Likeable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -494,7 +495,9 @@ class User extends Authenticatable
 
     public function activeSubscription()
     {
-        $sub = $this->subscriptions()->orderByDesc('start_at')->first();
-        return $sub;
+        return $this->subscriptions()
+            ->orderByDesc('start_at')
+            ->where('end_at', '>=', Carbon::now())
+        ->first();
     }
 }
