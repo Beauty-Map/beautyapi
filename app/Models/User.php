@@ -464,7 +464,7 @@ class User extends Authenticatable
         return $referrers;
     }
 
-    function distributeCoins($amount) {
+    function distributeCoins($app, $amount) {
         $user = $this;
         $referrer = $user->referrer;
         $bonuses = [];
@@ -478,6 +478,7 @@ class User extends Authenticatable
                     'amount' => $bonus,
                     'referrer_id' => $this->id,
                     'level' => $level,
+                    'app' => $app,
                 ]);
                 $bonuses[] = $bt;
                 $referrer = $referrer->referrer;

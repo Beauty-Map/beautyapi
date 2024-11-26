@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->foreignId('subscription_id')
-                ->nullable()
-                ->references('id')->on('subscriptions')->cascadeOnDelete();
+        Schema::table('bonus_transactions', function (Blueprint $table) {
+            $table->string('app')->default('polmap');
         });
     }
 
@@ -23,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->dropColumn('subscription_id');
+        Schema::table('bonus_transactions', function (Blueprint $table) {
+            $table->dropColumn('app');
         });
     }
 };

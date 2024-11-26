@@ -100,17 +100,17 @@ class PaymentController extends Controller
                 return $this->createError('expired', 'Expired', 401);
             }
             if (Str::startsWith($paymentCode, 'beauty')) {
-                return $this->verifyBeautyMapPayment($payment);
+                return $this->verifyBeautyMapPayment('beauty', $payment);
             }
             if (Str::startsWith($paymentCode, 'polmap')) {
-                return $this->verifyPolMapPayment($payment);
+                return $this->verifyPolMapPayment('polmap', $payment);
             }
 
         }
         return $this->createError('code_not_found', 'Code Not Found', 404);
     }
 
-    public function verifyBeautyMapPayment(Payment $payment)
+    public function verifyBeautyMapPayment(string $app, Payment $payment)
     {
         /** @var User $user */
         $user = $payment->user;
@@ -119,10 +119,10 @@ class PaymentController extends Controller
         $wc->save();
         $payment->status = Payment::PAYED;
         $payment->save();
-        return $user->distributeCoins($payment->amount);
+        return $user->distributeCoins($app, $payment->amount);
     }
 
-    private function verifyPolMapPayment(Payment $payment)
+    private function verifyPolMapPayment(string $app, Payment $payment)
     {
         /** @var User $user */
         $user = $payment->user;
@@ -135,7 +135,7 @@ class PaymentController extends Controller
         ]);
         $payment->status = Payment::PAYED;
         $payment->save();
-        return $user->distributeCoins($payment->amount);
+        return $user->distributeCoins($app, $payment->amount);
     }
 
     public function status(Request $request)

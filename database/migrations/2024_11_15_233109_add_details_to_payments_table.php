@@ -32,7 +32,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            //
+            $table->dropColumn('amount');
+            $table->dropColumn('coins');
+            $table->dropColumn('status');
+            $table->dropColumn('code');
+            $table->dropColumn('expire_at');
+            $table->dropColumn('user_id');
+            $table->dropColumn('payment_option_id');
         });
     }
 };
