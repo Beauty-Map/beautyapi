@@ -24,7 +24,7 @@ class RegisterUserRequest extends FormRequest
         return [
             'email' => 'required|string|email',
             'password' => 'required|string|min:4',
-            'referrer_code' => 'nullable|string|min:6',
+            'referrer_code' => 'nullable|string',
         ];
     }
 }
