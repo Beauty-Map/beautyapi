@@ -45,10 +45,14 @@ class PaymentRequestController extends Controller
     public function store(PaymentRequestCreateRequest $request)
     {
         $auth = $this->getAuth();
-        $amount = $auth->bonusTransactions()->where('status', BonusTransaction::STATUS_PENDING)->sum('amount');
+        $bonuses = $auth->bonusTransactions()->where('status', BonusTransaction::STATUS_PENDING);
+        $amount = $bonuses->sum('amount');
         $paymentRequest = $this->paymentRequestRepository->create([
             'amount' => $amount,
             'user_id' => $auth->id,
+        ]);
+        $bonuses->update([
+            'status' => BonusTransaction::STATUS_IN_PAY,
         ]);
         return new PaymentRequestResource($paymentRequest);
     }

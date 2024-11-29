@@ -11,6 +11,7 @@ class BonusTransaction extends Model
 
     const STATUS_PAYED = 'payed';
     const STATUS_PENDING = 'pending';
+    const STATUS_IN_PAY = 'in_pay';
 
     protected $fillable = [
         'app',

@@ -22,7 +22,7 @@ class PaymentRequestUpdateStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|string|in:published,rejected',
+            'status' => 'required|string|in:accepted,rejected',
             'description' => 'nullable|string'
         ];
     }

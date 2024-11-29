@@ -234,14 +234,21 @@ class AdminController extends Controller
             /** @var User $user */
             $user = $paymentRequest->user;
             $wallet = $user->getCoinWallet();
-            if ($paymentRequest->status == PaymentRequest::ACCEPTED_STATUS) {
+            if ($request->status == PaymentRequest::ACCEPTED_STATUS) {
                 $wallet->update([
                     'amount' => $wallet->amount - $paymentRequest->amount
                 ]);
-                $user->bonusTransactions()->where('status', BonusTransaction::STATUS_PENDING)
+                $user->bonusTransactions()->where('status', BonusTransaction::STATUS_IN_PAY)
                     ->where('created_at', '<=', $paymentRequest->created_at)
                     ->update([
                         'status' => BonusTransaction::STATUS_PAYED,
+                    ]);
+            }
+            if ($request->status == PaymentRequest::REJECTED_STATUS) {
+                $user->bonusTransactions()->where('status', BonusTransaction::STATUS_IN_PAY)
+                    ->where('created_at', '<=', $paymentRequest->created_at)
+                    ->update([
+                        'status' => BonusTransaction::STATUS_PENDING,
                     ]);
             }
             return $this->paymentRequestRepository->update($request->only([

@@ -30,7 +30,10 @@ class Meta extends Model
     public function getFormattedValueAttribute()
     {
         try {
-            $value = json_decode($this->value);
+            $value = json_decode($this->value, true);
+            if ($this->key == 'ton_wallet_address') {
+                $value = $this->value;
+            }
             if ($this->key == 'work_hours') {
                 $value = $value ?? [];
                 $value = collect($value)->sortBy('day_index')->values()->all();
@@ -57,6 +60,9 @@ class Meta extends Model
             }
             if ($this->key == 'is_all_day_open') {
                 $value = $value ?? false;
+            }
+            if ($this->key == 'ton_wallet_address') {
+                $value = $value ?? '';
             }
             if (in_array($this->key, self::STRING_ARRAY)) {
                 $value = $this->value;
