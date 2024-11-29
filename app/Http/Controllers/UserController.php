@@ -233,14 +233,8 @@ class UserController extends Controller
         if (!$altNumber) {
             return $this->createError('email', Constants::INVALID_EMAIL_ERROR, 422);
         }
-        return $auth->setMeta('email', $altNumber);
-//        $otp = Helper::randomCode(6, 'digit');
-//        $this->otpRepository->make([
-//            'email' => $request->get('alt_number'),
-//            'code' => $otp,
-//            'type' => 'alt_number',
-//        ]);
-//        return $otp;
+        $auth->setMeta('email', $altNumber);
+        return $this->createCustomResponse('done', 200);
     }
 
     public function deleteAccount()
