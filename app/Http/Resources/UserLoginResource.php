@@ -34,6 +34,7 @@ class UserLoginResource extends JsonResource
             'alt_number' => $this->user->getAltNumber(),
             'coins' => $this->user->getCoins(),
             'income' => $this->user->getIncome(),
+            'ton_wallet_address' => $this->user->getTonWalletAddress(),
             'withdraws' => $this->user->getWithdraw(),
             'old_withdraws' => $this->user->getOldWithdraws(),
             'all_income' => $this->user->getAllIncome(),

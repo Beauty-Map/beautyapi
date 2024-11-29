@@ -12,13 +12,12 @@ use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\SetRegisterPasswordRequest;
+use App\Http\Resources\BonusTransactionResource;
 use App\Http\Resources\UserLoginResource;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\PlanInterface;
 use App\Interfaces\UserInterface;
 use App\Interfaces\UserPlanInterface;
-use App\Mail\SendRegisterVerifyCodeEmail;
-use App\Models\BonusTransaction;
 use App\Models\Otp;
 use App\Models\Plan;
 use App\Models\User;
@@ -175,7 +174,7 @@ class AuthController extends Controller
     {
         $auth = $this->getAuth();
         $month = \request()->input('month', null);
-        $month = str_pad($month, 2, '0', STR_PAD_LEFT);
+        $month = $month ? str_pad($month, 2, '0', STR_PAD_LEFT) : "01";
         $year = \request()->input('year', null);
         $app = \request()->input('app', 'pol_map');
         if ($app == 'pol_map') {
@@ -226,6 +225,32 @@ class AuthController extends Controller
             'third' => $third,
             'forth' => $forth,
         ];
+    }
+
+    public function statisticsDetails()
+    {
+        $auth = $this->getAuth();
+        $month = \request()->input('month', null);
+        $month = $month ? str_pad($month, 2, '0', STR_PAD_LEFT) : "01";
+        $year = \request()->input('year', null);
+        $app = \request()->input('app', 'pol_map');
+        if ($app == 'pol_map') {
+            $bonuses = $auth->bonusTransactions()->where('app', 'polmap');
+        } else {
+            $bonuses = $auth->bonusTransactions()->where('app', 'beauty');
+        }
+        if ($year && $month) {
+            $jalaliDate = Jalalian::fromFormat('Y/m/d', "$year/$month/01");
+            $gregorianDate = $jalaliDate->toCarbon();
+            $bonuses = $bonuses->where('created_at', '>=', $gregorianDate);
+        }
+        if ($this->hasPage()) {
+            $limit = $this->getLimit();
+            $bonuses = $bonuses->paginate($limit);
+        } else {
+            $bonuses = $bonuses->get();
+        }
+        return BonusTransactionResource::collection($bonuses);
     }
 
     public function forgotPassword(ForgotPasswordRequest $request)

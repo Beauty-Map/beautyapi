@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PaymentRequestCreateRequest extends FormRequest
+class UserSetWalletAddressRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,7 @@ class PaymentRequestCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'ton_wallet_address' => 'required|string'
         ];
     }
 }

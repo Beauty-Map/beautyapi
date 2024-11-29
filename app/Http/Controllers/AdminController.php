@@ -25,6 +25,7 @@ use App\Interfaces\PaymentRequestInterface;
 use App\Interfaces\PortfolioInterface;
 use App\Interfaces\TicketInterface;
 use App\Interfaces\UserInterface;
+use App\Models\BonusTransaction;
 use App\Models\Notification;
 use App\Models\PaymentRequest;
 use App\Models\Subscription;
@@ -237,6 +238,11 @@ class AdminController extends Controller
                 $wallet->update([
                     'amount' => $wallet->amount - $paymentRequest->amount
                 ]);
+                $user->bonusTransactions()->where('status', BonusTransaction::STATUS_PENDING)
+                    ->where('created_at', '<=', $paymentRequest->created_at)
+                    ->update([
+                        'status' => BonusTransaction::STATUS_PAYED,
+                    ]);
             }
             return $this->paymentRequestRepository->update($request->only([
                 'status',

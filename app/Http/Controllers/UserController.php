@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateAltNumberRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserProfileUpdateRequest;
 use App\Http\Requests\LadderRequest;
+use App\Http\Requests\UserSetWalletAddressRequest;
 use App\Http\Resources\ArtistResource;
 use App\Http\Resources\UserNearResource;
 use App\Http\Resources\UserSimpleResource;
@@ -133,6 +134,22 @@ class UserController extends Controller
             unset($request['phone_number']);
         }
         $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
+        if ($res) {
+            DB::commit();
+            return $this->createCustomResponse(1);
+        }
+        DB::rollBack();
+        return $this->createError('error', Constants::UNDEFINED_ERROR, 422);
+    }
+
+    public function setWalletAddress(UserSetWalletAddressRequest $request)
+    {
+        $auth = $this->getAuth();
+        $data = [
+            'ton_wallet_address' => $request->input('ton_wallet_address', '')
+        ];
+        DB::beginTransaction();
+        $res = $this->metaRepository->insertOrAdd($data, $auth->id, 'user');
         if ($res) {
             DB::commit();
             return $this->createCustomResponse(1);

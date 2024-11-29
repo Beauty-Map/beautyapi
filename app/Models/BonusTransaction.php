@@ -13,6 +13,7 @@ class BonusTransaction extends Model
     const STATUS_PENDING = 'pending';
 
     protected $fillable = [
+        'app',
         'status',
         'amount',
         'user_id',

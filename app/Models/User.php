@@ -276,6 +276,16 @@ class User extends Authenticatable
         return $this->getMeta('avatar');
     }
 
+    public function getTonWalletAddress()
+    {
+        return $this->getMeta('ton_wallet_address');
+    }
+
+    public function setTonWalletAddress(string $address = '')
+    {
+        return $this->setMeta('ton_wallet_address', $address);
+    }
+
     public function getBanners()
     {
         return $this->getMeta('banners');
@@ -515,7 +525,7 @@ class User extends Authenticatable
             if ($referrer) {
                 $bonus = ($amount * $percentage) / 100;
                 $bt = $referrer->bonusTransactions()->create([
-                    'status' => BonusTransaction::STATUS_PAYED,
+                    'status' => BonusTransaction::STATUS_PENDING,
                     'amount' => $bonus,
                     'referrer_id' => $this->id,
                     'level' => $level,

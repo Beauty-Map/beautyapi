@@ -14,6 +14,15 @@ class BonusTransactionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'app' => $this->app,
+            'status' => $this->status,
+            'amount' => $this->amount,
+            'user_id' => $this->user_id,
+            'user' => new UserSimpleResource($this->user),
+            'referrer_id' => $this->referrer_id,
+            'referrer' => $this->referrer,
+            'level' => $this->level,
+        ];
     }
 }

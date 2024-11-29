@@ -6,6 +6,7 @@ use App\Constants\Constants;
 use App\Http\Requests\PaymentRequestCreateRequest;
 use App\Http\Resources\PaymentRequestResource;
 use App\Interfaces\PaymentRequestInterface;
+use App\Models\BonusTransaction;
 use App\Models\User;
 
 class PaymentRequestController extends Controller
@@ -44,15 +45,11 @@ class PaymentRequestController extends Controller
     public function store(PaymentRequestCreateRequest $request)
     {
         $auth = $this->getAuth();
-        $coins = $auth->getCoins();
-        if ($request['amount'] > $coins) {
-            return $this->createError('amount', Constants::NOT_ENOUGH_COINS, 422);
-        }
-        $request['user_id'] = $auth->id;
-        $paymentRequest = $this->paymentRequestRepository->create($request->only([
-            'amount',
-            'user_id',
-        ]));
+        $amount = $auth->bonusTransactions()->where('status', BonusTransaction::STATUS_PENDING)->sum('amount');
+        $paymentRequest = $this->paymentRequestRepository->create([
+            'amount' => $amount,
+            'user_id' => $auth->id,
+        ]);
         return new PaymentRequestResource($paymentRequest);
     }
 
