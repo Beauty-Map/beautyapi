@@ -229,11 +229,11 @@ class UserController extends Controller
     public function sendOtpForAltNumber(UpdateAltNumberRequest $request)
     {
         $auth = $this->getAuth();
-        $altNumber = $request->input('alt_number', '');
+        $altNumber = $request->input('email', '');
         if (!$altNumber) {
-            return $this->createError('alt_number', Constants::INVALID_EMAIL_ERROR, 422);
+            return $this->createError('email', Constants::INVALID_EMAIL_ERROR, 422);
         }
-        return $auth->setMeta('alt_number', $altNumber);
+        return $auth->setMeta('email', $altNumber);
 //        $otp = Helper::randomCode(6, 'digit');
 //        $this->otpRepository->make([
 //            'email' => $request->get('alt_number'),
@@ -241,26 +241,6 @@ class UserController extends Controller
 //            'type' => 'alt_number',
 //        ]);
 //        return $otp;
-    }
-
-    public function updateAltNumber(UpdateAltNumberRequest $request)
-    {
-        $auth = $this->getAuth();
-        $code = $request->input('code', '');
-        $altNumber = $request->input('alt_number', '');
-        if (!$code) {
-            return $this->createError('code', Constants::INVALID_OTP_CODE_ERROR, 422);
-        }
-        $data = [
-            'email' => $altNumber,
-            'code' => $code,
-            'type' => 'alt_number'
-        ];
-        $otp = $this->otpRepository->validate($data);
-        if (!$otp) {
-            return $this->createError('code', Constants::INVALID_OTP_CODE_ERROR, 422);
-        }
-        return $this->createCustomResponse('done', 200);
     }
 
     public function deleteAccount()

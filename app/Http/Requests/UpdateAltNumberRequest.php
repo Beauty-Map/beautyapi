@@ -22,7 +22,7 @@ class UpdateAltNumberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'alt_number' => 'required|string',
+            'email' => 'required|string|email',
             'code' => 'nullable'
         ];
     }

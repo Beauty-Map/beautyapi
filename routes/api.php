@@ -85,8 +85,8 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::get('/artist/notifications', [NotificationController::class, 'indexArtistNotifications']);
     Route::get('/artist/notifications/unread', [NotificationController::class, 'indexArtistUnreadNotifications']);
     Route::put('/password', [UserController::class, 'updatePassword']);
-    Route::post('/alt-number', [UserController::class, 'sendOtpForAltNumber']);
-    Route::put('/alt-number', [UserController::class, 'updateAltNumber']);
+    Route::post('/alt-email', [UserController::class, 'sendOtpForAltNumber']);
+    Route::put('/alt-email', [UserController::class, 'updateAltNumber']);
     Route::delete('/', [UserController::class, 'deleteAccount']);
     Route::put('/artist', [UserController::class, 'updateArtistProfile']);
     Route::put('/artist/agreement', [UserController::class, 'doArtistAgreement']);
