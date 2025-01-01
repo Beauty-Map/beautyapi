@@ -180,7 +180,6 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
         Route::put('/{id}', [AdminController::class, 'updateUser']);
         Route::delete('/{id}', [AdminController::class, 'destroyUser']);
 
-
         Route::prefix('/{id}/bonuses')->group(function () {
             Route::get('/', [BonusTransactionController::class, 'userIndex']);
         });
@@ -207,7 +206,6 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
         Route::get('/{id}', [AdminController::class, 'showPaymentRequest']);
         Route::put('/{id}', [AdminController::class, 'updatePaymentRequest']);
         Route::patch('/{id}', [AdminController::class, 'updatePaymentRequestStatus']);
-        Route::delete('/{id}', [AdminController::class, 'destroyPaymentRequest']);
     });
     Route::prefix('/intros')->group(function () {
         Route::get('/', [IntroController::class, 'index']);

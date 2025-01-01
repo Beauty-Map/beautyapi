@@ -23,8 +23,8 @@ class SubscriptionCreateRequest extends FormRequest
     {
         return [
             'title' => 'string|min:3',
-            'period' => 'numeric|min:1',
             'price' => 'numeric|min:0',
+            'number' => 'numeric|min:1|max:4',
         ];
     }
 }

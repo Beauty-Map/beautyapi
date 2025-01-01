@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->decimal('price', 24, 12)->default(0);
-            $table->unsignedSmallInteger('period')->default(1);
-            $table->timestamps();
+        Schema::table('subscriptions', function (Blueprint $table) {
+            $table->unsignedMediumInteger('number')->default(1);
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::table('subscriptions', function (Blueprint $table) {
+            $table->dropColumn('number');
+        });
     }
 };

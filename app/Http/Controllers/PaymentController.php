@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Types\Relations\Car;
+use Morilog\Jalali\Jalalian;
 
 class PaymentController extends Controller
 {
@@ -44,6 +45,7 @@ class PaymentController extends Controller
      */
     public function store(PaymentCreateRequest $request)
     {
+        $user = $this->getAuth();
         $app = $request->input('app', null);
         $paymentOptionID = $request->input('payment_id', null);
         $subscriptionID = $request->input('subscription_id', null);
@@ -61,12 +63,12 @@ class PaymentController extends Controller
         }
 
         $user = $this->getAuth();
-        $walletAddress = env('WALLET_ADDRESS');
+//        $walletAddress = env('WALLET_ADDRESS');
 
-        $transactionId = $app.'_'.Carbon::now()->unix();
-        $transactionId = urlencode($transactionId);
+        $now = Jalalian::now();
+        $transactionId = $app.'_'.$user->id.'_'.$now->format('Ymd');
 
-        $paymentLink = "ton://transfer/$walletAddress?amount=$price&text=$transactionId&comment=$transactionId";
+//        $paymentLink = "ton://transfer/$walletAddress?amount=$price&text=$transactionId&comment=$transactionId";
         Payment::query()->create([
             'user_id' => $user->id,
             'amount' => $price,
@@ -77,7 +79,7 @@ class PaymentController extends Controller
             'subscription_id' => $subscriptionID,
         ]);
         return response()->json([
-            'payment_url' => $paymentLink,
+//            'payment_url' => $paymentLink,
             'payment_id' => $transactionId,
         ]);
     }
@@ -127,9 +129,13 @@ class PaymentController extends Controller
         /** @var User $user */
         $user = $payment->user;
         $subscription = Subscription::query()->findOrFail($payment->subscription_id);
+        $date = $subscription->date;
+        $start_at = $date['start_day'];
+        $end_at = $date['end_day'];
+
         $user->subscriptions()->create([
-            'start_at' => Carbon::now(),
-            'end_at' => Carbon::now()->addMonths($subscription->period),
+            'start_at' => "$start_at 00:00:00",
+            'end_at' => "$end_at 00:00:00",
             'subscription_id' => $subscription->id,
             'period' => $subscription->period
         ]);

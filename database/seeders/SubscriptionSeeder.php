@@ -13,21 +13,48 @@ class SubscriptionSeeder extends Seeder
      */
     public function run(): void
     {
+//        $subscriptions = [
+//            [
+//                'title' => 'اشتراک یک ماهه',
+//                'period' => 1,
+//                'price' => 10000,
+//            ],
+//            [
+//                'title' => 'اشتراک سه ماهه',
+//                'period' => 3,
+//                'price' => 27000,
+//            ],
+//            [
+//                'title' => 'اشتراک شش ماهه',
+//                'period' => 6,
+//                'price' => 48000,
+//            ],
+//        ];
+
         $subscriptions = [
             [
-                'title' => 'اشتراک یک ماهه',
-                'period' => 1,
+                'title' => 'بهار',
+                'period' => 3,
                 'price' => 10000,
+                'number' => 1
             ],
             [
-                'title' => 'اشتراک سه ماهه',
+                'title' => 'تابستان',
                 'period' => 3,
                 'price' => 27000,
+                'number' => 2
             ],
             [
-                'title' => 'اشتراک شش ماهه',
-                'period' => 6,
+                'title' => 'پاییز',
+                'period' => 3,
                 'price' => 48000,
+                'number' => 3
+            ],
+            [
+                'title' => 'زمستان',
+                'period' => 3,
+                'price' => 58000,
+                'number' => 4
             ],
         ];
         foreach ($subscriptions as $subscription) {

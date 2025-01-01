@@ -22,8 +22,6 @@ class SubscriptionUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|min:3',
-            'period' => 'numeric|min:1',
             'price' => 'numeric|min:0',
         ];
     }
