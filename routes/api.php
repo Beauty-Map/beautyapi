@@ -17,6 +17,7 @@ use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketSubjectController;
@@ -259,3 +260,5 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
 });
 
 Route::get('/referrals', [ReferralController::class, 'index']);
+Route::get('/settings', [SettingController::class, 'index'])->middleware('auth:api');
+Route::put('/settings', [SettingController::class, 'update'])->middleware('auth:api');

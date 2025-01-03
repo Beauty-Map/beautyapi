@@ -16,12 +16,14 @@ class CourseController extends Controller
      */
     public function index()
     {
+        $order = \request()->input('order', 'created_at');
+        $sort = \request()->input('sort', 'desc');
         if ($this->hasPage()) {
             $page = $this->getPage();
             $limit = $this->getLimit();
-            $courses = Course::query()->orderByDesc('created_at')->paginate($limit);
+            $courses = Course::query()->orderBy($order, $sort)->paginate($limit);
         } else {
-            $courses = Course::query()->orderByDesc('created_at')->get();
+            $courses = Course::query()->orderBy($order, $sort)->get();
         }
         return CourseResource::collection($courses);
     }

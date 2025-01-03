@@ -62,12 +62,19 @@ class AdminController extends Controller
 
     public function indexUsers()
     {
+        $order = \request()->input('order', 'created_at');
+        $sort = \request()->input('sort', 'desc');
+        $q = \request()->input('q', '');
+        $filter = [];
+        if ($q) {
+            $filter['q'] = $q;
+        }
         if ($this->hasPage()) {
             $page = $this->getPage();
             $limit = $this->getLimit();
-            $users = $this->userRepository->findByPaginate([], $page, $limit);
+            $users = $this->userRepository->findByPaginate($filter, $page, $limit, $order, $sort);
         } else {
-            $users = $this->userRepository->findBy([]);
+            $users = $this->userRepository->findBy($filter, $order, $sort);
         }
         return UserSimpleResource::collection($users);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateSettingsRequest;
 use App\Models\Setting;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        //
+        return Setting::first();
     }
 
     /**
@@ -35,9 +36,16 @@ class SettingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Setting $setting)
+    public function update(UpdateSettingsRequest $request)
     {
-        //
+        $setting = Setting::first();
+        return $setting->update($request->only([
+            'own',
+            'first',
+            'second',
+            'third',
+            'forth',
+        ]));
     }
 
     /**

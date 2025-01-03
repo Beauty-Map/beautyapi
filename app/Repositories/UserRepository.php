@@ -75,4 +75,26 @@ class UserRepository extends BaseRepository implements UserInterface
         }
         return $query->orderBy($orderBy, $sortBy);
     }
+
+    public function findByPaginate(array $data, int $page = 1, int $limit = 10, string $orderBy = 'id', string $sortBy = 'desc') {
+        $query = $this->findUsers($orderBy, $sortBy, $data);
+        return $query->paginate($limit);
+    }
+
+    public function findBy(array $data, string $orderBy = 'id', string $sortBy = 'desc') {
+        $query = $this->findUsers($orderBy, $sortBy, $data);
+        return $query->get();
+    }
+
+    public function findUsers(string $orderBy, string $sortBy, array $data): Builder
+    {
+        $query = $this->model->newQuery()->orderBy($orderBy, $sortBy);
+        if ($data['q']) {
+            $q = $data['q'];
+            $query = $query->orWhere('full_name', 'like', "%$q%");
+            $query = $query->orWhere('email', 'like', "%$q%");
+            unset($data['q']);
+        }
+        return $query->where($data);
+    }
 }
