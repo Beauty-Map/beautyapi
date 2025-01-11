@@ -17,6 +17,7 @@ class UserSelectedPlanResource extends JsonResource
         return [
             'id' => $this->id,
             'plan_id' => $this->plan_id,
+            'plan' => $this->plan,
             'title' => $this->plan->title,
             'status' => $this->status,
         ];

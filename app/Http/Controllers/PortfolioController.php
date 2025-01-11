@@ -118,6 +118,9 @@ class PortfolioController extends Controller
         $auth = $this->getAuth();
         /** @var Plan $plan */
         $plan = $auth->getSelectedPlan()->plan;
+        if ($plan->image_upload_count < count($request->input('images', []))) {
+            return $this->createError('portfolio_count', 'حداکثر تعداد'.$plan->image_upload_count.' عکس می توانید برای هر نمونه کار ثبت کنید!', 422);
+        }
         if ($plan->portfolio_count <= $auth->getMonthPortfolios()->count()) {
             return $this->createError('portfolio_count', 'محدودیت ثبت نمونه کار ماهیانه شما تکمیل شده است. برای ثبت نمونه کار جدید حساب خود را ارتقا دهید.', 422);
         }

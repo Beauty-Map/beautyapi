@@ -14,10 +14,13 @@ use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\SetRegisterPasswordRequest;
 use App\Http\Resources\BonusTransactionResource;
 use App\Http\Resources\UserLoginResource;
+use App\Http\Resources\UserLoginSimpleResource;
+use App\Http\Resources\UserSelectedPlanResource;
 use App\Interfaces\OtpInterface;
 use App\Interfaces\PlanInterface;
 use App\Interfaces\UserInterface;
 use App\Interfaces\UserPlanInterface;
+use App\Models\Meta;
 use App\Models\Otp;
 use App\Models\Plan;
 use App\Models\User;
@@ -108,7 +111,7 @@ class AuthController extends Controller
         $plan = $this->planRepository->find(1);
         $this->userPlanRepository->setPlan($user->id, $plan->id, null, null, -1, $plan->coins);
         $token =  $user->createToken(env('APP_NAME'))->accessToken;
-        return new UserLoginResource($user, $token);
+        return new UserLoginSimpleResource($user, $token);
     }
 
     public function setPassword(SetRegisterPasswordRequest $request)
@@ -141,8 +144,18 @@ class AuthController extends Controller
             $user = Auth::user();
             $token =  $user->createToken(env('APP_NAME'))->accessToken;
             return new UserLoginResource($user, $token);
-        }
-        else{
+        } else{
+            $meta = Meta::query()
+                ->where('key', 'email')
+                ->where('value', $request->get('email'))
+                ->where('metaable_type', 'user')
+                ->first();
+            if ($meta) {
+                $user = User::query()->findOrFail($meta->metaable_id);
+                Auth::login($user);
+                $token =  $user->createToken(env('APP_NAME'))->accessToken;
+                return new UserLoginResource($user, $token);
+            }
             return $this->createError('INVALID_LOGIN_ERROR', Constants::INVALID_LOGIN_ERROR, 422);
         }
     }

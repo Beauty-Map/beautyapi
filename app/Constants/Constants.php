@@ -12,6 +12,7 @@ class Constants
     const INVALID_PHONE_NUMBER_ERROR = 'شماره تماس اشتباه است';
     const INVALID_EMAIL_ERROR = 'ایمیل اشتباه است';
     const INVALID_LOGIN_ERROR = 'ایمیل یا کلمه عبور اشتباه است';
+    const INVALID_EMAIL = 'امکان ثبت این ایمیل وجود ندارد است';
     const UNDEFINED_ERROR = 'متاسفانه خطایی رخ داده است';
     const LADDERING_TYPE_ERROR = 'نوع عملیات نردبان ضروری است';
     const INVALID_PASSWORD_ERROR = 'پسورد اشتباه است';

@@ -78,6 +78,7 @@ Route::prefix('/payments')->group(function () {
 Route::prefix('/own')->middleware('auth:api')->group(function () {
     Route::get('/', [AuthController::class, 'own']);
     Route::put('/', [UserController::class, 'updateProfile']);
+    Route::get('/plan', [UserController::class, 'getOwnPlan']);
     Route::put('/wallet', [UserController::class, 'setWalletAddress']);
     Route::get('/statistics', [AuthController::class, 'statistics']);
     Route::get('/statistics/details', [AuthController::class, 'statisticsDetails']);

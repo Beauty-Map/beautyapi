@@ -19,6 +19,7 @@ use App\Interfaces\OtpInterface;
 use App\Interfaces\PortfolioInterface;
 use App\Interfaces\UserInterface;
 use App\Models\Ladder;
+use App\Models\Meta;
 use App\Models\Portfolio;
 use App\Models\User;
 use Carbon\Carbon;
@@ -44,6 +45,12 @@ class UserController extends Controller
         $this->metaRepository = $metaRepository;
         $this->otpRepository = $otpRepository;
         $this->portfolioRepository = $portfolioRepository;
+    }
+
+    public function getOwnPlan()
+    {
+        $auth = $this->getAuth();
+        return $auth->getSelectedPlan();
     }
 
     /**
@@ -232,6 +239,19 @@ class UserController extends Controller
         $altNumber = $request->input('email', '');
         if (!$altNumber) {
             return $this->createError('email', Constants::INVALID_EMAIL_ERROR, 422);
+        }
+        $metaCount = Meta::query()
+            ->where('key', 'email')
+            ->where('value', $altNumber)
+            ->whereNot('metaable_id', $auth->id)
+            ->count();
+
+        $emailCount = User::query()
+            ->where('email', $altNumber)
+            ->count();
+
+        if ($metaCount > 0 || $emailCount > 0) {
+            return $this->createError('email', Constants::INVALID_EMAIL, 422);
         }
         $auth->setMeta('email', $altNumber);
         return $this->createCustomResponse('done', 200);
