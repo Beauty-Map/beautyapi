@@ -57,6 +57,7 @@ class UserLoginResource extends JsonResource
             'permissions' => $this->getPermissionNames(),
             'roles' => $this->getRoleNames(),
             'avatar' => $this->getAvatar(),
+            'plan' => $this->getSelectedPlan(),
             'birth_date' => $this->birth_date,
             'social_media' => $this->getSocialMedia(),
             'referral_code' => $this->referral_code,
