@@ -18,6 +18,7 @@ use App\Http\Resources\PortfolioResource;
 use App\Http\Resources\SubscriptionResource;
 use App\Http\Resources\TicketAdminResource;
 use App\Http\Resources\TicketResource;
+use App\Http\Resources\UserLoginResource;
 use App\Http\Resources\UserSimpleResource;
 use App\Interfaces\IntroInterface;
 use App\Interfaces\MetaInterface;
@@ -82,7 +83,7 @@ class AdminController extends Controller
     public function showUser(int $id)
     {
         $user = $this->userRepository->findOneOrFail($id);
-        return $user;
+        return new UserLoginResource($user, "");
     }
 
     public function updateUser(AdminUserUpdateRequest $request, int $id)
