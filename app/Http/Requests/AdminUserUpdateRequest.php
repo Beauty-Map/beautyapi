@@ -28,6 +28,7 @@ class AdminUserUpdateRequest extends FormRequest
             'city_id' => 'nullable|exists:cities,id',
             'birth_date' => 'nullable|date',
             'work_hours' => 'nullable|array',
+            'coins' => 'numeric|min:0',
         ];
     }
 }

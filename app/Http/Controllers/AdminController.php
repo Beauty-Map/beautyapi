@@ -112,6 +112,11 @@ class AdminController extends Controller
             $auth->syncRoles($request['roles']);
             unset($request['roles']);
         }
+        if (array_key_exists('coins', $request) && $request['coins']) {
+            $w = $auth->getCoinWallet();
+            $w->update(['amount' => $request['coins']]);
+            unset($request['coins']);
+        }
         $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
         if ($res) {
             DB::commit();
