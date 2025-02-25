@@ -58,11 +58,11 @@ class UserController extends Controller
      */
     public function nearest()
     {
-        $lat = \request()->input('lat', null);
-        $lng = \request()->input('lng', null);
+        $provinceID = \request()->input('province_id', null);
+        $cityID = \request()->input('city_id', null);
         $filter = [
-            'lat' => $lat,
-            'lng' => $lng,
+            'province_id' => $provinceID,
+            'city_id' => $cityID,
         ];
         if ($this->hasPage()) {
             $page = $this->getPage();

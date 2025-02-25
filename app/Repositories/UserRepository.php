@@ -32,6 +32,16 @@ class UserRepository extends BaseRepository implements UserInterface
     public function nearestQuery(array $filter = [],string $sortBy = 'desc')
     {
         $query = $this->model->newQuery();
+        if (!empty($filter['province_id'])) {
+            $query = $query->whereHas('city', function ($query) use ($filter) {
+                $query->whereHas('province', function ($q) use ($filter) {
+                    $q->where('id', $filter['province_id']);
+                });
+            });
+        }
+        if (!empty($filter['city_id'])) {
+            $query = $query->where('city_id', $filter['city_id']);
+        }
         return $query;
     }
 
