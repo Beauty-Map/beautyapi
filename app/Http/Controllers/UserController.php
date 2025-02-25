@@ -297,27 +297,28 @@ class UserController extends Controller
     public function doLadderPortfolios(LadderRequest $request): bool
     {
         $auth = $this->getAuth();
-        $endAt = Carbon::now()->addWeek();
+//        $endAt = Carbon::now()->addWeek();
         DB::beginTransaction();
         try {
             if ($request['type'] == 'all_portfolios') {
                 $portfolios = $auth->portfolios;
                 /** @var Portfolio $portfolio */
                 foreach ($portfolios as $portfolio) {
-                    $portfolio->ladders()->create([
-                        'end_at' => $endAt,
-                        'user_id' => $auth->id,
-                    ]);
+                    $portfolio->update(['laddered_at' => now()]);
                 }
 
             } else {
                 $portfolios = $request['data'];
                 foreach ($portfolios as $portfolio) {
-                    Ladder::query()->create([
-                        'portfolio_id' => $portfolio,
-                        'end_at' => $endAt,
-                        'user_id' => $auth->id,
-                    ]);
+                    $p = Portfolio::query()->find($portfolio);
+                    if ($p) {
+                        $p->update(['laddered_at' => now()]);
+                    }
+//                    Ladder::query()->create([
+//                        'portfolio_id' => $portfolio,
+//                        'end_at' => $endAt,
+//                        'user_id' => $auth->id,
+//                    ]);
                 }
             }
             DB::commit();

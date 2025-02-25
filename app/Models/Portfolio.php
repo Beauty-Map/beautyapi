@@ -31,6 +31,7 @@ class Portfolio extends Model
         'has_tel',
         'has_phone_number',
         'status',
+        'laddered_at',
     ];
 
     protected $casts = [

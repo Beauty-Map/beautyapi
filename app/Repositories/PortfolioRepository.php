@@ -33,8 +33,7 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
 
     public function searchQuery(array $filter, string $orderBy = 'created_at', string $sortBy = 'desc'): Builder
     {
-        $query = $this->model->newQuery()
-            ->leftJoin('ladders', 'ladders.portfolio_id', '=', 'portfolios.id');
+        $query = $this->model->newQuery();
         if (array_key_exists('user_id', $filter) && $filter['user_id']) {
             $query = $query->where('portfolios.user_id', $filter['user_id']);
         }
@@ -47,25 +46,21 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
         if ($orderBy == 'discount') {
             $query = $query->selectRaw('portfolios.*, (price - discount_price) as discount,
             (
-           (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(portfolios.created_at)) / 3600 * -1
-                    +
                     CASE
-                        WHEN ladders.end_at >= NOW() THEN
-                            150
+                        WHEN portfolios.laddered_at is not null THEN
+                            portfolios.laddered_at
                         ELSE
-                            0
+                            portfolios.created_at
                     END
                 ) as score');
         } else {
             $query = $query->selectRaw('portfolios.*,
              (
-           (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(portfolios.created_at)) / 3600 * -1
-                    +
-                    CASE
-                        WHEN ladders.end_at >= NOW() THEN
-                            150
+                     CASE
+                        WHEN portfolios.laddered_at is not null THEN
+                            portfolios.laddered_at
                         ELSE
-                            0
+                            portfolios.created_at
                     END
              )as score');
         }

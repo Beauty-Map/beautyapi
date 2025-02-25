@@ -4,8 +4,10 @@
 namespace App\Repositories;
 
 use App\Interfaces\UserInterface;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class UserRepository
@@ -47,7 +49,9 @@ class UserRepository extends BaseRepository implements UserInterface
 
     public function doLadder()
     {
-        return true;
+        /** @var User $auth */
+        $auth = Auth::user();
+        return $auth->update(['laddered_at' => now()]);
     }
 
     public function referredBy(array $filter = [], string $sortBy = 'desc')
