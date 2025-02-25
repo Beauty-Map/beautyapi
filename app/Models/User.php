@@ -63,13 +63,8 @@ class User extends Authenticatable
             'is_active' => 'boolean',
             'is_closed' => 'boolean',
             'is_all_day_open' => 'boolean',
-            'licenses' => 'array',
         ];
     }
-
-    protected $appends = [
-        'licenses',
-    ];
 
     public function addView()
     {
@@ -296,9 +291,10 @@ class User extends Authenticatable
         return $this->getMeta('banners');
     }
 
-    public function licenses()
+    public function getLicenses()
     {
-        return $this->getMeta('licenses') ?? [];
+        $res = $this->getMeta('licenses') ?? [];
+        return $array = json_decode($res, true);
     }
 
     public function getRating()

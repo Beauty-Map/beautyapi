@@ -33,7 +33,7 @@ class ArtistResource extends JsonResource
             'services_count' => $this->getServicesCount(),
             'services' => $this->services,
             'work_hours' => $this->getWorkHours(),
-            'licenses' => $this->licenses,
+            'licenses' => $this->getLicenses(),
             'location' => $this->getLocation(),
             'socials' => $this->getSocialMedia(),
             'view' => $this->getView(),
