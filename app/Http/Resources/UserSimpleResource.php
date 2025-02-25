@@ -20,6 +20,7 @@ class UserSimpleResource extends JsonResource
             'phone_number' => $this->phone_number,
             'email' => $this->email,
             'rating' => $this->getRating(),
+            'coins' => $this->getCoins(),
             'portfolios_count' => $this->getPortfoliosCount(),
             'subscription' => $this->activeSubscription(),
         ];
