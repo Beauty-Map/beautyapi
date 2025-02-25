@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\Helper;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
@@ -26,6 +27,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPlanController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CheckMicroKey;
+use App\Mail\SendRegisterVerifyCodeEmail;
+use App\Models\Otp;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 

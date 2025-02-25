@@ -32,12 +32,6 @@ class UserRepository extends BaseRepository implements UserInterface
     public function nearestQuery(array $filter = [],string $sortBy = 'desc')
     {
         $query = $this->model->newQuery();
-        if (array_key_exists('lat', $filter) &&
-            $filter['lat'] != null &&
-            array_key_exists('lng', $filter) &&
-            $filter['lng'] != null) {
-
-        }
         return $query;
     }
 
