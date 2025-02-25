@@ -298,7 +298,7 @@ class User extends Authenticatable
 
     public function licenses()
     {
-        return $this->getMeta('licenses');
+        return $this->getMeta('licenses') ?? [];
     }
 
     public function getRating()
