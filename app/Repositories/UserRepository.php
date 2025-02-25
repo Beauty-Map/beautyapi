@@ -93,7 +93,7 @@ class UserRepository extends BaseRepository implements UserInterface
     public function findUsers(string $orderBy, string $sortBy, array $data): Builder
     {
         $query = $this->model->newQuery()->orderBy($orderBy, $sortBy);
-        if ($data['q']) {
+        if (!empty($data['q'])) {
             $q = $data['q'];
             $query = $query->orWhere('full_name', 'like', "%$q%");
             $query = $query->orWhere('email', 'like', "%$q%");
