@@ -68,8 +68,16 @@ class UserController extends Controller
             $page = $this->getPage();
             $limit = $this->getLimit();
             $nearest = $this->userRepository->nearestByPagination($filter, $page, $limit, 'desc');
+            if (count($nearest) == 0) {
+                unset($filter['city_id']);
+                $nearest = $this->userRepository->nearestByPagination($filter, $page, $limit, 'desc');
+            }
         } else {
             $nearest = $this->userRepository->nearest($filter, 'desc');
+            if (count($nearest) == 0) {
+                unset($filter['city_id']);
+                $nearest = $this->userRepository->nearest($filter, 'desc');
+            }
         }
         return UserNearResource::collection($nearest);
     }
