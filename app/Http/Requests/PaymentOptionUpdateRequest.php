@@ -25,6 +25,7 @@ class PaymentOptionUpdateRequest extends FormRequest
             'coins' => 'required|numeric|min:0',
             'gift' => 'required|numeric|min:0',
             'price' => 'required|numeric|min:0',
+            'discount_price' => 'required|numeric|min:0',
         ];
     }
 }

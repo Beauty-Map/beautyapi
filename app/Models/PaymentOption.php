@@ -13,5 +13,6 @@ class PaymentOption extends Model
         'coins',
         'gift',
         'price',
+        'discount_price',
     ];
 }

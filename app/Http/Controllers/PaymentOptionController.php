@@ -44,6 +44,7 @@ class PaymentOptionController extends Controller
             'coins',
             'gift',
             'price',
+            'discount_price',
         ]));
         return new PaymentOptionResource($option);
     }
@@ -65,6 +66,7 @@ class PaymentOptionController extends Controller
             'coins',
             'gift',
             'price',
+            'discount_price',
         ]), $id);
     }
 
