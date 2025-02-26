@@ -36,6 +36,7 @@ class PortfolioResource extends JsonResource
             'getView' => $this->getView(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'laddered_at' => $this->laddered_at,
         ];
     }
 }

@@ -34,38 +34,25 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
     public function searchQuery(array $filter, string $orderBy = 'created_at', string $sortBy = 'desc'): Builder
     {
         $query = $this->model->newQuery();
-        if (array_key_exists('user_id', $filter) && $filter['user_id']) {
-            $query = $query->where('portfolios.user_id', $filter['user_id']);
+        if (!empty($filter['user_id'])) {
+            $query->where('portfolios.user_id', $filter['user_id']);
         }
-        if (array_key_exists('services', $filter) && $filter['services'] && count($filter['services']) > 0) {
-            $query = $query->whereIn('portfolios.service_id', $filter['services']);
+        if (!empty($filter['services']) && is_array($filter['services'])) {
+            $query->whereIn('portfolios.service_id', $filter['services']);
         }
-        if (array_key_exists('term', $filter) && $filter['term']) {
-            $query = $query->where('portfolios.title', 'like', '%'.$filter['term'].'%');
+        if (!empty($filter['term'])) {
+            $query->where('portfolios.title', 'like', '%' . $filter['term'] . '%');
         }
+        $orderBy = in_array($orderBy, ['discount', 'created_at', 'laddered_at']) ? $orderBy : 'created_at';
+        $sortBy = in_array($sortBy, ['asc', 'desc']) ? $sortBy : 'desc';
+        $scoreQuery = "COALESCE(portfolios.laddered_at, portfolios.created_at) as score";
         if ($orderBy == 'discount') {
-            $query = $query->selectRaw('portfolios.*, (price - discount_price) as discount,
-            (
-                    CASE
-                        WHEN portfolios.laddered_at is not null THEN
-                            portfolios.laddered_at
-                        ELSE
-                            portfolios.created_at
-                    END
-                ) as score');
+            $query->selectRaw("portfolios.*, (price - COALESCE(discount_price, 0)) as discount, $scoreQuery");
         } else {
-            $query = $query->selectRaw('portfolios.*,
-             (
-                     CASE
-                        WHEN portfolios.laddered_at is not null THEN
-                            portfolios.laddered_at
-                        ELSE
-                            portfolios.created_at
-                    END
-             )as score');
+            $query->selectRaw("portfolios.*, $scoreQuery");
         }
-        $query = $query->orderByDesc('score');
-        return $query->orderBy($orderBy, $sortBy);
+        $query->orderByDesc('score')->orderBy($orderBy, $sortBy);
+        return $query;
     }
 
     public function doLadder(array $data)
