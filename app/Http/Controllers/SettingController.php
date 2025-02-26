@@ -15,7 +15,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return Setting::first();
+        return Setting::query()->firstOrCreate();
     }
 
     /**
