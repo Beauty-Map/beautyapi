@@ -267,3 +267,4 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
 Route::get('/referrals', [ReferralController::class, 'index']);
 Route::get('/settings', [SettingController::class, 'index'])->middleware('auth:api');
 Route::put('/settings', [SettingController::class, 'update'])->middleware('auth:api');
+Route::put('/rule', [SettingController::class, 'updateRule'])->middleware('auth:api');

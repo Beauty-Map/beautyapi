@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateRuleRequest;
 use App\Http\Requests\UpdateSettingsRequest;
 use App\Models\Setting;
 use App\Http\Controllers\Controller;
@@ -45,6 +46,17 @@ class SettingController extends Controller
             'second',
             'third',
             'forth',
+        ]));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updateRule(UpdateRuleRequest $request)
+    {
+        $setting = Setting::first();
+        return $setting->update($request->only([
+            'rule',
         ]));
     }
 
