@@ -39,7 +39,7 @@ class SettingController extends Controller
      */
     public function update(UpdateSettingsRequest $request)
     {
-        $setting = Setting::first();
+        $setting = Setting::query()->firstOrCreate();
         return $setting->update($request->only([
             'own',
             'first',
@@ -54,7 +54,7 @@ class SettingController extends Controller
      */
     public function updateRule(UpdateRuleRequest $request)
     {
-        $setting = Setting::first();
+        $setting = Setting::query()->firstOrCreate();
         return $setting->update($request->only([
             'rule',
         ]));
