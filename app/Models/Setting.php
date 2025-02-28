@@ -16,6 +16,7 @@ class Setting extends Model
         'third',
         'forth',
         'rule',
+        'help',
     ];
 
     public function toPercentages()

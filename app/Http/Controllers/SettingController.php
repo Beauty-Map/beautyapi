@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateHelpRequest;
 use App\Http\Requests\UpdateRuleRequest;
 use App\Http\Requests\UpdateSettingsRequest;
 use App\Models\Setting;
@@ -57,6 +58,17 @@ class SettingController extends Controller
         $setting = Setting::query()->firstOrCreate();
         return $setting->update($request->only([
             'rule',
+        ]));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updateHelp(UpdateHelpRequest $request)
+    {
+        $setting = Setting::query()->firstOrCreate();
+        return $setting->update($request->only([
+            'help',
         ]));
     }
 

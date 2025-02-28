@@ -268,3 +268,4 @@ Route::get('/referrals', [ReferralController::class, 'index']);
 Route::get('/settings', [SettingController::class, 'index'])->middleware('auth:api');
 Route::put('/settings', [SettingController::class, 'update'])->middleware('auth:api');
 Route::put('/rule', [SettingController::class, 'updateRule'])->middleware('auth:api');
+Route::put('/help', [SettingController::class, 'updateHelp'])->middleware('auth:api');
