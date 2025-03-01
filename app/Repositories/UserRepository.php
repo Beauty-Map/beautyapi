@@ -78,8 +78,8 @@ class UserRepository extends BaseRepository implements UserInterface
     public function searchQuery(array $filter, string $orderBy = 'created_at', string $sortBy = 'desc'): Builder
     {
         $query = $this->model->newQuery();
-        if (array_key_exists('term', $filter) && $filter['term']) {
-            $query = $query->where('full_name', 'full_name', '%'.$filter['term'].'%');
+        if (!empty($filter['term'])) {
+            $query = $query->where('full_name', 'like', '%'.$filter['term'].'%');
         }
         return $query->orderBy($orderBy, $sortBy);
     }
