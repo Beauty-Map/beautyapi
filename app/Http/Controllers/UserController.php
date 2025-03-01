@@ -287,6 +287,7 @@ class UserController extends Controller
         if ($request['type'] == 'all_portfolios') {
             return $this->userRepository->doLadder();
         }
+        dd($request['type']);
         return match ($request['type']) {
             'all_portfolios' => $this->doLadderPortfolios($request),
             'some_portfolios' => $this->doLadderPortfolios($request),
