@@ -305,14 +305,17 @@ class UserController extends Controller
                 /** @var Portfolio $portfolio */
                 foreach ($portfolios as $portfolio) {
                     $portfolio->update(['laddered_at' => now()]);
+                    $portfolio->save();
                 }
-
+                DB::commit();
+                return true;
             } else {
                 $portfolios = $request['data'];
                 foreach ($portfolios as $portfolio) {
                     $p = Portfolio::query()->find($portfolio);
                     if ($p) {
                         $p->update(['laddered_at' => now()]);
+                        $portfolio->save();
                     }
 //                    Ladder::query()->create([
 //                        'portfolio_id' => $portfolio,
