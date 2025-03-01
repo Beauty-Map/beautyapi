@@ -525,19 +525,21 @@ class User extends Authenticatable
         foreach ($percentages as $level => $percentage) {
             if ($referrer) {
                 $bonus = ($amount * $percentage) / 100;
-                $bt = $referrer->bonusTransactions()->create([
-                    'status' => BonusTransaction::STATUS_PENDING,
-                    'amount' => $bonus,
-                    'referrer_id' => $this->id,
-                    'level' => $level,
-                    'app' => $app,
-                ]);
-                $bonuses[] = $bt;
-                $w = $referrer->getGoldWallet();
-                $w->update([
-                    'amount' => $w->amount + $bonus,
-                ]);
-                $referrer = $referrer->referrer;
+                if ($bonus > 0) {
+                    $bt = $referrer->bonusTransactions()->create([
+                        'status' => BonusTransaction::STATUS_PENDING,
+                        'amount' => $bonus,
+                        'referrer_id' => $this->id,
+                        'level' => $level,
+                        'app' => $app,
+                    ]);
+                    $bonuses[] = $bt;
+                    $w = $referrer->getGoldWallet();
+                    $w->update([
+                        'amount' => $w->amount + $bonus,
+                    ]);
+                    $referrer = $referrer->referrer;
+                }
             } else {
                 break;
             }
