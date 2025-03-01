@@ -288,7 +288,8 @@ class UserController extends Controller
             return $this->userRepository->doLadder();
         }
         return match ($request['type']) {
-            'all_portfolios', 'some_portfolios' => $this->doLadderPortfolios($request),
+            'all_portfolios' => $this->doLadderPortfolios($request),
+            'some_portfolios' => $this->doLadderPortfolios($request),
             'profile' => $this->userRepository->doLadder(),
             default => $this->createError('type', Constants::LADDERING_TYPE_ERROR, 422),
         };
