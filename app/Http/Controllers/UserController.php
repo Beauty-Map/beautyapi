@@ -301,6 +301,7 @@ class UserController extends Controller
         try {
             if ($request['type'] == 'all_portfolios') {
                 $portfolios = $auth->portfolios;
+                dd($portfolios, "po");
                 /** @var Portfolio $portfolio */
                 foreach ($portfolios as $portfolio) {
                     $portfolio->update(['laddered_at' => now()]);
