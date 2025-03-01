@@ -299,9 +299,9 @@ class UserController extends Controller
         $auth = $this->getAuth();
         DB::beginTransaction();
         try {
+            dd($request['type'] == 'all_portfolios');
             if ($request['type'] == 'all_portfolios') {
                 $portfolios = $auth->portfolios;
-                dd($portfolios, "po");
                 /** @var Portfolio $portfolio */
                 foreach ($portfolios as $portfolio) {
                     $portfolio->update(['laddered_at' => now()]);
