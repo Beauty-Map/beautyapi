@@ -314,7 +314,7 @@ class UserController extends Controller
                     $p = Portfolio::query()->find($portfolio);
                     if ($p) {
                         $p->update(['laddered_at' => now()]);
-                        $portfolio->save();
+                        $p->save();
                     }
                 }
             }
