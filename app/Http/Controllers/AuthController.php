@@ -198,50 +198,50 @@ class AuthController extends Controller
         if ($app == 'pol_map') {
             $bonus = $auth->bonusTransactions()->where('app', 'polmap');
             $first = $auth->levelOneReferrals();
-            $second = $auth->levelTwoReferrals();
-            $third = $auth->levelThreeReferrals();
-            $forth = $auth->levelFourReferrals();
+//            $second = $auth->levelTwoReferrals();
+//            $third = $auth->levelThreeReferrals();
+//            $forth = $auth->levelFourReferrals();
             if ($year && $month) {
                 $jalaliDate = Jalalian::fromFormat('Y/m/d', "$year/$month/01");
                 $gregorianDate = $jalaliDate->toCarbon();
                 $bonus = $bonus->where('created_at', '>=', $gregorianDate);
                 $first = $first->where('created_at', '>=', $gregorianDate);
-                $second = $second->where('u2.created_at', '>=', $gregorianDate);
-                $third = $third->where('u3.created_at', '>=', $gregorianDate);
-                $forth = $forth->where('u4.created_at', '>=', $gregorianDate);
+//                $second = $second->where('u2.created_at', '>=', $gregorianDate);
+//                $third = $third->where('u3.created_at', '>=', $gregorianDate);
+//                $forth = $forth->where('u4.created_at', '>=', $gregorianDate);
             }
-            $all = ($first->count() + $second->count() + $third->count() + $forth->count());
+//            $all = ($first->count() + $second->count() + $third->count() + $forth->count());
             $first = $first->count();
-            $second = $second->count();
-            $third = $third->count();
-            $forth = $forth->count();
+//            $second = $second->count();
+//            $third = $third->count();
+//            $forth = $forth->count();
         } else {
             $bonus = $auth->bonusTransactions()->where('app', 'beauty');
             $all = $auth->levelOneReferrals()->count();
             $first = $auth->bonusTransactions()->where('app', 'beauty')->where('level', 0);
-            $second = $auth->bonusTransactions()->where('app', 'beauty')->where('level', 1);
-            $third = $auth->bonusTransactions()->where('app', 'beauty')->where('level', 2);
-            $forth = $auth->bonusTransactions()->where('app', 'beauty')->where('level', 3);
+//            $second = $auth->bonusTransactions()->where('app', 'beauty')->where('level', 1);
+//            $third = $auth->bonusTransactions()->where('app', 'beauty')->where('level', 2);
+//            $forth = $auth->bonusTransactions()->where('app', 'beauty')->where('level', 3);
             if ($year && $month) {
                 $jalaliDate = Jalalian::fromFormat('Y/m/d', "$year/$month/01");
                 $gregorianDate = $jalaliDate->toCarbon();
                 $first = $first->where('created_at', '>=', $gregorianDate);
-                $second = $second->where('created_at', '>=', $gregorianDate);
-                $third = $third->where('created_at', '>=', $gregorianDate);
-                $forth = $forth->where('created_at', '>=', $gregorianDate);
+//                $second = $second->where('created_at', '>=', $gregorianDate);
+//                $third = $third->where('created_at', '>=', $gregorianDate);
+//                $forth = $forth->where('created_at', '>=', $gregorianDate);
             }
             $first = $first->sum('amount');
-            $second = $second->sum('amount');
-            $third = $third->sum('amount');
-            $forth = $forth->sum('amount');
+//            $second = $second->sum('amount');
+//            $third = $third->sum('amount');
+//            $forth = $forth->sum('amount');
         }
         return [
             'bonus' => $bonus->sum('amount'),
-            'all' => $all,
+            'all' => $first,
             'first' => $first,
-            'second' => $second,
-            'third' => $third,
-            'forth' => $forth,
+//            'second' => $second,
+//            'third' => $third,
+//            'forth' => $forth,
         ];
     }
 
