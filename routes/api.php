@@ -171,6 +171,14 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
         Route::put('/{course}', [CourseController::class, 'update'])->middleware('auth:api');
         Route::delete('/{course}', [CourseController::class, 'destroy'])->middleware('auth:api');
     });
+
+    Route::prefix('/provinces')->group(function () {
+        Route::get('/', [ProvinceController::class, 'index']);
+        Route::post('/', [ProvinceController::class, 'store'])->middleware('auth:api');
+        Route::get('/{province}', [ProvinceController::class, 'show']);
+        Route::put('/{province}', [ProvinceController::class, 'update'])->middleware('auth:api');
+        Route::delete('/{province}', [ProvinceController::class, 'destroy'])->middleware('auth:api');
+    });
     Route::prefix('/subscriptions')->group(function () {
         Route::get('/', [AdminController::class, 'indexSubscriptions'])->middleware('auth:api');
         Route::post('/', [AdminController::class, 'storeSubscription'])->middleware('auth:api');

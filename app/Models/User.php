@@ -383,7 +383,16 @@ class User extends Authenticatable
         if ($last) {
             return new UserSelectedPlanResource($last);
         }
-        return new UserSelectedPlanResource($this->plans()->orderBy('created_at')->first());
+        $plan = Plan::query()->orderBy('id')->first();
+        $userPlan = $this->plans()->create([
+            'plan_id' => $plan->id,
+            'status' => 'payed',
+            'start_date' => Carbon::now(),
+            'end_date' => null,
+            'duration' => -1,
+            'amount' => 0,
+        ]);
+        return new UserSelectedPlanResource($userPlan);
     }
 
     public function getIsArtist()
