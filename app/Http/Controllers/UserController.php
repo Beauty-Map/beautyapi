@@ -23,6 +23,7 @@ use App\Models\Meta;
 use App\Models\Portfolio;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -291,13 +292,17 @@ class UserController extends Controller
         };
     }
 
-    public function doLadderPortfolios(LadderRequest $request): bool
+    public function doLadderPortfolios(LadderRequest $request): bool | JsonResponse
     {
         $auth = $this->getAuth();
         DB::beginTransaction();
         try {
+            $userLadders = $auth->portfolios()->where('laddered_at', '>=', now()->subDays(2))->count();
             if ($request['type'] == 'all_portfolios') {
                 $portfolios = $auth->portfolios;
+                if (count($portfolios) > $userLadders) {
+                    return $this->createError('do_ladder', Constants::LADDERING_COUNT_ERROR, 422);
+                }
                 /** @var Portfolio $portfolio */
                 foreach ($portfolios as $portfolio) {
                     $portfolio->update(['laddered_at' => now()]);
@@ -307,6 +312,9 @@ class UserController extends Controller
                 return true;
             } else {
                 $portfolios = $request['data'];
+                if (count($portfolios) > $userLadders) {
+                    return $this->createError('do_ladder', Constants::LADDERING_COUNT_ERROR, 422);
+                }
                 foreach ($portfolios as $portfolio) {
                     $p = Portfolio::query()->find($portfolio);
                     if ($p) {
