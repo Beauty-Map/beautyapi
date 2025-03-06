@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Interfaces\ApplicationInterface;
 use App\Interfaces\BaseInterface;
+use App\Interfaces\CityInterface;
 use App\Interfaces\IntroInterface;
 use App\Interfaces\MetaInterface;
 use App\Interfaces\OtpInterface;
@@ -18,6 +19,7 @@ use App\Interfaces\TicketSubjectInterface;
 use App\Interfaces\UserInterface;
 use App\Interfaces\UserPlanInterface;
 use App\Models\Application;
+use App\Models\City;
 use App\Models\Intro;
 use App\Models\Meta;
 use App\Models\Otp;
@@ -33,6 +35,7 @@ use App\Models\User;
 use App\Models\UserPlan;
 use App\Repositories\ApplicationRepository;
 use App\Repositories\BaseRepository;
+use App\Repositories\CityRepository;
 use App\Repositories\IntroRepository;
 use App\Repositories\MetaRepository;
 use App\Repositories\OtpRepository;
@@ -141,6 +144,12 @@ class BackendServiceProvider extends ServiceProvider
             PaymentRequestInterface::class,
             function() {
                 return new PaymentRequestRepository(new PaymentRequest);
+            }
+        );
+        $this->app->bind(
+            CityInterface::class,
+            function() {
+                return new CityRepository(new City);
             }
         );
     }
