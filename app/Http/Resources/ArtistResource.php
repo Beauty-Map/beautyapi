@@ -37,6 +37,7 @@ class ArtistResource extends JsonResource
             'location' => $this->getLocation(),
             'socials' => $this->getSocialMedia(),
             'view' => $this->getView(),
+            'plan' => $this->getSelectedPlan(),
         ];
     }
 }
