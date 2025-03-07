@@ -23,6 +23,7 @@ class UserSimpleResource extends JsonResource
             'coins' => $this->getCoins(),
             'portfolios_count' => $this->getPortfoliosCount(),
             'subscription' => $this->activeSubscription(),
+            'plan' => $this->getSelectedPlan(),
         ];
     }
 }
