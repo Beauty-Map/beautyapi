@@ -35,6 +35,17 @@ class SearchController extends Controller
         $filter = [
             'services' => $services,
         ];
+        $provinceID = \request()->input('province_id', null);
+        $cityID = \request()->input('city_id', null);
+        if ($provinceID) {
+            $filter['province_id'] = $provinceID;
+        }
+        if ($cityID) {
+            $filter['city_id'] = $cityID;
+        }
+        if ($term) {
+            $filter['term'] = $term;
+        }
         if ($term) {
             $filter['term'] = $term;
         }
@@ -55,7 +66,15 @@ class SearchController extends Controller
         $page = $this->getPage();
         $limit = $this->getLimit();
         $term = request()->input('term', '');
+        $provinceID = \request()->input('province_id', null);
+        $cityID = \request()->input('city_id', null);
         $filter = [];
+        if ($provinceID) {
+            $filter['province_id'] = $provinceID;
+        }
+        if ($cityID) {
+            $filter['city_id'] = $cityID;
+        }
         if ($term) {
             $filter['term'] = $term;
         }

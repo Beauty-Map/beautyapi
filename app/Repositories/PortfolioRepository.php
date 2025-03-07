@@ -34,6 +34,8 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
     public function searchQuery(array $filter, string $orderBy = 'created_at', string $sortBy = 'desc'): Builder
     {
         $query = $this->model->newQuery();
+        $query->join('users', 'users.id', '=', 'portfolios.user_id');
+        $query->join('cities', 'cities.id', '=', 'users.city_id');
         if (!empty($filter['user_id'])) {
             $query->where('portfolios.user_id', $filter['user_id']);
         }
@@ -42,6 +44,13 @@ class PortfolioRepository extends BaseRepository implements PortfolioInterface
         }
         if (!empty($filter['term'])) {
             $query->where('portfolios.title', 'like', '%' . $filter['term'] . '%');
+        }
+        if (!empty($filter['city_id'])) {
+            $query->where('users.city_id', $filter['city_id']);
+        }
+        if (!empty($filter['province_id'])) {
+            $query->join('provinces', 'provinces.id', '=', 'cities.province_id')
+                ->where('provinces.id', $filter['province_id']);
         }
         $orderBy = in_array($orderBy, ['discount', 'created_at', 'laddered_at']) ? $orderBy : 'created_at';
         $sortBy = in_array($sortBy, ['asc', 'desc']) ? $sortBy : 'desc';
