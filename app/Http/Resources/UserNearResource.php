@@ -27,6 +27,7 @@ class UserNearResource extends JsonResource
             'avatar' => $this->getAvatar(),
             'has_blue_tick' => $this->getHasBlueTick(),
             'created_at' => $this->created_at,
+            'plan' => $this->getSelectedPlan(),
         ];
     }
 }
