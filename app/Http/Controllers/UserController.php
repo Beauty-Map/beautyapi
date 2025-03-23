@@ -297,10 +297,11 @@ class UserController extends Controller
         $auth = $this->getAuth();
         DB::beginTransaction();
         try {
+            $plan = $auth->getSelectedPlan()->plan;
             $userLadders = $auth->portfolios()->where('laddered_at', '>=', now()->subDays(2))->count();
             if ($request['type'] == 'all_portfolios') {
                 $portfolios = $auth->portfolios;
-                if (count($portfolios) > $userLadders) {
+                if ($plan->portfolio_count - $userLadders < count($portfolios) ) {
                     return $this->createError('do_ladder', Constants::LADDERING_COUNT_ERROR, 422);
                 }
                 /** @var Portfolio $portfolio */
@@ -312,7 +313,7 @@ class UserController extends Controller
                 return true;
             } else {
                 $portfolios = $request['data'];
-                if (count($portfolios) > $userLadders) {
+                if ($plan->portfolio_count - $userLadders < count($portfolios) ) {
                     return $this->createError('do_ladder', Constants::LADDERING_COUNT_ERROR, 422);
                 }
                 foreach ($portfolios as $portfolio) {
