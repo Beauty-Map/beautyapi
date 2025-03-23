@@ -37,6 +37,7 @@ class PortfolioResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'laddered_at' => $this->laddered_at,
+            'star_count' => $this->getStarCount(),
         ];
     }
 }

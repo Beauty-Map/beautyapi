@@ -120,4 +120,9 @@ class Portfolio extends Model
     {
         return Helper::setMeta($this, $key, $value);
     }
+
+    public function getStarCount()
+    {
+        return $this->user->getSelectedPlan()->plan->star_count;
+    }
 }
