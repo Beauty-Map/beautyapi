@@ -298,7 +298,7 @@ class UserController extends Controller
         DB::beginTransaction();
         try {
             $plan = $auth->getSelectedPlan()->plan;
-            $userLadders = $auth->portfolios()->where('laddered_at', '>=', now()->subDays(2))->count();
+            $userLadders = $auth->portfolios()->where('laddered_at', '>=', Carbon::now()->subDays(2))->count();
             if ($request['type'] == 'all_portfolios') {
                 $portfolios = $auth->portfolios;
                 if ($plan->portfolio_count - $userLadders < count($portfolios) ) {
@@ -306,7 +306,7 @@ class UserController extends Controller
                 }
                 /** @var Portfolio $portfolio */
                 foreach ($portfolios as $portfolio) {
-                    $portfolio->update(['laddered_at' => now()]);
+                    $portfolio->update(['laddered_at' => Carbon::now()]);
                     $portfolio->save();
                 }
                 DB::commit();
@@ -319,7 +319,7 @@ class UserController extends Controller
                 foreach ($portfolios as $portfolio) {
                     $p = Portfolio::query()->find($portfolio);
                     if ($p) {
-                        $p->update(['laddered_at' => now()]);
+                        $p->update(['laddered_at' => Carbon::now()]);
                         $p->save();
                     }
                 }
