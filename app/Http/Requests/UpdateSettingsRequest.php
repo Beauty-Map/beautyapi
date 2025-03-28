@@ -27,6 +27,7 @@ class UpdateSettingsRequest extends FormRequest
             'second' => 'required|numeric|min:0|max:100',
             'third' => 'required|numeric|min:0|max:100',
             'forth' => 'required|numeric|min:0|max:100',
+            'lock_all' => 'required|boolean',
         ];
     }
 }

@@ -17,6 +17,7 @@ class Setting extends Model
         'forth',
         'rule',
         'help',
+        'lock_all',
     ];
 
     public function toPercentages()

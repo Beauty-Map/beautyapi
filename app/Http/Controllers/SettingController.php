@@ -47,6 +47,7 @@ class SettingController extends Controller
             'second',
             'third',
             'forth',
+            'lock_all',
         ]));
     }
 
