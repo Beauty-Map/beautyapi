@@ -42,7 +42,7 @@ class ArtistProfileUpdateRequest extends FormRequest
             'work_hours.*' => 'required|array',
             'work_hours.*.day_index' => 'required|min:1|max:7',
             'work_hours.*.start_hour' => 'required|date_format:H:i',
-            'work_hours.*.end_hour' => 'required|date_format:H:i|after:start_hour',
+            'referrer_code' => 'nullable|string',
         ];
     }
 }

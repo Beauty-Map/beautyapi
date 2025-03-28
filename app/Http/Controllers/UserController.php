@@ -200,6 +200,10 @@ class UserController extends Controller
                 $auth->update(['lat' => $request['location']['lat'], 'lng' => $request['location']['lng']]);
                 unset($request['location']);
             }
+            if (array_key_exists('referrer_code', $request) && $request['referrer_code']) {
+                $auth->update(['referrer_code' => $request['referrer_code']]);
+                unset($request['location']);
+            }
             $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
             if ($res) {
                 $auth->assignRole('artist');
