@@ -328,6 +328,10 @@ class UserController extends Controller
                 if ($plan->portfolio_count - $userLadders < count($portfolios) ) {
                     return $this->createError('do_ladder', Constants::LADDERING_COUNT_ERROR, 422);
                 }
+                $requiredCoins = count($portfolios) * 10;
+                if ($wallet->amount < $requiredCoins) {
+                    return $this->createError('do_ladder', Constants::LADDERING_PRICE_ERROR, 422);
+                }
                 foreach ($portfolios as $portfolio) {
                     $p = Portfolio::query()->find($portfolio);
                     if ($p) {
@@ -336,10 +340,9 @@ class UserController extends Controller
                     }
                 }
             }
-            $requiredCoins = count($portfolios) * 10;
-            if ($wallet->amount < $requiredCoins) {
-                return $this->createError('do_ladder', Constants::LADDERING_PRICE_ERROR, 422);
-            }
+            $wallet->update([
+                'amount' => $wallet->amount - $requiredCoins
+            ]);
             DB::commit();
             return true;
         } catch (\Exception $e) {
