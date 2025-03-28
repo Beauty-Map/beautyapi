@@ -65,6 +65,7 @@ class UserLoginResource extends JsonResource
             'is_artist_profile_completed' => $this->getIsArtistProfileCompleted(),
             'licenses' => $this->getLicenses(),
             'portfolios_count' => $this->getPortfoliosCount(),
+            'referrer_code' => $this->referrer_code,
         ];
     }
 }
