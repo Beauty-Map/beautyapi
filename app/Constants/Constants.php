@@ -16,6 +16,7 @@ class Constants
     const UNDEFINED_ERROR = 'متاسفانه خطایی رخ داده است';
     const LADDERING_TYPE_ERROR = 'نوع عملیات نردبان ضروری است';
     const LADDERING_COUNT_ERROR = 'ظرفیت نردبان در 48 ساعت گذشته ی شما کمتر از تعداد نمونه کارهای انتخاب شده برای نردبان می باشد. برای افزایش ظرفیت می توانید پنل خود رو ارتقا دهید!';
+    const LADDERING_PRICE_ERROR = 'هزینه ی نردبان از موجودی سکه ی شما بیشتر است. لطفا سکه های خود را افزایش دهید!';
     const INVALID_PASSWORD_ERROR = 'پسورد اشتباه است';
     const INVALID_OLD_PASSWORD_ERROR = 'پسورد قدیمی اشتباه است';
     const USER_REGISTERED_BEFORE_ERROR = 'این ایمیل پیشتر ثبت شده است';

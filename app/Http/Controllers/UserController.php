@@ -299,16 +299,24 @@ class UserController extends Controller
         try {
             $plan = $auth->getSelectedPlan()->plan;
             $userLadders = $auth->portfolios()->where('laddered_at', '>=', Carbon::now()->subDays(2))->count();
+            $wallet = $auth->getCoinWallet();
             if ($request['type'] == 'all_portfolios') {
                 $portfolios = $auth->portfolios;
-                if ($plan->portfolio_count - $userLadders < count($portfolios) ) {
+                if ($plan->portfolio_count - $userLadders < count($portfolios)) {
                     return $this->createError('do_ladder', Constants::LADDERING_COUNT_ERROR, 422);
+                }
+                $requiredCoins = count($portfolios) * 6;
+                if ($wallet->amount < $requiredCoins) {
+                    return $this->createError('do_ladder', Constants::LADDERING_PRICE_ERROR, 422);
                 }
                 /** @var Portfolio $portfolio */
                 foreach ($portfolios as $portfolio) {
                     $portfolio->update(['laddered_at' => Carbon::now()]);
                     $portfolio->save();
                 }
+                $wallet->update([
+                    'amount' => $wallet->amount - $requiredCoins
+                ]);
                 DB::commit();
                 return true;
             } else {
@@ -323,6 +331,10 @@ class UserController extends Controller
                         $p->save();
                     }
                 }
+            }
+            $requiredCoins = count($portfolios) * 10;
+            if ($wallet->amount < $requiredCoins) {
+                return $this->createError('do_ladder', Constants::LADDERING_PRICE_ERROR, 422);
             }
             DB::commit();
             return true;
