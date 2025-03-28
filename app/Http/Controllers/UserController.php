@@ -273,10 +273,25 @@ class UserController extends Controller
     public function deleteAccount()
     {
         $user = $this->getAuth();
-        if (!$user->can('delete-own-account')) {
-            return $this->createError('delete-account', Constants::ACCESS_ERROR, 403);
+        DB::beginTransaction();
+        $portfolios = $user->portfolios();
+        /** @var Portfolio $portfolio */
+        foreach ($portfolios as $portfolio) {
+            $portfolio->metas()->delete();
+            $portfolio->delete();
         }
-        return $this->userRepository->delete($this->getAuth()->id);
+        $user->metas()->delete();
+        $user->services()->delete();
+        $user->plans()->delete();
+        $user->wallets()->delete();
+        $user->bonusTransactions()->delete();
+        $user->likes()->delete();
+        $user->paymentRequests()->delete();
+        $user->activities()->delete();
+        $user->subscriptions()->delete();
+        $user->delete();
+        DB::commit();
+        return true;
     }
 
     /**
