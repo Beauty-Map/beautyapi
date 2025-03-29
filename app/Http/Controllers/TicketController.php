@@ -41,6 +41,22 @@ class TicketController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function indexAnswers(int $id)
+    {
+        /** @var Ticket $ticket */
+        $ticket = $this->ticketRepository->findOneOrFail($id);
+        if ($this->hasPage()) {
+            $limit = $this->getLimit();
+            $tickets = $ticket->children()->orderBy('created_at')->paginate($limit);
+        } else {
+            $tickets = $ticket->children()->orderBy('created_at')->get();
+        }
+        return TicketResource::collection($tickets);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(TicketCreateRequest $request)

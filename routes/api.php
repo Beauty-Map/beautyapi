@@ -27,14 +27,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPlanController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CheckMicroKey;
-use App\Mail\SendRegisterVerifyCodeEmail;
-use App\Models\Otp;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-
-
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 
 Route::get('/intros', [IntroController::class, 'index']);
 Route::get('/provinces', [ProvinceController::class, 'index']);
@@ -114,6 +107,7 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
         Route::get('/', [TicketController::class, 'index']);
         Route::post('/', [TicketController::class, 'store']);
         Route::get('/{id}', [TicketController::class, 'show']);
+        Route::get('/{id}/answers', [TicketController::class, 'indexAnswers']);
         Route::put('/{id}', [TicketController::class, 'close']);
     });
     Route::prefix('/plans')->group(function () {
@@ -254,6 +248,7 @@ Route::prefix('/admin')->middleware(['auth:api', AdminMiddleware::class])->group
         Route::post('/', [AdminController::class, 'storeTicket']);
         Route::post('/{id}/answer', [AdminController::class, 'storeTicketAnswer']);
         Route::get('/{id}', [AdminController::class, 'showTicket']);
+        Route::get('/{id}/answers', [AdminController::class, 'indexAnswers']);
         Route::put('/{id}', [AdminController::class, 'closeTicket']);
     });
     Route::prefix('/subjects')->group(function () {
