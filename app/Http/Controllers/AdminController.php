@@ -298,9 +298,9 @@ class AdminController extends Controller
         $ticket = $this->ticketRepository->findOneOrFail($id);
         if ($this->hasPage()) {
             $limit = $this->getLimit();
-            $tickets = $ticket->children()->orderBy('created_at')->paginate($limit);
+            $tickets = $ticket->children()->orderByDesc('created_at')->paginate($limit);
         } else {
-            $tickets = $ticket->children()->orderBy('created_at')->get();
+            $tickets = $ticket->children()->orderByDesc('created_at')->get();
         }
         return TicketResource::collection($tickets);
     }
