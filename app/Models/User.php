@@ -469,7 +469,7 @@ class User extends Authenticatable
 
     public function getServicesCount()
     {
-        return $this->services()->pluck('services.id')->count();
+        return $this->services()->pluck('services.id')->unique()->count();
     }
 
     public function likedItems($modelType = null)
