@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Events\UploadTicketFileEvent;
 use App\Http\Requests\TicketCreateRequest;
+use App\Http\Resources\TicketAdminResource;
 use App\Http\Resources\TicketResource;
 use App\Interfaces\TicketInterface;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
@@ -73,6 +75,31 @@ class TicketController extends Controller
             event(new UploadTicketFileEvent($ticket, $request['new_file']));
         }
         return new TicketResource($ticket);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function answer(int $id, TicketCreateRequest $request)
+    {
+        $auth = $this->getAuth();
+        $request['user_id'] = $auth->id;
+        $request['parent_id'] = $id;
+        DB::beginTransaction();
+        try {
+            $ticket = $this->ticketRepository->create($request->only([
+                'title',
+                'subject_id',
+                'user_id',
+                'parent_id',
+                'description'
+            ]));
+            DB::commit();
+            return new TicketResource($ticket);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->createError('error', $e->getMessage(), 500);
+        }
     }
 
     /**

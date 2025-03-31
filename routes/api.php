@@ -107,6 +107,7 @@ Route::prefix('/own')->middleware('auth:api')->group(function () {
         Route::get('/', [TicketController::class, 'index']);
         Route::post('/', [TicketController::class, 'store']);
         Route::get('/{id}', [TicketController::class, 'show']);
+        Route::post('/{id}/answer', [TicketController::class, 'answer']);
         Route::get('/{id}/answers', [TicketController::class, 'indexAnswers']);
         Route::put('/{id}', [TicketController::class, 'close']);
     });
