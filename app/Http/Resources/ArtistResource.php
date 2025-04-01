@@ -31,7 +31,7 @@ class ArtistResource extends JsonResource
             'portfolios_count' => $this->getPortfoliosCount(),
             'portfolios' => $this->portfolios,
             'services_count' => $this->getServicesCount(),
-            'services' => $this->services,
+            'services' => ServiceResource::collection($this->services),
             'work_hours' => $this->getWorkHours(),
             'licenses' => $this->getLicenses(),
             'location' => $this->getLocation(),
