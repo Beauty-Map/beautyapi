@@ -38,6 +38,7 @@ class PortfolioResource extends JsonResource
             'updated_at' => $this->updated_at,
             'laddered_at' => $this->laddered_at,
             'star_count' => $this->getStarCount(),
+            'has_blue_tick' => $this->user->getHasBlueTick(),
         ];
     }
 }
