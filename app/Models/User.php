@@ -118,6 +118,13 @@ class User extends Authenticatable
         return $this->portfolios()->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
     }
 
+    public function getYearPortfolios()
+    {
+        $startOfYear = Jalalian::now()->getFirstDayOfYear()->toCarbon();
+        $endOfYear = Jalalian::now()->getEndDayOfYear()->toCarbon();
+        return $this->portfolios()->whereBetween('created_at', [$startOfYear, $endOfYear]);
+    }
+
 //    protected $appends = [
 //        'province',
 //        'golds',
