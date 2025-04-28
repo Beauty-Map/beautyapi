@@ -24,7 +24,7 @@ class PortfolioCreateRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:3|max:40',
-            'description' => 'required|string|max:200|min:3',
+            'description' => 'required|string|max:2000|min:3',
             'maintenance' => 'nullable|string|max:200',
             'service_id' => 'required|exists:services,id',
             'price' => 'required|numeric|min:0',
