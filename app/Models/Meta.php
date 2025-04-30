@@ -9,7 +9,9 @@ class Meta extends Model
 {
     use HasFactory;
 
-    const STRING_ARRAY = ['tel_number', 'alt_number', 'avatar', 'national_code', 'artist_banner', 'address', 'bio', 'licenses'];
+    const STRING_ARRAY = ['tel_number', 'alt_number', 'avatar', 'national_code', 'postal_code', 'education',
+        'account_full_name', 'account_number', 'sheba', 'bank_name', 'card_number', 'artist_banner', 'address',
+        'gender', 'bio', 'licenses'];
 
     protected $fillable = [
         'metaable_id',

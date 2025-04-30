@@ -283,6 +283,11 @@ class User extends Authenticatable
         return $this->getMeta('avatar');
     }
 
+    public function getGender()
+    {
+        return $this->getMeta('gender');
+    }
+
     public function getTonWalletAddress()
     {
         return $this->getMeta('ton_wallet_address');
@@ -314,6 +319,41 @@ class User extends Authenticatable
         return $this->getMeta('national_code');
     }
 
+    public function getPostalCode()
+    {
+        return $this->getMeta('postal_code');
+    }
+
+    public function getEducation()
+    {
+        return $this->getMeta('education');
+    }
+
+    public function getAccountFullName()
+    {
+        return $this->getMeta('account_full_name');
+    }
+
+    public function getAccountNumber()
+    {
+        return $this->getMeta('account_number');
+    }
+
+    public function getSheba()
+    {
+        return $this->getMeta('sheba');
+    }
+
+    public function getBankName()
+    {
+        return $this->getMeta('bank_name');
+    }
+
+    public function getCardNumber()
+    {
+        return $this->getMeta('card_number');
+    }
+
     public function getTelNumber()
     {
         return $this->getMeta('tel_number');
@@ -332,6 +372,12 @@ class User extends Authenticatable
     public function getIsArtistAgreed()
     {
         return $this->getMeta('is_artist_agreed');
+    }
+
+    public function getIsProfileCompleted()
+    {
+        return $this->full_name && $this->email && $this->phone_number && $this->birth_date
+            && $this->city_id;
     }
 
     public function getBio()

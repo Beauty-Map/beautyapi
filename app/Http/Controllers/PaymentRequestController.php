@@ -7,6 +7,7 @@ use App\Http\Requests\PaymentRequestCreateRequest;
 use App\Http\Resources\PaymentRequestResource;
 use App\Interfaces\PaymentRequestInterface;
 use App\Models\BonusTransaction;
+use App\Models\PaymentRequest;
 use App\Models\User;
 
 class PaymentRequestController extends Controller
@@ -47,6 +48,16 @@ class PaymentRequestController extends Controller
         $auth = $this->getAuth();
         $bonuses = $auth->bonusTransactions()->where('status', BonusTransaction::STATUS_PENDING);
         $amount = $bonuses->sum('amount');
+        if ($amount < 10) {
+            return $this->createError('error', 'حداقل مبلغ قابل برداشت 10 TON می باشد', 422);
+        }
+        $openRequests = PaymentRequest::query()
+            ->where('type', PaymentRequest::WITHDRAW_TYPE)
+            ->where('status', 'created')
+            ->count();
+        if ($openRequests > 0) {
+            return $this->createError('error', 'شما یک برداشت در حال بررسی دارید.', 422);
+        }
         $paymentRequest = $this->paymentRequestRepository->create([
             'amount' => $amount,
             'user_id' => $auth->id,

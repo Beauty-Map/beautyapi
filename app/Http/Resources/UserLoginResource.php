@@ -66,6 +66,15 @@ class UserLoginResource extends JsonResource
             'licenses' => $this->getLicenses(),
             'portfolios_count' => $this->getPortfoliosCount(),
             'referrer_code' => $this->referrer_code,
+            'gender' => $this->getGender(),
+            'postal_code' => $this->getPostalCode(),
+            'education' => $this->getEducation(),
+            'account_full_name' => $this->getAccountFullName(),
+            'account_number' => $this->getAccountNumber(),
+            'sheba' => $this->getSheba(),
+            'bank_name' => $this->getBankName(),
+            'card_number' => $this->getCardNumber(),
+            'is_profile_completed' => $this->getIsProfileCompleted(),
         ];
     }
 }
