@@ -273,3 +273,7 @@ Route::get('/settings', [SettingController::class, 'index'])->middleware('auth:a
 Route::put('/settings', [SettingController::class, 'update'])->middleware('auth:api');
 Route::put('/rule', [SettingController::class, 'updateRule'])->middleware('auth:api');
 Route::put('/help', [SettingController::class, 'updateHelp'])->middleware('auth:api');
+
+Route::get('/export/artists', function () {
+    return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ArtistsExport, 'artists.xlsx');
+});
