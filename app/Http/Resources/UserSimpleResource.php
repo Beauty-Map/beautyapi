@@ -26,6 +26,7 @@ class UserSimpleResource extends JsonResource
             'referrer_code' => $this->referrer_code,
             'plan' => $this->getSelectedPlan(),
             'avatar' => $this->getAvatar(),
+            'ton_wallet_address' => $this->getTonWalletAddress(),
         ];
     }
 }

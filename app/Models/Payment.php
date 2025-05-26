@@ -20,6 +20,7 @@ class Payment extends Model
         'code',
         'expire_at',
         'coins',
+        'gift',
         'payment_option_id',
         'subscription_id',
     ];

@@ -51,11 +51,13 @@ class PaymentController extends Controller
         $subscriptionID = $request->input('subscription_id', null);
         $coins = 0;
         $price = 0;
+        $gift = 0;
         if ($paymentOptionID) {
             /** @var PaymentOption $paymentOption */
             $paymentOption = $this->paymentOptionRepository->findOneOrFail($request->get('payment_id', null));
             $price = $paymentOption->price;
             $coins = $paymentOption->coins;
+            $gift = $paymentOption->gift;
         } else if ($subscriptionID) {
             /** @var Subscription $subscription */
             $subscription = Subscription::query()->findOrFail($subscriptionID);
@@ -75,6 +77,7 @@ class PaymentController extends Controller
             'code' => $transactionId,
             'expire_at' => Carbon::now()->addMinutes(230),
             'coins' => $coins,
+            'gift' => $gift,
             'payment_option_id' => $paymentOptionID,
             'subscription_id' => $subscriptionID,
         ]);
