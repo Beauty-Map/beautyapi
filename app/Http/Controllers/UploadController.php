@@ -22,7 +22,7 @@ class UploadController extends Controller
             $file = $request->file('file');
         }
         $type = $request->input('type', 'avatar');
-        $ext = $file->getClientOriginalExtension();
+        $ext = $file->guessExtension();
         $name = Carbon::now()->format('Y_m_d_H_i_s').Str::random(4);
         $path = "/images/$type";
         if (!File::exists(storage_path($path))) {
