@@ -42,7 +42,7 @@ class Helper
             return '';
         }
         /** @var Meta $meta */
-        $meta = $model->metas()->where('key', $key)->first();
+        $meta = $model->metas()->where('key', $key)->last();
         if ($meta == null) {
             $meta = $model->metas()->create(['key' => $key, 'value' => '']);
         }
