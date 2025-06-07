@@ -44,6 +44,8 @@ class ArtistProfileUpdateRequest extends FormRequest
             'work_hours.*.start_hour' => 'required|date_format:H:i',
             'referrer_code' => 'nullable|string',
             'features' => 'nullable|array',
+            'profile_images' => 'nullable|array|max:25',
+            'profile_images.*' => 'required|string',
         ];
     }
 }

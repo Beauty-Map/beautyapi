@@ -314,6 +314,12 @@ class User extends Authenticatable
         return $array = json_decode($res, true);
     }
 
+    public function getGalleries()
+    {
+        $res = $this->getMeta('galleries') ?? [];
+        return $res;
+    }
+
     public function getRating()
     {
         return 4.5;

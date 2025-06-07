@@ -64,6 +64,7 @@ class UserLoginResource extends JsonResource
             'subscription' => $this->activeSubscription(),
             'is_artist_profile_completed' => $this->getIsArtistProfileCompleted(),
             'licenses' => $this->getLicenses(),
+            'galleries' => $this->getGalleries(),
             'portfolios_count' => $this->getPortfoliosCount(),
             'referrer_code' => $this->referrer_code,
             'gender' => $this->getGender(),
