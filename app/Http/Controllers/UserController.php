@@ -204,6 +204,10 @@ class UserController extends Controller
                 $auth->update(['referrer_code' => $request['referrer_code']]);
                 unset($request['referrer_code']);
             }
+            if (array_key_exists('features', $request) && $request['features']) {
+                $auth->features()->sync($request['features']);
+                unset($request['features']);
+            }
             $res = $this->metaRepository->insertOrAdd($request, $auth->id, 'user');
             if ($res) {
                 $auth->assignRole('artist');

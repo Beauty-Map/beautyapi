@@ -75,6 +75,7 @@ class UserLoginResource extends JsonResource
             'bank_name' => $this->getBankName(),
             'card_number' => $this->getCardNumber(),
             'is_profile_completed' => $this->getIsProfileCompleted(),
+            'features' => $this->user->features,
         ];
     }
 }

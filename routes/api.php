@@ -6,6 +6,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BonusTransactionController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\IntroController;
 use App\Http\Controllers\MainSliderController;
 use App\Http\Controllers\NotificationController;
@@ -277,3 +278,4 @@ Route::put('/help', [SettingController::class, 'updateHelp'])->middleware('auth:
 Route::get('/export/artists', function () {
     return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ArtistsExport, 'artists.xlsx');
 });
+Route::get('/features', [FeatureController::class, 'index']);

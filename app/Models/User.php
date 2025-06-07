@@ -85,6 +85,11 @@ class User extends Authenticatable
 
     }
 
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class);
+    }
+
     public function levelOneReferrals()
     {
         return $this->hasMany(User::class, 'referrer_code', 'referral_code');

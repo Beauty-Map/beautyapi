@@ -123,6 +123,7 @@ class Portfolio extends Model
 
     public function getStarCount()
     {
-        return $this->user->getSelectedPlan()->plan->star_count;
+        return $this->user->getSelectedPlan()->plan->star_count <= 5 ?
+            $this->user->getSelectedPlan()->plan->star_count : 0;
     }
 }
