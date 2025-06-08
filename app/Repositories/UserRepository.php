@@ -78,19 +78,28 @@ class UserRepository extends BaseRepository implements UserInterface
     public function searchQuery(array $filter, string $orderBy = 'created_at', string $sortBy = 'desc'): Builder
     {
         $query = $this->model->newQuery();
+
         if (!empty($filter['term'])) {
-            $query = $query->where('full_name', 'like', '%'.$filter['term'].'%');
+            $query->where('full_name', 'like', '%' . $filter['term'] . '%');
         }
+
+        if (!empty($filter['city_id']) && empty($filter['province_id'])) {
+            $city = \App\Models\City::with('province')->find($filter['city_id']);
+            if ($city) {
+                $filter['province_id'] = $city->province_id;
+            }
+        }
+
         if (!empty($filter['province_id'])) {
-            $query = $query->whereHas('city', function ($query) use ($filter) {
-                $query->whereHas('province', function ($q) use ($filter) {
-                    $q->where('id', $filter['province_id']);
-                });
+            $query->whereHas('city', function ($q) use ($filter) {
+                $q->where('province_id', $filter['province_id']);
             });
         }
+
         if (!empty($filter['city_id'])) {
-            $query = $query->where('city_id', $filter['city_id']);
+            $query->orderByRaw("CASE WHEN city_id = ? THEN 0 ELSE 1 END", [$filter['city_id']]);
         }
+
         return $query->orderBy($orderBy, $sortBy);
     }
 
